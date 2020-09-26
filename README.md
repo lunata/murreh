@@ -1,2 +1,2 @@
-# dialect-karel
+# Murreh
 Dialectal base of the Karelian language
