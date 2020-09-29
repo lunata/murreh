@@ -1,0 +1,1 @@
+{{ trans('mail.account_reminder', array('url'=>URL::to("reset/{$sentuser->getUserId()}/{$code}"))) }}

@@ -1,0 +1,1 @@
+{{ trans('mail.account_activate', array('url'=>URL::to("activate/{$sentuser->getUserId()}/{$code}"))) }}

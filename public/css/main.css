@@ -1,0 +1,464 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 16, 2016, 1:12:18 AM
+    Author     : componavt
+*/
+
+@import url(buttons.css);
+@import url(fonts.css);
+@import url(forms.css);
+@import url(navigation.css);
+@import url(head.css);
+
+body {
+    background: url(/images/bg_decor.png) 0 0 no-repeat;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+}
+
+a,
+a:active,
+a:focus,
+a:hover {
+    color: #972d1a;
+    text-decoration: underline;
+}
+
+.btn {
+    text-decoration: none;
+}
+.panel-default {
+    border-color: #d6d6d6;
+    border-radius: 0;
+}
+
+.panel-body {
+    font-size: 14px;
+    padding: 36px 4% 37px;
+}
+
+h1 {
+    color: #ef3928;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 20px;
+    padding-left: 43px;
+    position: relative;
+}
+
+h1:before {
+    background-image: url(../images/icons.png);
+    background-repeat: no-repeat;
+    content: '';
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 28px;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 28px;
+    margin: 0 0 20px;
+}
+
+.text-page {
+    line-height: 22px;
+    padding-top: 20px;
+}
+.text-page p {
+    margin: 0 0 20px;
+}
+
+.right-col {
+    padding-left: 5%;
+}
+.corpus_means_text {
+    color: #5b5b5b;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 22px;
+    padding-bottom: 20px;
+}
+
+.in_numbers {
+    background-color: #f1efef;
+    background-image: url(../images/bg_in_numbers_top.png),
+                url(../images/bg_in_numbers_bottom.png);
+    background-position: top left, bottom left;
+    background-repeat: repeat-x;
+    color: #202020;
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 20px;
+    padding: 30px 20px;
+}
+
+.in_numbers-b {
+    align-items: center;
+    color: #ef3928;
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 16px;
+    font-weight: bold;
+    justify-content: flex-start;
+    line-height: 18px;
+    margin-top: 20px;
+}
+
+.in_numbers-n {
+    font-size: 35px;
+    padding-right: 10px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    padding: 5px 10px;
+}
+
+.footer {
+    background-color: #373737;
+    color: #fff;
+    margin-top: 35px;
+    padding: 35px 0 100px;
+}
+
+.footer-right-col {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-left: 12%;
+}
+
+.developers {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 20px;
+    max-width: 350px;
+    min-height: 150px;
+    padding: 0 0 20px 113px;
+    position: relative;
+}
+
+.developers:before {
+    background: #fefefe url(../images/krc-logo.png) 50% 32px no-repeat;
+    border-top: 2px solid #dbd8d8;
+    content: '';
+    height: 136px;
+    left: 0;
+    position: absolute;
+    top: -35px;
+    width: 98px;
+}
+
+.developers a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.license {
+    color: #d4d4d4;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 22px;
+    max-width: 350px;
+}
+
+.license a {
+    color: #6d6d6d;
+    text-decoration: underline;
+}
+
+.copyright {
+    border-top: 2px solid #515151;
+    margin-top: 40px;
+    padding-top: 50px;
+}
+
+.copyright-b {
+    font-size: 15px;
+    line-height: 20px;
+    margin: 0 auto;
+    max-width: 320px;
+    padding: 21px 0 0 158px;
+    position: relative;
+}
+
+.copyright-b:before {
+    background: url(../images/logo-bottom.png) 0 0 no-repeat;
+    content: '';
+    height: 77px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 141px;
+}
+
+.copy-left {
+    display: inline-block;
+    text-align: right;
+    margin: 0px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: “FlipH”;
+}
+
+.corpus-text td:first-child{
+    padding-right: 20px;
+}
+
+.table th:first-letter {
+    text-transform: uppercase;    
+}
+
+.warning {
+    color: red;
+}
+
+.special-symbols-link {
+    color: #c9302c;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    position: absolute;
+    right: 5px;
+    text-align:right;
+    top: 0;
+    /*width: 300px;*/
+}
+/*
+.form-inline .special-symbols-link {
+    top: 0;
+}
+*/
+.special-symbols {
+    display: none;
+    position: absolute;
+    right: 0;
+    text-align:right;
+    top: -25px;
+    width: 300px;
+}
+/*
+.form-inline .special-symbols {
+    top: -25px;
+}
+*/
+.special-symbol-b {
+/*    background-color: #f0ad4e;
+    border-color: #f0ad4e;*/
+    font-size: 14px;
+/*    font-weight: bold;*/
+    line-height: 14px;
+    padding: 0;
+}
+
+.block-list {
+    padding-bottom: 20px;
+}
+
+.block-list h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.block-list p {
+    margin-bottom: 0;
+}
+
+.block-list a {
+    color: #a1a1a1;
+    font-size: 18px;
+}
+
+.block-list a span {
+    color: #040404;
+}
+
+.block-list .full-list {
+    padding-top: 5px;
+}
+
+.block-list .full-list a {
+    color: #ef3928;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.datetime {
+    color:#5b5b5b;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.date {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+.date-b {
+    display: flex;
+}
+
+.date-b>div {
+    display: block;
+    padding-left: 20px;
+}
+.date-b .time {
+    display: block;
+    color:#999;
+    padding-left: 20px;
+}
+
+.table-wide {
+    width: 100%;
+}
+
+.table-wide th {
+    text-align: center;
+}
+
+.table-wide th::first-letter {
+    text-transform: uppercase;
+}
+
+.table-wide td {
+    padding: 10px 15px;
+}
+
+.condensed>div {
+    padding-right: 5px;
+    padding-left: 5px;
+
+}
+
+.with-first-big-letter::first-letter {
+    text-transform: uppercase;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover, 
+.pagination > .active > span, 
+.pagination > .active > span:focus, 
+.pagination > .active > span:hover {
+    background-color: #972d1a;
+    border-color: #972d1a;
+}
+
+.pagination > li > a, 
+.pagination > li > span {
+    color: #972d1a;
+}
+
+.imp {
+    color: #972d1a;
+}
+
+.figure {
+/*    background: #f1efef;*/
+    padding: 1% 5%;
+    text-align: center;
+}
+
+.figure img {
+    display: block;
+    height:auto;
+    margin: 1% auto;
+    max-width:100%;
+}
+
+.figure-caption {
+    font-style: italic;
+}
+
+.publ-title {
+    font-size: 16px;
+}
+
+.rwd-table .number-cell {
+    font-size: 16px;
+    text-align: center;
+}
+
+.form-group .select2-container--default .select2-selection--single {
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0,0,0,.075);
+    border-color: #ccc;
+    height: 34px;
+}
+
+.form-group .select2-container .select2-selection--single .select2-selection__rendered {
+    padding: 3px 20px 3px 13px;
+}
+
+.select2-selection li {
+    white-space: pre-line;
+}
+
+.comment {
+    color: #666;
+}
+
+.search-form div {
+    min-height: 49px;  
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+    margin-left: 5px;
+}
+
+.search-b {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.search-b .form-group {
+    margin-bottom: 0;
+}
+
+@media screen and (min-width: 768px) {   
+    .comment {
+        margin-top: -50px;
+    }
+}
+@media screen and (min-width: 992px) {
+    h1 {
+        font-size: 33px;
+    }
+    h1:before {
+        top: 7px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+}
+@media screen and (min-width: 1200px) {
+    h2 {
+        font-size: 26px;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .developers {
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
