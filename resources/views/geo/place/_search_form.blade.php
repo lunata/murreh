@@ -1,4 +1,4 @@
-        {!! Form::open(['url' => '/corpus/place/', 
+        {!! Form::open(['url' => $url, 
                              'method' => 'get']) 
         !!}
 <div class="row">
@@ -8,28 +8,28 @@
                  'value' => $url_args['search_id'],
                  'attributes'=>['placeholder' => 'ID']])                                  
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
          @include('widgets.form.formitem._text', 
                 ['name' => 'search_name', 
                  'special_symbol' => true,
                  'value' => $url_args['search_name'],
-                 'attributes'=>['placeholder' => trans('corpus.title')]])
-    </div>
+                 'attributes'=>['placeholder' => trans('geo.name')]])
+{{--    </div>
     <div class="col-sm-3">
         @include('widgets.form.formitem._select', 
                 ['name' => 'search_region', 
                  'values' => $region_values,
                  'value' => $url_args['search_region'],
-                 'attributes' => ['placeholder' => trans('corpus.region')]]) 
+                 'attributes' => ['placeholder' => trans('geo.region')]]) --}}
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-4">
         @include('widgets.form.formitem._select', 
                 ['name' => 'search_district', 
                  'values' => $district_values,
                  'value' => $url_args['search_district'],
-                 'attributes' => ['placeholder' => trans('corpus.district')]]) 
+                 'attributes' => ['placeholder' => trans('geo.district')]]) 
     </div>
-    <div class="col-sm-3 search-button-b">       
+    <div class="col-sm-4 search-button-b">       
         <span>
         {{trans('messages.show_by')}}
         </span>

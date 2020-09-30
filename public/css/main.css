@@ -435,6 +435,15 @@ h2 {
     margin-bottom: 0;
 }
 
+.flex-hor-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.flex-hor-group .form-group {
+    margin-bottom: 5px;
+}
 @media screen and (min-width: 768px) {   
     .comment {
         margin-top: -50px;

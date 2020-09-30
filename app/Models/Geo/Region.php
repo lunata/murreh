@@ -14,28 +14,17 @@ class Region extends Model
     public $timestamps = false;
     protected $fillable = ['name_ru'];
     
-    /** Gets name of this region, takes into account locale.
-     * 
-     * @return String
-     */
-    public function getNameAttribute() : String
-    {
-        $column = "name_ru";
-        $name = $this->{$column};
-        return $name;
-    }
+    use \App\Traits\Methods\getNameAttribute;
+    
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Districts;
     
     // Region __has_many__ Places
+/*    
     public function places()
     {
         return $this->hasMany(Place::class);
-    }
-
-    // Region __has_many__ Districts
-    public function districts()
-    {
-        return $this->hasMany(District::class);
-    }
+    }*/
 
     /** Gets list of regions
      * 

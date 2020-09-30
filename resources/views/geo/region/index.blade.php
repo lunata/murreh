@@ -37,7 +37,7 @@
                 <th>No</th>
                 <th>{{ trans('geo.name') }}</th>
                 <th>{{ trans('navigation.districts') }}</th>
-                <th>{{ trans('navigation.places') }}</th>
+{{--                <th>{{ trans('navigation.places') }}</th> --}}
                 @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -50,15 +50,20 @@
                 <td data-th="{{ trans('messages.in_russian') }}">{{$region->name_ru}}</td>
                 <td data-th="{{ trans('navigation.districts') }}">
                     @if($region->districts)
+                        @if ($region->districts()->count())
+                        <a href="/geo/district/?search_region={{$region->id}}">
+                        @endif
                         {{ $region->districts()->count() }}
+                        @if ($region->districts()->count())
+                        </a>
+                        @endif
                     @endif
                 </td>
-                <td data-th="{{ trans('navigation.places') }}">
-{{--                    
+{{--                <td data-th="{{ trans('navigation.places') }}">
                     @if($region->places)
                         {{ $region->places()->count() }}
-                    @endif --}}
-                </td>
+                    @endif
+                </td> --}}
                 @if (User::checkAccess('corpus.edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 

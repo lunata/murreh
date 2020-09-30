@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Library\Str;
+
 use App\Models\Geo\District;
+use App\Models\Geo\Place;
 use App\Models\Geo\Region;
 
 class DistrictController extends Controller
@@ -139,37 +141,28 @@ class DistrictController extends Controller
     public function destroy(District $district)
     {
         $error = false;
-        $status_code = 200;
         $result =[];
         if ($district) {
-            try{
-                if ($district){
-                    $district_name = $district->name;
-                    $district->delete();
-                    $result['message'] = \Lang::get('geo.district_removed', ['name'=>$district_name]);
-                }
-                else{
-                    $error = true;
-                    $result['error_message'] = \Lang::get('messages.record_not_exists');
-                }
-          }catch(\Exception $ex){
-                    $error = true;
-                    $status_code = $ex->getCode();
-                    $result['error_code'] = $ex->getCode();
-                    $result['error_message'] = $ex->getMessage();
-                }
-        }else{
+            try {
+                $district_name = $district->name;
+                $district->delete();
+                $result['message'] = \Lang::get('geo.district_removed', ['name'=>$district_name]);
+          } catch(\Exception $ex){
+                $error = true;
+                $result['error_code'] = $ex->getCode();
+                $result['error_message'] = $ex->getMessage();
+            }
+        } else{
             $error =true;
-            $status_code = 400;
-            $result['message']='Request data is empty';
+            $result['error_message'] = \Lang::get('messages.record_not_exists');
         }
         
         if ($error) {
-                return Redirect::to('/geo/district/'.($this->args_by_get))
-                               ->withErrors($result['error_message']);
+            return Redirect::to('/geo/district/'.($this->args_by_get))
+                           ->withErrors($result['error_message']);
         } else {
             return Redirect::to('/geo/district/'.($this->args_by_get))
-                  ->withSuccess($result['message']);
+                           ->withSuccess($result['message']);
         }
     }
 }

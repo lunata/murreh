@@ -1,9 +1,8 @@
         {!! Form::open(['url' => $url, 
-                             'method' => 'get', 
-                             'class' => 'form-inline']) 
+                             'method' => 'get']) 
         !!}
 <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-1">
         @include('widgets.form.formitem._text', 
                 ['name' => 'search_id', 
                 'value' => $url_args['search_id'],
@@ -22,7 +21,7 @@
                  'value' => $url_args['search_region'],
                  'attributes' => ['placeholder' => trans('geo.region')]]) 
     </div>
-    <div class="col-sm-3 search-button-b">       
+    <div class="col-sm-4 search-button-b">       
         <span>
         {{trans('messages.show_by')}}
         </span>

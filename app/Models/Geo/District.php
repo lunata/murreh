@@ -13,45 +13,23 @@ class District extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['region_id','name_ru'];
+    protected $fillable = ['region_id', 'name_ru', 'foundation', 'abolition'];
     
-    /** Gets name of this corpus, takes into account locale.
-     * 
-     * @return String
-     */
-    public function getNameAttribute() : String
-    {
-        $column = "name_ru";
-        $name = $this->{$column};
-        return $name;
-    }
+    use \App\Traits\Methods\getNameAttribute;
     
-    /** Gets Region
-     * 
-     * District belongs_to Region
-     * 
-     * @return Relationship, Query Builder
-     */
-    public function region()
-    {
-        return $this->belongsTo(Region::class);
-    } 
+    // Belongs To Relations
+    use \App\Traits\Relations\BelongsTo\Region;
     
-    // District __has_many__ Places
-    public function places()
-    {
-        return $this->hasMany(Place::class);
-    }
-
+    // Belongs To Many Relations
+    use \App\Traits\Relations\BelongsToMany\Places;
+        
     /** Gets list of districts
      * 
      * @return Array [1=>'Бабаевский р-н',..]
      */
     public static function getList()
     {     
-        $locale = LaravelLocalization::getCurrentLocale();
-        
-        $districts = self::orderBy('name_'.$locale)->get();
+        $districts = self::orderBy('name_ru')->get();
         
         $list = array();
         foreach ($districts as $row) {
@@ -67,9 +45,7 @@ class District extends Model
      */
     public static function getListWithQuantity($method_name)
     {     
-        $locale = LaravelLocalization::getCurrentLocale();
-        
-        $districts = self::orderBy('name_'.$locale)->get();
+        $districts = self::orderBy('name_ru')->get();
         
         $list = array();
         foreach ($districts as $row) {

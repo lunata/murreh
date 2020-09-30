@@ -1,7 +1,7 @@
 <?php $list_count = $url_args['limit_num'] * ($url_args['page']-1) + 1;?>
-@extends('layouts.master')
+@extends('layouts.page')
 
-@section('title')
+@section('page_title')
 {{ trans('geo.district_list') }}
 @stop
 
@@ -9,8 +9,7 @@
     {!!Html::style('css/table.css')!!}
 @stop
 
-@section('content')
-        <h1>{{ trans('geo.district_list') }}</h1>
+@section('body')
 <div class="row">
     <div class="col-sm-6 col-md-5 col-lg-4">
         <p>
@@ -38,6 +37,8 @@
                 <th>No</th>
                 <th>{{ trans('geo.region') }}</th>
                 <th>{{ trans('geo.name') }}</th>
+                <th>{{ trans('geo.foundation') }}</th>
+                <th>{{ trans('geo.abolition') }}</th>
                 <th>{{ trans('navigation.places') }}</th>
                 @if (User::checkAccess('geo.edit'))
                 <th>{{ trans('messages.actions') }}</th>
@@ -49,13 +50,13 @@
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
                 <td data-th="{{ trans('geo.region') }}">{{$district->region->name}}</td>
-                <td data-th="{{ trans('geo.name') }}">{{$district->name_ru}}</td>
+                <td data-th="{{ trans('geo.name') }}">{{$district->name}}</td>
+                <td data-th="{{ trans('geo.foundation') }}">{{$district->foundation}}</td>
+                <td data-th="{{ trans('geo.abolition') }}">{{$district->abolition}}</td>
                 <td data-th="{{ trans('navigation.places') }}">
-{{--                    
                     @if($district->places)
                         {{ $district->places()->count() }}
                     @endif
---}}                    
                 </td>
                 @if (User::checkAccess('geo.edit'))
                 <td data-th="{{ trans('messages.actions') }}">

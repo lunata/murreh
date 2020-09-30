@@ -133,29 +133,20 @@ class RegionController extends Controller
     public function destroy(Region $region)
     {
         $error = false;
-        $status_code = 200;
         $result =[];
-        if($region) {
+        if ($region) {
             try{
-                if($region){
-                    $region_name = $region->name;
-                    $region->delete();
-                    $result['message'] = \Lang::get('geo.region_removed', ['name'=>$region_name]);
-                }
-                else{
-                    $error = true;
-                    $result['error_message'] = \Lang::get('messages.record_not_exists');
-                }
-          }catch(\Exception $ex){
-                    $error = true;
-                    $status_code = $ex->getCode();
-                    $result['error_code'] = $ex->getCode();
-                    $result['error_message'] = $ex->getMessage();
-                }
-        }else{
+                $region_name = $region->name;
+                $region->delete();
+                $result['message'] = \Lang::get('geo.region_removed', ['name'=>$region_name]);
+            } catch(\Exception $ex){
+                $error = true;
+                $result['error_code'] = $ex->getCode();
+                $result['error_message'] = $ex->getMessage();
+            }
+        } else {
             $error =true;
-            $status_code = 400;
-            $result['message']='Request data is empty';
+            $result['error_message'] = \Lang::get('messages.record_not_exists');
         }
         
         if ($error) {

@@ -49,7 +49,7 @@ $attributes['id'] = $id_name;
     @endif
     
     @if ($special_symbol) 
-        @include('dict.special_symbols',['id_name'=>$id_name])
+        @include('widgets.special_symbols',['id_name'=>$id_name])
     @endif
     {{ $tail }}                                    
     <p class="help-block">{!! $errors->first($name) !!}</p>

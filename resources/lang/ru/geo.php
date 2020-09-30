@@ -10,11 +10,22 @@ return [
     |
     */
 
+    'abolition' => 'упразднен',
+    
     'district' => 'Район',
     'district_list' => 'Список районов',
     'district_removed' => 'Район ":name" удален.',
+    
+    'foundation' => 'образован',
+    
+    'include_from' => 'год включения',
+    'include_to' => 'год исключения',
+    
+    'latitude'=>'широта',
+    'longitude'=>'долгота',
 
     'name' => 'название',
+    'name_old' => 'старое название',
     'nee' => 'урожд.',
 
     'of_district' => 'района',
@@ -23,9 +34,11 @@ return [
     
     'place_list' => 'Список населенных пунктов',
     'place_removed' => 'Населенный пункт ":name" удален.',
+    'population'=>'численность',
     
     'region' => 'Область, республика',
     'region_list' => 'Список регионов',
     'region_removed' => 'Регион ":name" удален.',
     
+    'select_district' => 'Выберите район'
 ];

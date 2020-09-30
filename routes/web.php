@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Geo\DistrictController;
 use App\Http\Controllers\Geo\RegionController;
+use App\Http\Controllers\Geo\PlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::get('wait', [AuthController::class, 'wait']);
 Route::resources([
     'geo/district' => DistrictController::class,
     'geo/region'   => RegionController::class,
+    'geo/place'    => PlaceController::class,
 ]);
 /*
 Route::resource('corpus/district', 'DistrictController',
