@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\Geo\DistrictController;
+use App\Http\Controllers\Geo\RegionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,3 +44,45 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 // Сервисная страничка, показываем после заполнения рег формы, формы сброса и т.
 // о том, что письмо отправлено и надо заглянуть в почтовый ящик.
 Route::get('wait', [AuthController::class, 'wait']);
+
+//Route::get('import/district_names', [ImportController::class, 'districtNames']);
+
+Route::resources([
+    'geo/district' => DistrictController::class,
+    'geo/region'   => RegionController::class,
+]);
+/*
+Route::resource('corpus/district', 'DistrictController',
+               ['names' => ['update' => 'district.update',
+                            'store' => 'district.store',
+                            'destroy' => 'district.destroy']]);
+
+Route::resource('corpus/informant', 'Corpus\InformantController',
+               ['names' => ['update' => 'informant.update',
+                            'store' => 'informant.store',
+                            'destroy' => 'informant.destroy']]);
+
+Route::resource('corpus/place', 'Corpus\PlaceController',
+               ['names' => ['update' => 'place.update',
+                            'store' => 'place.store',
+                            'destroy' => 'place.destroy']]);
+
+Route::resource('corpus/recorder', 'Corpus\RecorderController',
+               ['names' => ['update' => 'recorder.update',
+                            'store' => 'recorder.store',
+                            'destroy' => 'recorder.destroy']]);
+
+Route::resource('corpus/region', 'Corpus\RegionController',
+               ['names' => ['update' => 'region.update',
+                            'store' => 'region.store',
+                            'destroy' => 'region.destroy']]);
+
+Route::resource('role', 'RoleController',
+               ['names' => ['update' => 'role.update',
+                            'store' => 'role.store',
+                            'destroy' => 'role.destroy']]);
+
+Route::resource('user', 'UserController',
+               ['names' => ['update' => 'user.update',
+                            'destroy' => 'user.destroy']]);
+*/

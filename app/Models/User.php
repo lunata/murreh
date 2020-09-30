@@ -12,7 +12,10 @@ use App\Models\Role;
 class User extends EloquentUser
 {
     protected $fillable = ['email','first_name','last_name','permissions'];
-    protected $perm_list = ['admin','dict.edit','corpus.edit','ref.edit','user.edit'];
+    protected $perm_list = ['admin','edit'];
+    protected $hidden = ['password', 'remember_token'];
+    protected $casts = ['email_verified_at' => 'datetime'];
+
     
     /** Gets name of this user
      * 

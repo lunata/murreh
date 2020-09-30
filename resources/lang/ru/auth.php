@@ -33,10 +33,7 @@ return [
     'password_updated' => 'Пароль успешно обновлён.',
     
     'perm.admin' => 'Супер-права',
-    'perm.dict.edit'=> 'Редакция словаря',
-    'perm.corpus.edit'=> 'Редакция корпуса',
-    'perm.ref.edit'=> 'Редакция справочников',
-    'perm.user.edit'=> 'Редакция пользователей',
+    'perm.edit'=> 'Редакция',
     'permissions' => 'Права',
     
     'registration' => 'Регистрация',
