@@ -13,6 +13,9 @@ use App\Http\Controllers\Person\OccupationController;
 use App\Http\Controllers\Person\RecorderController;
 use App\Http\Controllers\Person\InformantController;
 
+use App\Http\Controllers\Library\ImportController;
+use App\Http\Controllers\Library\ServiceController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,6 +55,9 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 Route::get('wait', [AuthController::class, 'wait']);
 
 //Route::get('import/district_names', [ImportController::class, 'districtNames']);
+Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
+
+Route::get('service', [ServiceController::class, 'index']);
 
 Route::resources([
     'geo/district' => DistrictController::class,
