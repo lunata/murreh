@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Library\Str;
 
 //use App\Models\Geo\District;
-use App\Models\Geo\Informant;
+use App\Models\Person\Informant;
 //use App\Models\Geo\Region;
 
 class Place extends Model
@@ -143,22 +143,10 @@ class Place extends Model
         $info = [];
         
         if ($this->name) {
-            $info[0] = $this->name;
-            if ($this->other_names()->count()) {
-                $other_names = $this->other_names();
-                if ($lang_id) {
-                    $other_names = $other_names -> where('lang_id',$lang_id);
-                }
-                $other_names = $other_names -> get();
-                
-                $tmp = [];
-                foreach ($other_names as $other_name) {
-                    $tmp[] = $other_name->name; 
-                }
-                if (sizeof($tmp)) {
-                    $info[0] .= ' ('.join(', ',$tmp).')';
-                }
-            }
+            $info[0] = $this->name
+                     . ($this->name_old_ru ? " (".$this->name_old_ru.")" : '')
+                     . ($this->name_krl ? ", ".$this->name_krl : '')
+                     . ($this->name_krl_ru ? " (".$this->name_krl_ru.")" : '');
         }
         
         if ($this->district) {
@@ -184,7 +172,7 @@ class Place extends Model
     }
     
     public static function search(Array $url_args) {
-        $places = self::orderBy('name_ru');
+        $places = self::orderBy('id'); //name_ru
 
         $places = self::searchByDistrict($places, $url_args['search_district']);
         $places = self::searchByID($places, $url_args['search_id']);

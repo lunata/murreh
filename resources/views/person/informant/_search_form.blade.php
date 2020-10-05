@@ -1,4 +1,4 @@
-        {!! Form::open(['url' => '/corpus/informant/', 
+        {!! Form::open(['url' => '/person/informant/', 
                              'method' => 'get']) 
         !!}
 <div class="row">
@@ -12,22 +12,45 @@
          @include('widgets.form.formitem._text', 
                 ['name' => 'search_name', 
                 'value' => $url_args['search_name'],
-                'attributes'=>['placeholder' => trans('corpus.informant_name')]])
+                'attributes'=>['placeholder' => trans('person.informant_name')]])
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-4">
         @include('widgets.form.formitem._select', 
                 ['name' => 'search_birth_place', 
                  'values' => $place_values,
                  'value' => $url_args['search_birth_place'],
-                 'attributes' => ['placeholder' => trans('corpus.birth_place')]])                                   
+                 'attributes' => ['placeholder' => trans('person.birth_place')]])                                   
+    </div>
+    <div class="col-sm-4">
+        @include('widgets.form.formitem._select', 
+                ['name' => 'search_place', 
+                 'values' => $place_values,
+                 'value' => $url_args['search_place'],
+                 'attributes' => ['placeholder' => trans('person.place')]])                                   
     </div>
     <div class="col-sm-1">
         @include('widgets.form.formitem._text', 
                 ['name' => 'search_birth', 
                 'value' => $url_args['search_birth'],
-                'attributes'=>['placeholder' => trans('corpus.birth_year')]])
+                'attributes'=>['placeholder' => trans('person.birth_year')]])
     </div>
-    <div class="col-sm-3 search-button-b">       
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        @include('widgets.form.formitem._select', 
+                ['name' => 'search_nationality', 
+                 'values' => $nationality_values,
+                 'value' => $url_args['search_nationality'],
+                 'attributes' => ['placeholder' => trans('person.nationality')]]) 
+    </div>
+    <div class="col-sm-4">
+        @include('widgets.form.formitem._select', 
+                ['name' => 'search_occupation', 
+                 'values' => $occupation_values,
+                 'value' => $url_args['search_occupation'],
+                 'attributes' => ['placeholder' => trans('person.occupation')]]) 
+    </div>
+    <div class="col-sm-4 search-button-b">       
         <span>
         {{trans('messages.show_by')}}
         </span>

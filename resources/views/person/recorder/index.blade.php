@@ -2,7 +2,7 @@
 @extends('layouts.page')
 
 @section('page_title')
-{{ trans('corpus.recorder_list') }}
+{{ trans('person.recorder_list') }}
 @stop
 
 @section('headExtra')
@@ -11,31 +11,16 @@
 
 @section('body')
         <p style="text-align:right">
-        @if (User::checkAccess('corpus.edit'))
-            <a href="{{ LaravelLocalization::localizeURL('/corpus/recorder/create') }}">
+        @if (User::checkAccess('edit'))
+            <a href="{{route('recorder.create', $url_args)}}">
         @endif
             {{ trans('messages.create_new_m') }}
-        @if (User::checkAccess('corpus.edit'))
+        @if (User::checkAccess('edit'))
             </a>
         @endif
         </p>
         
-        {!! Form::open(['url' => '/corpus/recorder/', 
-                             'method' => 'get', 
-                             'class' => 'form-inline']) 
-        !!}
-        @include('widgets.form.formitem._text', 
-                ['name' => 'search_id', 
-                'value' => $url_args['search_id'],
-                'attributes'=>['size' => 3,
-                               'placeholder' => 'ID']])
-         @include('widgets.form.formitem._text', 
-                ['name' => 'search_name', 
-                'value' => $url_args['search_name'],
-                'attributes'=>['size' => 15,
-                               'placeholder' => trans('corpus.name')]])
-        @include('widgets.form.formitem._submit', ['title' => trans('messages.view')])
-        {!! Form::close() !!}
+        @include('person.recorder._search_form',['url' => '/geo/recorder/']) 
 
         <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
         
@@ -43,10 +28,11 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>{{ trans('messages.in_english') }}</th>
                 <th>{{ trans('messages.in_russian') }}</th>
-                <th>{{ trans('navigation.texts') }}</th>
-                @if (User::checkAccess('corpus.edit'))
+                <th>{{ trans('person.nationality') }}</th>
+                <th>{{ trans('person.occupation') }}</th>
+                <th>{{ trans('navigation.anketas') }}</th>
+                @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
             </tr>
@@ -55,25 +41,27 @@
             @foreach($recorders as $recorder)
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
-                <td data-th="{{ trans('messages.in_english') }}">{{$recorder->name_en}}</td>
                 <td data-th="{{ trans('messages.in_russian') }}">{{$recorder->name_ru}}</td>
-                <td data-th="{{ trans('navigation.texts') }}">
-                   @if($recorder->texts())
-                   <a href="{{ LaravelLocalization::localizeURL('/corpus/text/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_recorder={{$recorder->id}}">
-                       {{ $recorder->texts()->count() }} 
+                <td data-th="{{ trans('person.nationality') }}">{{$recorder->nationality->name ?? null}}</td>
+                <td data-th="{{ trans('person.occupation') }}">{{$recorder->occupation->name ?? null}}</td>
+                <td data-th="{{ trans('navigation.anketas') }}">
+{{--                   @if($recorder->anketas())
+                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_recorder={{$recorder->id}}">
+                       {{ $recorder->anketas()->count() }} 
                    </a>
-                    @endif
+                    @endif --}}
                 </td>
-                @if (User::checkAccess('corpus.edit'))
+                @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 
                             ['is_button'=>true, 
                              'without_text' => 1,
-                             'route' => '/corpus/recorder/'.$recorder->id.'/edit'])
+                             'route' => '/person/recorder/'.$recorder->id.'/edit'])
                     @include('widgets.form.button._delete', 
                             ['is_button'=>true, 
                              'without_text' => 1,
                              'route' => 'recorder.destroy', 
+                             'obj' => $recorder,
                              'args'=>['id' => $recorder->id]])
                 </td>
                 @endif

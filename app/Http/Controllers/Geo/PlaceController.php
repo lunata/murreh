@@ -93,7 +93,7 @@ class PlaceController extends Controller
         $place = Place::create($request->except('districts'));        
         $place->saveDistricts($request->districts);
         
-        return Redirect::to('/geo/place/?search_id='.$place->id)
+        return Redirect::to('/geo/place/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
     }
 
@@ -144,7 +144,7 @@ class PlaceController extends Controller
 
         $place->saveDistricts($request->districts);
         
-        return Redirect::to('/geo/place/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$place->id)
+        return Redirect::to('/geo/place/'.($this->args_by_get))
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 

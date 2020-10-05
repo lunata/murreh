@@ -36,8 +36,8 @@
                         <ul class="dropdown-menu" role="menu" id='menu4-sub'>
                             <li><a href="/person/informant">{{ trans('navigation.informants') }}</a></li>
                             <li><a href="/person/recorder">{{ trans('navigation.recorders') }}</a></li>
-                            <li><a href="/person/occupation">{{ trans('navigation.occupations') }}</a></li>
                             <li><a href="/person/nationality">{{ trans('navigation.nationalities') }}</a></li>
+                            <li><a href="/person/occupation">{{ trans('navigation.occupations') }}</a></li>
                         </ul>
                     </li>
                     

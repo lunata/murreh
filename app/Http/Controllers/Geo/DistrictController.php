@@ -80,7 +80,7 @@ class DistrictController extends Controller
         
         $district = District::create($request->all());
         
-        return Redirect::to('/geo/district/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$district->id)
+        return Redirect::to('/geo/district/'.($this->args_by_get))
             ->withSuccess(\Lang::get('messages.created_success'));        
     }
 
@@ -128,7 +128,7 @@ class DistrictController extends Controller
         
         $district->fill($request->all())->save();
         
-        return Redirect::to('/geo/district/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$district->id)
+        return Redirect::to('/geo/district/'.($this->args_by_get))
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 

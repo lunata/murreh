@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Corpus;
+namespace App\Http\Controllers\Person;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
-use DB;
-use LaravelLocalization;
 
 use App\Library\Str;
 
-use App\Models\Dict\Lang;
-use App\Models\Corpus\Recorder;
+use App\Models\Person\Nationality;
+use App\Models\Person\Occupation;
+use App\Models\Person\Recorder;
 
 class RecorderController extends Controller
 {
@@ -24,14 +22,9 @@ class RecorderController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:corpus.edit,/corpus/recorder/', ['only' => ['create','store','edit','update','destroy']]);
-        $this->url_args = [
-                    'search_id'     => (int)$request->input('search_id'),
-                    'search_name'    => $request->input('search_name'),
-                ];
+        $this->middleware('auth:edit,/person/recorder/', ['only' => ['create','store','edit','update','destroy']]);
         
-        $this->url_args['search_id'] = $this->url_args['search_id'] ? $this->url_args['search_id'] : NULL;
-        
+        $this->url_args = Recorder::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);
     }
 
@@ -45,27 +38,18 @@ class RecorderController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
         
-        $locale = LaravelLocalization::getCurrentLocale();
-        $recorders = Recorder::orderBy('name_'.$locale);
-
-        $recorder_name = $url_args['search_id'];
-        if ($recorder_name) {
-            $recorders = $recorders->where(function($q) use ($recorder_name){
-                            $q->where('name_en','like', $recorder_name)
-                              ->orWhere('name_ru','like', $recorder_name);
-                    });
-        } 
-
-        if ($url_args['search_id']) {
-            $recorders = $recorders->where('id',$url_args['search_id']);
-        } 
+        $recorders = Recorder::search($url_args);
 
         $numAll = $recorders->count();
 
         $recorders = $recorders->get();
         
-        return view('corpus.recorder.index',
-                    compact('recorders', 'numAll','args_by_get', 'url_args'));
+        $nationality_values = Nationality::getListWithQuantity('informants');
+        $occupation_values = Occupation::getListWithQuantity('informants');
+        
+        return view('person.recorder.index',
+                    compact('nationality_values', 'occupation_values', 'recorders', 
+                            'numAll','args_by_get', 'url_args'));
     }
 
     /**
@@ -75,7 +59,23 @@ class RecorderController extends Controller
      */
     public function create()
     {
-        return view('corpus.recorder.create');
+        $args_by_get = $this->args_by_get;
+        $url_args = $this->url_args;
+
+        $nationality_values = [NULL => ''] + Nationality::getList();
+        $occupation_values = [NULL => ''] + Occupation::getList();
+        
+        return view('person.recorder.create', 
+                compact('nationality_values', 'occupation_values', 
+                        'args_by_get', 'url_args'));
+    }
+
+    public function validateRequest(Request $request) {
+        $this->validate($request, [
+            'name_ru'  => 'required|max:150',
+//            'nationality_id' => 'numeric',
+  //          'occupation_id' => 'numeric',
+        ]);
     }
 
     /**
@@ -86,14 +86,10 @@ class RecorderController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name_en'  => 'max:150',
-            'name_ru'  => 'required|max:150',
-        ]);
-        
+        $this->validateRequest($request);
         $recorder = Recorder::create($request->all());
         
-        return Redirect::to('/corpus/recorder/?search_id='.$recorder->id)
+        return Redirect::to('/person/recorder/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
     }
 
@@ -103,9 +99,9 @@ class RecorderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Recorder $recorder)
     {
-        return Redirect::to('/corpus/recorder/');
+        return Redirect::to('/person/recorder/'.$this->args_by_get);
     }
 
     /**
@@ -114,11 +110,17 @@ class RecorderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Recorder $recorder)
     {
-        $recorder = Recorder::find($id); 
+        $args_by_get = $this->args_by_get;
+        $url_args = $this->url_args;
         
-        return view('corpus.recorder.edit',compact('recorder'));
+        $nationality_values = [NULL => ''] + Nationality::getList();
+        $occupation_values = [NULL => ''] + Occupation::getList();
+        
+        return view('person.recorder.edit',
+                compact('recorder', 'nationality_values', 'occupation_values',
+                        'args_by_get', 'url_args'));
     }
 
     /**
@@ -128,17 +130,12 @@ class RecorderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Recorder $recorder)
     {
-        $this->validate($request, [
-            'name_en'  => 'max:150',
-            'name_ru'  => 'required|max:150',
-        ]);
-        
-        $recorder = Recorder::find($id);
+        $this->validateRequest($request);
         $recorder->fill($request->all())->save();
         
-        return Redirect::to('/corpus/recorder/?search_id='.$recorder->id)
+        return Redirect::to('/person/recorder/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 
@@ -148,62 +145,31 @@ class RecorderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Recorder $recorder)
     {
         $error = false;
-        $status_code = 200;
         $result =[];
-        if($id != "" && $id > 0) {
+        if($recorder) {
             try{
-                $recorder = Recorder::find($id);
-                if($recorder){
-                    $recorder_name = $recorder->name;
-                    $recorder->delete();
-                    $result['message'] = \Lang::get('corpus.recorder_removed', ['name'=>$recorder_name]);
-                }
-                else{
-                    $error = true;
-                    $result['error_message'] = \Lang::get('messages.record_not_exists');
-                }
-          }catch(\Exception $ex){
-                    $error = true;
-                    $status_code = $ex->getCode();
-                    $result['error_code'] = $ex->getCode();
-                    $result['error_message'] = $ex->getMessage();
-                }
-        }else{
+                $recorder_name = $recorder->name;
+                $recorder->delete();
+                $result['message'] = \Lang::get('person.recorder_removed', ['name'=>$recorder_name]);
+            } catch(\Exception $ex){
+                $error = true;
+                $result['error_code'] = $ex->getCode();
+                $result['error_message'] = $ex->getMessage();
+            }
+        } else {
             $error =true;
-            $status_code = 400;
-            $result['message']='Request data is empty';
+            $result['error_message'] = \Lang::get('messages.record_not_exists');
         }
         
         if ($error) {
-                return Redirect::to('/corpus/recorder/')
+                return Redirect::to('/person/recorder/'.$this->args_by_get)
                                ->withErrors($result['error_message']);
         } else {
-            return Redirect::to('/corpus/recorder/')
+            return Redirect::to('/person/recorder/'.$this->args_by_get)
                   ->withSuccess($result['message']);
         }
     }
-
-/*    
-    public function tempInsertVepsianRecorder()
-    {
-        $veps_recorders = DB::connection('vepsian')
-                            ->table('recorder')
-                            ->orderBy('id')
-                            //->take(1)
-                            ->get();
- 
-        DB::connection('mysql')->table('recorders')->delete();
-       
-        foreach ($veps_recorders as $veps_recorder):
-            $recorder = new Recorder;
-            $recorder->id = $veps_recorder->id;
-            $recorder->name_ru = $veps_recorder->name;
-            $recorder->save();            
-        endforeach;
-     }
- * 
- */
 }

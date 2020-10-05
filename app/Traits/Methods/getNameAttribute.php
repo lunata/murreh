@@ -1,7 +1,5 @@
 <?php namespace App\Traits\Methods;
 
-use LaravelLocalization;
-
 trait getNameAttribute
 {
     /** Gets name of this object, takes into account locale.

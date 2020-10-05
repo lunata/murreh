@@ -65,10 +65,10 @@
                     @endif
                 </td>
                 <td data-th="{{ trans('geo.latitude') }}">
-                    {{ sprintf("%.05f\n", $place->latitude) }}
+                    {{ $place->latitude ? sprintf("%.05f\n", $place->latitude) : '' }}
                 </td>
                 <td data-th="{{ trans('geo.longitude') }}">
-                    {{ sprintf("%.05f\n", $place->longitude) }}
+                    {{ $place->longitude ? sprintf("%.05f\n", $place->longitude) : '' }}
                 </td>
                 <td data-th="{{ trans('geo.population') }}" style="text-align: right">
                     {{ $place->population }}
@@ -109,7 +109,7 @@
             @endforeach
         </tbody>
         </table>
-        {!! $places->appends($url_args)->render() !!}
+        {{ $places->appends($url_args)->links() }}
         @endif
     </div>
 @stop

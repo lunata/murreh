@@ -12,6 +12,7 @@ use App\Models\Geo\Region;
 
 class RegionController extends Controller
 {
+    use \App\Traits\Methods\validateRequest;
      /**
      * Instantiate a new new controller instance.
      *
@@ -68,13 +69,11 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name_ru'  => 'required|max:150',
-        ]);
-        
+        $this->validateRequest($request);
         $region = Region::create($request->all());
         
-        return Redirect::to('/geo/region/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$region->id)
+//        return Redirect::to('/geo/region/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$region->id)
+        return Redirect::to('/geo/region/'. $this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
     }
 
@@ -84,9 +83,9 @@ class RegionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Region $region)
     {
-        return Redirect::to('/geo/region/'.$this->args_by_get);
+        return Redirect::to('/geo/region/'. $this->args_by_get);
     }
 
     /**
@@ -113,14 +112,10 @@ class RegionController extends Controller
      */
     public function update(Request $request, Region $region)
     {
-        $this->validate($request, [
-            'name_ru'  => 'required|max:150',
-        ]);
-        
-//        $region = Region::find($id);
+        $this->validateRequest($request);
         $region->fill($request->all())->save();
         
-        return Redirect::to('/geo/region/'.($this->args_by_get).($this->args_by_get ? '&' : '?').'search_id='.$region->id)
+        return Redirect::to('/geo/region/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 
@@ -150,10 +145,10 @@ class RegionController extends Controller
         }
         
         if ($error) {
-                return Redirect::to('/geo/region/'.($this->args_by_get))
+                return Redirect::to('/geo/region/'.$this->args_by_get)
                                ->withErrors($result['error_message']);
         } else {
-            return Redirect::to('/geo/region/'.($this->args_by_get))
+            return Redirect::to('/geo/region/'.$this->args_by_get)
                   ->withSuccess($result['message']);
         }
     }

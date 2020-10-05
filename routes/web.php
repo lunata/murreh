@@ -8,6 +8,11 @@ use App\Http\Controllers\Geo\DistrictController;
 use App\Http\Controllers\Geo\RegionController;
 use App\Http\Controllers\Geo\PlaceController;
 
+use App\Http\Controllers\Person\NationalityController;
+use App\Http\Controllers\Person\OccupationController;
+use App\Http\Controllers\Person\RecorderController;
+use App\Http\Controllers\Person\InformantController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,39 +57,9 @@ Route::resources([
     'geo/district' => DistrictController::class,
     'geo/region'   => RegionController::class,
     'geo/place'    => PlaceController::class,
+    
+    'person/nationality' => NationalityController::class,
+    'person/occupation'  => OccupationController::class,
+    'person/recorder'    => RecorderController::class,
+    'person/informant'   => InformantController::class,
 ]);
-/*
-Route::resource('corpus/district', 'DistrictController',
-               ['names' => ['update' => 'district.update',
-                            'store' => 'district.store',
-                            'destroy' => 'district.destroy']]);
-
-Route::resource('corpus/informant', 'Corpus\InformantController',
-               ['names' => ['update' => 'informant.update',
-                            'store' => 'informant.store',
-                            'destroy' => 'informant.destroy']]);
-
-Route::resource('corpus/place', 'Corpus\PlaceController',
-               ['names' => ['update' => 'place.update',
-                            'store' => 'place.store',
-                            'destroy' => 'place.destroy']]);
-
-Route::resource('corpus/recorder', 'Corpus\RecorderController',
-               ['names' => ['update' => 'recorder.update',
-                            'store' => 'recorder.store',
-                            'destroy' => 'recorder.destroy']]);
-
-Route::resource('corpus/region', 'Corpus\RegionController',
-               ['names' => ['update' => 'region.update',
-                            'store' => 'region.store',
-                            'destroy' => 'region.destroy']]);
-
-Route::resource('role', 'RoleController',
-               ['names' => ['update' => 'role.update',
-                            'store' => 'role.store',
-                            'destroy' => 'role.destroy']]);
-
-Route::resource('user', 'UserController',
-               ['names' => ['update' => 'user.update',
-                            'destroy' => 'user.destroy']]);
-*/

@@ -12,7 +12,7 @@
         <h2>{{ trans('messages.editing')}} {{ trans('geo.of_place')}} <span class='imp'>"{{ $place->name}}"</span></h2>
         <p><a href="/geo/place/{{$place->id}}{{$args_by_get}}">{{ trans('messages.back_to_show') }}</a></p>
         
-        {!! Form::model($place, array('method'=>'PUT', 'route' => array('place.update', $place->id))) !!}
+        {!! Form::model($place, ['method'=>'PUT', 'route' => ['place.update', $place->id]]) !!}
         @include('geo.place._form_create_edit', ['submit_title' => trans('messages.save'),
                                       'action' => 'edit'])
         {!! Form::close() !!}

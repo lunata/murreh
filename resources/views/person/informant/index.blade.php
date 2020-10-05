@@ -2,7 +2,7 @@
 @extends('layouts.master')
 
 @section('title')
-{{ trans('corpus.informant_list') }}
+{{ trans('person.informant_list') }}
 @stop
 
 @section('headExtra')
@@ -10,19 +10,19 @@
 @stop
 
 @section('content')
-        <h1>{{ trans('corpus.informant_list') }}</h1>
+        <h1>{{ trans('person.informant_list') }}</h1>
         
         <p>
-        @if (User::checkAccess('corpus.edit'))
-            <a href="{{ LaravelLocalization::localizeURL('/corpus/informant/create') }}">
+        @if (User::checkAccess('edit'))
+            <a href="{{route('informant.create', $url_args)}}">
         @endif
             {{ trans('messages.create_new_m') }}
-        @if (User::checkAccess('corpus.edit'))
+        @if (User::checkAccess('edit'))
             </a>
         @endif
         </p>
         
-        @include('corpus.informant._search_form',['url' => '/corpus/informant/']) 
+        @include('person.informant._search_form',['url' => '/person/informant/']) 
 
         <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
         
@@ -30,12 +30,14 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>{{ trans('messages.in_english') }}</th>
                 <th>{{ trans('messages.in_russian') }}</th>
-                <th>{{ trans('corpus.birth_year') }}</th>
-                <th>{{ trans('corpus.birth_place') }}</th>
-                <th>{{ trans('navigation.texts') }}</th>
-                @if (User::checkAccess('corpus.edit'))
+                <th>{{ trans('person.birth_year') }}</th>
+                <th>{{ trans('person.birth_place') }}</th>
+                <th>{{ trans('person.place') }}</th>
+                <th>{{ trans('person.nationality') }}</th>
+                <th>{{ trans('person.occupation') }}</th>
+                <th>{{ trans('navigation.anketas') }}</th>
+                @if (User::checkAccess('person.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
             </tr>
@@ -44,31 +46,38 @@
             @foreach($informants as $informant)
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
-                <td data-th="{{ trans('messages.in_english') }}">{{$informant->name_en}}</td>
                 <td data-th="{{ trans('messages.in_russian') }}">{{$informant->name_ru}}</td>
-                <td data-th="{{ trans('corpus.birth_year') }}">{{$informant->birth_date}}</td>
-                <td data-th="{{ trans('corpus.birth_place') }}">
+                <td data-th="{{ trans('person.birth_year') }}">{{$informant->birth_date}}</td>
+                <td data-th="{{ trans('person.birth_place') }}">
                     @if ($informant->birth_place)
                         {{$informant->birth_place->placeString()}}
                     @endif
                 </td>
-                <td data-th="{{ trans('navigation.texts') }}">
-                   @if($informant->texts())
-                   <a href="{{ LaravelLocalization::localizeURL('/corpus/text/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_informant={{$informant->id}}">
-                       {{ $informant->texts()->count() }} 
-                   </a>
+                <td data-th="{{ trans('person.place') }}">
+                    @if ($informant->place)
+                        {{$informant->place->placeString()}}
                     @endif
                 </td>
-                @if (User::checkAccess('corpus.edit'))
+                <td data-th="{{ trans('person.nationality') }}">{{$informant->nationality->name ?? null}}</td>
+                <td data-th="{{ trans('person.occupation') }}">{{$informant->occupation->name ?? null}}</td>
+                <td data-th="{{ trans('navigation.anketas') }}">
+{{--                   @if($informant->anketas())
+                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_informant={{$informant->id}}">
+                       {{ $recorder->anketas()->count() }} 
+                   </a>
+                    @endif --}}
+                </td>
+                @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 
                             ['is_button'=>true, 
                              'without_text' => 1,
-                             'route' => '/corpus/informant/'.$informant->id.'/edit'])
+                             'route' => '/person/informant/'.$informant->id.'/edit'])
                     @include('widgets.form.button._delete', 
                             ['is_button'=>true, 
                              'without_text' => 1,
                              'route' => 'informant.destroy', 
+                             'obj' => $informant,
                              'args'=>['id' => $informant->id]])
                 </td>
                 @endif
