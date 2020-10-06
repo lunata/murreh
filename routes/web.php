@@ -13,6 +13,10 @@ use App\Http\Controllers\Person\OccupationController;
 use App\Http\Controllers\Person\RecorderController;
 use App\Http\Controllers\Person\InformantController;
 
+use App\Http\Controllers\Ques\AnswerController;
+use App\Http\Controllers\Ques\QsectionController;
+use App\Http\Controllers\Ques\QuestionController;
+
 use App\Http\Controllers\Library\ImportController;
 use App\Http\Controllers\Library\ServiceController;
 
@@ -56,6 +60,8 @@ Route::get('wait', [AuthController::class, 'wait']);
 
 //Route::get('import/district_names', [ImportController::class, 'districtNames']);
 Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
+Route::get('import/qsections', [ImportController::class, 'qsections']);
+Route::get('import/questions', [ImportController::class, 'questions']);
 
 Route::get('service', [ServiceController::class, 'index']);
 
@@ -68,4 +74,8 @@ Route::resources([
     'person/occupation'  => OccupationController::class,
     'person/recorder'    => RecorderController::class,
     'person/informant'   => InformantController::class,
+    
+    'ques/answer'      => AnswerController::class,
+    'ques/qsection'    => QsectionController::class,
+    'ques/question'    => QuestionController::class,
 ]);

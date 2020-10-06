@@ -3,19 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/projects/murreh/app/Models/Geo/Region.php</file>
+            <file>file:/E:/projects/murreh/app/Library/Import.php</file>
             <file>file:/E:/projects/murreh/routes/web.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Person/Recorder.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Person/RecorderController.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Person/NationalityController.php</file>
-            <file>file:/E:/projects/murreh/resources/views/geo/place/index.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Geo/RegionController.php</file>
-            <file>file:/E:/projects/murreh/resources/views/person/recorder/index.blade.php</file>
-            <file>file:/E:/projects/murreh/resources/views/person/informant/index.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Person/OccupationController.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Person/Informant.php</file>
+            <file>file:/E:/projects/murreh/resources/views/service/index.blade.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Library/ServiceController.php</file>
+            <file>file:/E:/projects/murreh/config/app.php</file>
             <file>file:/E:/projects/murreh/app/Models/Geo/Place.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Person/InformantController.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Library/ImportController.php</file>
         </group>
     </open-files>
 </project-private>

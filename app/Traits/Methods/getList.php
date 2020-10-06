@@ -8,10 +8,10 @@ trait getList
      */
     public static function getList()
     {     
-        $regions = self::orderBy('name_ru')->get();
+        $objs = self::orderBy('name_ru')->get();
         
         $list = array();
-        foreach ($regions as $row) {
+        foreach ($objs as $row) {
             $list[$row->id] = $row->name;
         }
         

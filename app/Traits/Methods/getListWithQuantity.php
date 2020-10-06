@@ -8,10 +8,10 @@ trait getListWithQuantity
      */
     public static function getListWithQuantity($method_name)
     {     
-        $regions = self::orderBy('name_ru')->get();
+        $objs = self::orderBy('name_ru')->get();
         
         $list = array();
-        foreach ($regions as $row) {
+        foreach ($objs as $row) {
             $count=$row->$method_name()->count();
             $name = $row->name;
             if ($count) {

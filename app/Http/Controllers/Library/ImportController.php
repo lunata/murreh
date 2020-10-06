@@ -24,4 +24,19 @@ class ImportController extends Controller
         Import::placeCoord($file_lines);
 print "Координаты сохранены.";        
     }
+    
+    public function questions(Request $request) {
+        $fname = 'questions'; 
+        $filename = 'import/'.$fname.'.txt';
+        $file_content = Storage::disk('local')->get($filename);
+        $file_lines = preg_split ("/\r?\n/",$file_content);
+//dd($file_lines);
+        Import::questions($file_lines);
+print "Вопросы сохранены.";        
+    }
+    
+    public function qsections() {
+        Import::writeSections();
+print "Разделы вопросов сохранены.";        
+    }
 }
