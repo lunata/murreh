@@ -27,6 +27,9 @@ class Informant extends Model
     use \App\Traits\Relations\BelongsTo\Occupation;
     use \App\Traits\Relations\BelongsTo\Place;
 
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Anketas;
+
     /** Gets place, takes into account locale.
      * 
      * Informant belongs_to Place

@@ -19,6 +19,9 @@ class Question extends Model
     use \App\Traits\Methods\searchStrField;
     use \App\Traits\Methods\searchIntField;
     
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Anketas;
+    
     public function getSectionAttribute() {
         if (!$sections = $this->qsection) {
             return null;
@@ -70,6 +73,52 @@ class Question extends Model
         
         return $list;         
     }    
+    
+    /** Gets list of answers
+     * 
+     * @return Array [1=><answer1>,..]
+     */
+    public function getAnswerList()
+    {     
+        $list = array();
+        foreach ($this->answers as $row) {
+            $list[$row->id] = $row->answer;
+        }
+        
+        return [NULL => ''] + $list;         
+    }    
+    
+    /**
+     * 
+     * @return Array [<question1_id>=><question1_text>,..]
+     */
+    public static function getListByQsection($qsection_id)
+    {     
+        $list = array();
+        $objs = self::where('qsection_id', $qsection_id)->orderBy('id')->get();
+
+        foreach ($objs as $row) {
+            $list[$row->id] = $row->question;
+        }
+                
+        return $list;         
+    }
+    
+    /**
+     * 
+     * @return Array [<qsection1_id>=>[<question1_id>=><question1_text>,..], ...]
+     */
+    public static function getListWithQsections()
+    {     
+        $qsections = Qsection::orderBy('id')->get();
+//dd($qsections);        
+        $list = array();
+        foreach ($qsections as $qsection) {
+            $list[$qsection->id] = self::getListByQsection($qsection->id);
+        }
+                
+        return $list;         
+    }
     
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');

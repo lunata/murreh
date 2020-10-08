@@ -1,0 +1,32 @@
+.nav-tabs > li > a {
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.tab-pane {
+    background-color: #f9f5f5; 
+    border-bottom: 1px #ccc solid;
+    border-left: 1px #ccc solid;
+    border-right: 1px #ccc solid;
+    padding: 20px;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus, 
+.nav-tabs > li.active > a:hover{
+    background-color: #f9f5f5; 
+    font-weight: bold;
+}
+.tab-pane h3 {
+    font-size: 18px;
+    color: #972d1a;
+    margin-top:0;
+    padding-top: 0;
+}
+
+.anketa-ques-edit {
+    cursor: pointer;
+}
+
+.img-loading {
+    display: none;
+}

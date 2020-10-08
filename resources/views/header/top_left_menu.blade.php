@@ -10,7 +10,7 @@
                         </a>
                         
                         <ul class="dropdown-menu" role="menu" id='menu2-sub'>
-                            <li><a href="/ques/anketa">{{ trans('navigation.anketas') }}</a></li>
+                            <li><a href="/ques/anketas">{{ trans('navigation.anketas') }}</a></li>
                             <li><a href="/ques/question">{{ trans('navigation.questions') }}</a></li>
                         </ul>
                     </li>

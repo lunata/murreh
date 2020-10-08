@@ -72,7 +72,7 @@ class Qsection extends Model
     
     /** Gets list of objects with quantity of relations $method_name
      * 
-     * @return Array [1=>'Фонетика (199)',..]
+     * @return array [1=>'Фонетика (199)',..]
      */
     public static function getSectionListWithQuantity()
     {     
@@ -109,6 +109,28 @@ class Qsection extends Model
             $list[$row->id] = $title;
         }
         
+        return $list;         
+    }
+    
+    /**
+     * 
+     * @return Array [1=>[1=>'Вологодская обл.',..], ...]
+     */
+    public static function getListWithSections()
+    {     
+        $qsection = new Qsection;
+        $sections = $qsection->getSections();
+        
+        $list = array();
+        foreach (array_keys($sections) as $section_id) {
+            $list[$section_id] = [];
+            $objs = self::where('section_id', $section_id)->orderBy('id')->get();
+        
+            foreach ($objs as $row) {
+                $list[$section_id][$row->id] = $row->title;
+            }
+        }
+                
         return $list;         
     }
 }

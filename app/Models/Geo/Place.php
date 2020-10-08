@@ -22,6 +22,8 @@ class Place extends Model
     
     use \App\Traits\Methods\getNameAttribute;
 
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Anketas;
     
     public function identifiableName()
     {

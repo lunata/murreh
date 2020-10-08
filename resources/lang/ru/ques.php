@@ -11,8 +11,13 @@ return [
     */
 
     'anketa_exists' => 'Существует анкета, связанная с этой записью',
+    'of_anketa' => 'анкеты',
+    'anketa_removed' => 'Анкета :name удалена',
     'answers' => 'ответы',
+    'fond_number' => 'Фонд / Опись / №',
     'question' => 'вопрос',
     'section' => 'раздел',
+    'speech_sample' => 'образец речи',
     'subsection' => 'подраздел',
+    'year' => 'Год записи',
 ];

@@ -13,6 +13,8 @@ use App\Http\Controllers\Person\OccupationController;
 use App\Http\Controllers\Person\RecorderController;
 use App\Http\Controllers\Person\InformantController;
 
+use App\Http\Controllers\Ques\AnketaController;
+use App\Http\Controllers\Ques\AnketaQuestionController;
 use App\Http\Controllers\Ques\AnswerController;
 use App\Http\Controllers\Ques\QsectionController;
 use App\Http\Controllers\Ques\QuestionController;
@@ -63,6 +65,9 @@ Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
 Route::get('import/qsections', [ImportController::class, 'qsections']);
 Route::get('import/questions', [ImportController::class, 'questions']);
 
+Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
+Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
+
 Route::get('service', [ServiceController::class, 'index']);
 
 Route::resources([
@@ -75,6 +80,7 @@ Route::resources([
     'person/recorder'    => RecorderController::class,
     'person/informant'   => InformantController::class,
     
+    'ques/anketas'      => AnketaController::class,
     'ques/answer'      => AnswerController::class,
     'ques/qsection'    => QsectionController::class,
     'ques/question'    => QuestionController::class,

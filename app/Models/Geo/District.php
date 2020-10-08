@@ -23,6 +23,9 @@ class District extends Model
     // Belongs To Many Relations
     use \App\Traits\Relations\BelongsToMany\Places;
         
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Anketas;
+
     /** Gets list of districts
      * 
      * @return Array [1=>'Бабаевский р-н',..]

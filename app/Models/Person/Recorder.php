@@ -24,6 +24,9 @@ class Recorder extends Model
     use \App\Traits\Relations\BelongsTo\Occupation;
     use \App\Traits\Relations\BelongsTo\Nationality;
     
+    // Has To Many Relations
+    use \App\Traits\Relations\HasMany\Anketas;
+    
     public static function search(Array $url_args) {
         $objs = self::orderBy('name_ru');
         

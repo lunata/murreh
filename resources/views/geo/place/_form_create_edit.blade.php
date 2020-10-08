@@ -18,16 +18,6 @@
                 ['name' => 'name_old_krl', 
                  'title'=>trans('geo.name_old').' '.trans('messages.in_karelian')])
                                   
-{{--        @include('widgets.form.formitem._select', 
-                ['name' => 'region_id', 
-                 'values' =>$region_values,
-                 'title' => trans('geo.region')]) 
-                 
-        @include('widgets.form.formitem._select', 
-                ['name' => 'district_id', 
-                 'values' =>$district_values,
-                 'title' => trans('geo.district')]) --}}
-                 
     </div>
     <div class="col-sm-6">
         <?php $i=0;?>
