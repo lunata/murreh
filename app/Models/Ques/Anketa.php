@@ -25,6 +25,7 @@ class Anketa extends Model
     use \App\Traits\Relations\BelongsTo\Recorder;
     
     // Belongs To Many Relations
+    use \App\Traits\Relations\BelongsToMany\Answers;
     use \App\Traits\Relations\BelongsToMany\Questions;
 
     public static function search(Array $url_args) {

@@ -13,6 +13,7 @@ return [
     'birth_place' => 'место рождения',
     'birth_year' => 'г.р.',
     
+    '_female' => 'в женском роде',
     'fio' => 'ФИО',
     
     'informant' => 'Информант',
@@ -21,6 +22,9 @@ return [
     'informant_list' => 'Список информантов',
     'informant_name' => 'Имя информанта',
     'informant_removed' => 'Информант ":name" удален.',
+    
+    'live' => 'прож.',
+    '_male' => 'в мужском роде',
     
     'name' => 'имя',
     'nationality' => 'национальность',
@@ -36,6 +40,9 @@ return [
     'of_recorder' => 'собирателя',
     
     'place' => 'место жительства',
+    'pol' => 'пол',
+    'pol_values' => ['m' => 'мужской',
+                     'f' => 'женский'],
     
     'recorder' => 'Собиратель',
     'recorder_list' => 'Список собирателей',

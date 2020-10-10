@@ -40,6 +40,7 @@
                 <th>{{ trans('geo.foundation') }}</th>
                 <th>{{ trans('geo.abolition') }}</th>
                 <th>{{ trans('navigation.places') }}</th>
+                <th>{{ trans('navigation.anketas') }}</th>
                 @if (User::checkAccess('geo.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -54,8 +55,23 @@
                 <td data-th="{{ trans('geo.foundation') }}">{{$district->foundation}}</td>
                 <td data-th="{{ trans('geo.abolition') }}">{{$district->abolition}}</td>
                 <td data-th="{{ trans('navigation.places') }}">
-                    @if($district->places)
+                @if($district->places)
+                    @if($district->places()->count())
+                    <a href="/geo/place?search_district={{$district->id}}">
                         {{ $district->places()->count() }}
+                    </a>
+                    @else
+                    0
+                    @endif
+                @endif
+                </td>
+                <td data-th="{{ trans('navigation.anketas') }}">
+                    @if($district->anketas()->count())
+                    <a href="/ques/anketas?search_district={{$district->id}}">
+                        {{ $district->anketas()->count() }}
+                    </a>
+                    @else 
+                        0
                     @endif
                 </td>
                 @if (User::checkAccess('geo.edit'))

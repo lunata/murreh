@@ -4,6 +4,7 @@ namespace App\Models\Ques;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Library\Str;
 
@@ -14,13 +15,13 @@ class Question extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['id', 'section_id', 'subsection_id', 'question'];
+    protected $fillable = ['id', 'section_id', 'qsection_id', 'question'];
     
     use \App\Traits\Methods\searchStrField;
     use \App\Traits\Methods\searchIntField;
     
     // Has To Many Relations
-    use \App\Traits\Relations\HasMany\Anketas;
+    use \App\Traits\Relations\BelongsToMany\Anketas;
     
     public function getSectionAttribute() {
         if (!$sections = $this->qsection) {
@@ -45,7 +46,7 @@ class Question extends Model
     public function answers()
     {
         return $this->hasMany(Answer::class)
-                    ->orderBy('id');
+                    ->orderBy('code');
     }
     
     public static function getSectionIDBySubsectionID(Int $subsection_id) {
@@ -119,7 +120,43 @@ class Question extends Model
                 
         return $list;         
     }
+
+    public function newCode() {
+        $last_answer = $this->answers->last();
+//dd($last_answer);        
+        if (!$last_answer) {
+            return 'a';
+        } else {
+            return $last_answer->code++;
+        }        
+    }
     
+    public function updateAnswers($answers) {
+        foreach ($answers as $answer_id => $info) {
+//dd($answer_id, $info);            
+            if ($answer_id == 'new' && $info['answer']) {
+                $answer = Answer::create([
+                    'question_id' => $this->id,
+                    'code' => $info['code'] ? $info['code'] : $this->newCode(), 
+                    'answer' => $info['answer']]);
+            } elseif ($answer_id != 'new') {
+//dd($answer_id);                
+                $answer = Answer::find($answer_id);
+                if (!$answer) {
+                    dd('There is no answer with ID '.$answer_id);
+                }
+                if (!$info['answer']) {
+                    if ($answer->anketas && $answer->anketas()->count()) {
+                        return $answer->answer;
+                    }
+                    $answer->delete();
+                } else {
+                    $answer->fill($info)->save();
+                }
+            }
+        }
+    }
+
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');
 

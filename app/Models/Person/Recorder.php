@@ -12,7 +12,7 @@ class Recorder extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['name_ru', 'nationality_id', 'occupation_id'];
+    protected $fillable = ['name_ru', 'nationality_id', 'occupation_id', 'pol'];
     
     use \App\Traits\Methods\getNameAttribute;
     use \App\Traits\Methods\getList;
@@ -26,6 +26,42 @@ class Recorder extends Model
     
     // Has To Many Relations
     use \App\Traits\Relations\HasMany\Anketas;
+    
+    public function getOccupationNameAttribute() : String
+    {
+        $pol = $this->pol;
+        $column = "name_ru_".$pol;
+        $occupation = $this->occupation;
+        if (!$occupation) {
+            return '';
+        }
+        return $occupation->{$column} ?? '';
+    }
+    
+    public function getNationalityNameAttribute() : String
+    {
+        $pol = $this->pol;
+        $column = "name_ru_".$pol;
+        $nationality = $this->nationality;
+        if (!$nationality) {
+            return '';
+        }
+        return $nationality->{$column} ?? '';
+    }
+    
+    public function toString() {
+        $info=[$this->name];
+        
+        if ($this->nationality) {
+            $info[] = $this->nationality_name;
+        }
+        
+        if ($this->occupation) {
+            $info[] = $this->occupation_name;
+        }
+        
+        return join(', ', $info);
+    }
     
     public static function search(Array $url_args) {
         $objs = self::orderBy('name_ru');

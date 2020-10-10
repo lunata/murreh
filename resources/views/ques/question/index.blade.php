@@ -51,11 +51,13 @@
                     @endforeach
                 </td>
                 <td data-th="{{ trans('navigation.anketas') }}">
-{{--                   @if($question->anketas())
-                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_question={{$question->id}}">
-                       {{ $recorder->anketas()->count() }} 
-                   </a>
-                    @endif --}}
+                    @if($question->anketas()->count())
+                    <a href="/ques/anketas?search_question={{$question->id}}">
+                        {{ $question->anketas()->count() }}
+                    </a>
+                    @else 
+                        0
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

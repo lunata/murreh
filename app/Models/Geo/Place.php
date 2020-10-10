@@ -103,7 +103,7 @@ class Place extends Model
         
         $list = array();
         foreach ($places as $row) {
-            $list[$row->id] = $row->placeString();
+            $list[$row->id] = $row->toStringWithDistrict();
         }
         
         return $list;         
@@ -120,7 +120,7 @@ class Place extends Model
         $list = array();
         foreach ($places as $row) {
             $count=$row->$method_name()->count();
-            $name = $row->placeString();
+            $name = $row->name;
             if ($count) {
                 $name .= " ($count)";
             }
@@ -226,5 +226,15 @@ class Place extends Model
     
     public function countInformantPlace() {
         return Informant::where('place_id',$this->id)->count();
+    }
+    
+    public function toStringWithDistrict() {
+        $info=[$this->name];
+        
+        if ($this->districtNamesWithDates()) {
+            $info[] = $this->districtNamesWithDates();
+        }
+        
+        return join(', ', $info);
     }
 }

@@ -1,4 +1,4 @@
-<?php $list_count = 1;?>
+<?php $list_count = 1; ?>
 @extends('layouts.page')
 
 @section('page_title')
@@ -42,14 +42,16 @@
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
                 <td data-th="{{ trans('messages.in_russian') }}">{{$recorder->name_ru}}</td>
-                <td data-th="{{ trans('person.nationality') }}">{{$recorder->nationality->name ?? null}}</td>
-                <td data-th="{{ trans('person.occupation') }}">{{$recorder->occupation->name ?? null}}</td>
+                <td data-th="{{ trans('person.nationality') }}">{{$recorder->nationality_name}}</td>
+                <td data-th="{{ trans('person.occupation') }}">{{$recorder->occupation_name}}</td>
                 <td data-th="{{ trans('navigation.anketas') }}">
-{{--                   @if($recorder->anketas())
-                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_recorder={{$recorder->id}}">
-                       {{ $recorder->anketas()->count() }} 
-                   </a>
-                    @endif --}}
+                    @if($recorder->anketas()->count())
+                    <a href="/ques/anketas?search_recorder={{$recorder->id}}">
+                        {{ $recorder->anketas()->count() }}
+                    </a>
+                    @else 
+                        0
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

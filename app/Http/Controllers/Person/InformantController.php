@@ -24,7 +24,8 @@ class InformantController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:edit,/person/informant/', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('auth:edit,/');
+//        $this->middleware('auth:edit,/person/informant/', ['only' => ['create','store','edit','update','destroy']]);
         
         $this->url_args = Informant::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);

@@ -56,6 +56,9 @@
         <p><b>{{trans('geo.place')}}:</b> {{$anketa->place->name}}</p>
         <p><b>{{trans('geo.population')}}:</b> {{$anketa->population}}</p>
         <p><b>{{trans('ques.year')}}:</b> {{$anketa->year}}</p>
+        <p><b>{{trans('person.recorder')}}:</b> {{$anketa->recorder->toString()}}</p>
+        @include('person.informant._to_string', ['informant'=>$anketa->informant])
+        </p>
         
 <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">           
@@ -75,7 +78,7 @@
                     <i id="anketa-ques-edit-{{$qsection_id}}" class="anketa-ques-edit fa fa-pencil-alt fa-lg" data-qid="{{$qsection_id}}"></i>                
                 </h3>
                 <img class="img-loading" id="loading-questions-{{$qsection_id}}" src="{{ asset('images/loading.gif') }}">
-                <div id="anketa-ques-{{$qsection_id}}">
+                <div id="anketa-ques-{{$qsection_id}}" class="anketa-ques">
                     @include('ques.anketa._question_show', ['anketa'=>$anketa, 'questions'=>$question_values[$qsection_id], 'qsection_id'=>$qsection_id])
                 </div>
             @endforeach

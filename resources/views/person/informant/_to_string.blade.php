@@ -5,16 +5,31 @@
             $info[] = $informant->name;
         }
         
+        if ($informant->nationality) {
+            $info[] = $informant->nationality_name;
+        }
+        
+        if ($informant->occupation) {
+            $info[] = $informant->occupation_name;
+        }
+        
         if ($informant->birth_date) {
-            $info[] = '<i>'.\Lang::get('person.birth_year'). '</i> '. $informant->birth_date;
+            $info[] = $informant->birth_date. ' <i>'.\Lang::get('person.birth_year'). '</i>';
         }
 
+        if ($informant->birth_place) {
+            $info[] = '<i>'.\Lang::get('person.nee'). '</i> '. $informant->birth_place->toStringWithDistrict();
+        }
+        
+        if ($informant->place) {
+            $info[] = '<i>'.\Lang::get('person.live'). '</i> '. $informant->place->toStringWithDistrict();
+        }
+        
         $informant_info = join(', ', $info);
 ?>
 @if ($informant_info)
-<i>{{ trans('person.informant')}}:</i> 
-    {!! $informant_info !!},
+<p><b>{{ trans('person.informant')}}:</b> 
+    {!! $informant_info !!}
 
-    @if ($informant->birth_place)
-    <i>{{ trans('person.nee')}}</i> @include('geo.place._to_string',['place' => $informant->birth_place, 'lang_id' => $lang_id])@endif
+</p>
 @endif

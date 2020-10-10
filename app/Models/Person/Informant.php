@@ -14,7 +14,7 @@ class Informant extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['name_ru', 'birth_date', 'birth_place_id', 'place_id', 'nationality_id', 'occupation_id'];
+    protected $fillable = ['name_ru', 'birth_date', 'birth_place_id', 'place_id', 'nationality_id', 'occupation_id', 'pol'];
     
     use \App\Traits\Methods\getNameAttribute;
     use \App\Traits\Methods\getList;
@@ -30,6 +30,28 @@ class Informant extends Model
     // Has To Many Relations
     use \App\Traits\Relations\HasMany\Anketas;
 
+    public function getOccupationNameAttribute() : String
+    {
+        $pol = $this->pol;
+        $column = "name_ru_".$pol;
+        $occupation = $this->occupation;
+        if (!$occupation) {
+            return '';
+        }
+        return $occupation->{$column} ?? '';
+    }
+    
+    public function getNationalityNameAttribute() : String
+    {
+        $pol = $this->pol;
+        $column = "name_ru_".$pol;
+        $nationality = $this->nationality;
+        if (!$nationality) {
+            return '';
+        }
+        return $nationality->{$column} ?? '';
+    }
+    
     /** Gets place, takes into account locale.
      * 
      * Informant belongs_to Place
