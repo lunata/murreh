@@ -74,17 +74,20 @@ class Qsection extends Model
      * 
      * @return array [1=>'Фонетика (199)',..]
      */
-    public static function getSectionListWithQuantity($anketa)
+    public static function getSectionListWithQuantity($anketa=null)
     {     
         $qsection = new Qsection;
         $sections = $qsection->getSections();
         
         $list = array();
         foreach ($sections as $section_id=>$title) {
-            $answer_count=$anketa->questions()->where('section_id', $section_id)->count();
             $count=Question::where('section_id',$section_id)->count();
+            if ($anketa) {
+                $answer_count=$anketa->questions()->where('section_id', $section_id)->count();
+                $count = "$answer_count / $count";
+            }
             if ($count) {
-                $title .= " ($answer_count / $count)";
+                $title .= " ($count)";
             }
             $list[$section_id] = $title;
         }

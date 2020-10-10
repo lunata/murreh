@@ -24,6 +24,7 @@
 
         <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
         
+        @if($anketas->count()) 
         <table class="table-bordered table-wide rwd-table wide-md">
         <thead>
             <tr>
@@ -72,6 +73,7 @@
         </tbody>
         </table>
         {{ $anketas->appends($url_args)->links() }}
+        @endif
     </div>
 @stop
 

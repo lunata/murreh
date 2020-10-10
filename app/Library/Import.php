@@ -29,7 +29,7 @@ class Import {
         if (!$place) {
             dd("Населенный пункт с ID=".$data[1]." отсутствует.");
         }
-        $place->fill(['latitude'=>$data[2], 'longitude'=>$data[2]])->save();
+        $place->fill(['latitude'=>$data[2], 'longitude'=>$data[3]])->save();
     }
     
     /**

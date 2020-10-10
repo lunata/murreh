@@ -38,10 +38,32 @@ class Anketa extends Model
         $objs = self::searchIntField($objs, 'place_id', $url_args['search_place']);
         $objs = self::searchIntField($objs, 'recorder_id', $url_args['search_recorder']);
         $objs = self::searchIntField($objs, 'informant_id', $url_args['search_informant']);
+        $objs = self::searchByAnswer($objs, $url_args['search_answer']);
+        $objs = self::searchByQuestion($objs, $url_args['search_question']);
         
         return $objs;
     }
     
+    public static function searchByAnswer($objs, $search_value) {
+        if (!$search_value) {
+            return $objs;
+        }
+        return $objs->whereIn('id', function($query) use ($search_value) {
+                    $query->select('anketa_id')->from('anketa_question')
+                          ->where('answer_id', $search_value);
+        });
+    }
+    
+    public static function searchByQuestion($objs, $search_value) {
+        if (!$search_value) {
+            return $objs;
+        }
+        return $objs->whereIn('id', function($query) use ($search_value) {
+                    $query->select('anketa_id')->from('anketa_question')
+                          ->where('question_id', $search_value);
+        });
+    }
+
     public static function urlArgs($request) {
         $url_args = Str::urlArgs($request) + [
                     'search_id'   => (int)$request->input('search_id') ? (int)$request->input('search_id') : null,
@@ -51,6 +73,8 @@ class Anketa extends Model
                     'search_place'   => (int)$request->input('search_place') ? (int)$request->input('search_place') : null,
                     'search_recorder'   => (int)$request->input('search_recorder') ? (int)$request->input('search_recorder') : null,
                     'search_informant'   => (int)$request->input('search_informant') ? (int)$request->input('search_informant') : null,
+                    'search_answer'   => (int)$request->input('search_answer') ? (int)$request->input('search_answer') : null,
+                    'search_question'   => (int)$request->input('search_question') ? (int)$request->input('search_question') : null,
                 ];
         
         return $url_args;
