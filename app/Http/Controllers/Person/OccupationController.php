@@ -11,7 +11,6 @@ use App\Models\Person\Occupation;
 
 class OccupationController extends Controller
 {
-    use \App\Traits\Methods\validateRequest;
      /**
      * Instantiate a new new controller instance.
      *
@@ -60,6 +59,13 @@ class OccupationController extends Controller
                 compact('args_by_get', 'url_args'));
     }
 
+    public function validateRequest(Request $request) {
+        $this->validate($request, [
+            'name_ru_m'  => 'required|max:45',
+            'name_ru_f'  => 'required|max:45',
+        ]);
+    }
+    
     /**
      * Store a newly created resource in storage.
      *

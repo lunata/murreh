@@ -11,7 +11,6 @@ use App\Models\Person\Nationality;
 
 class NationalityController extends Controller
 {
-    use \App\Traits\Methods\validateRequest;
      /**
      * Instantiate a new new controller instance.
      *
@@ -60,6 +59,13 @@ class NationalityController extends Controller
                 compact('args_by_get', 'url_args'));
     }
 
+    public function validateRequest(Request $request) {
+        $this->validate($request, [
+            'name_ru_m'  => 'required|max:45',
+            'name_ru_f'  => 'required|max:45',
+        ]);
+    }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -112,7 +118,7 @@ class NationalityController extends Controller
     {
         $this->validateRequest($request);
         $nationality->fill($request->all())->save();
-        
+
         return Redirect::to('/person/nationality/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }

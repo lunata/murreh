@@ -47,7 +47,7 @@
             @foreach($nationalities as $nationality)
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
-                <td data-th="{{ trans('person.name') }}">{{$nationality->name_ru}}</td>
+                <td data-th="{{ trans('person.name') }}">{{$nationality->name_ru_m}}, {{$nationality->name_ru_f}}</td>
                 <td data-th="{{ trans('navigation.recorders') }}">
                     @if($nationality->recorders)
                         @if ($nationality->recorders()->count())

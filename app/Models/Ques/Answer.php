@@ -14,6 +14,9 @@ class Answer extends Model
     public $timestamps = false;
     protected $fillable = ['question_id', 'code', 'answer'];
     
+    // Has To Many Relations
+    use \App\Traits\Relations\BelongsToMany\Anketas;
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

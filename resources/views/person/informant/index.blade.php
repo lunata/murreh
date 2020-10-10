@@ -50,16 +50,16 @@
                 <td data-th="{{ trans('person.birth_year') }}">{{$informant->birth_date}}</td>
                 <td data-th="{{ trans('person.birth_place') }}">
                     @if ($informant->birth_place)
-                        {{$informant->birth_place->placeString()}}
+                        {{$informant->birth_place->toStringWithDistrict()}}
                     @endif
                 </td>
                 <td data-th="{{ trans('person.place') }}">
                     @if ($informant->place)
-                        {{$informant->place->placeString()}}
+                        {{$informant->place->toStringWithDistrict()}}
                     @endif
                 </td>
-                <td data-th="{{ trans('person.nationality') }}">{{$informant->nationality->name ?? null}}</td>
-                <td data-th="{{ trans('person.occupation') }}">{{$informant->occupation->name ?? null}}</td>
+                <td data-th="{{ trans('person.nationality') }}">{{$informant->nationality_name ?? null}}</td>
+                <td data-th="{{ trans('person.occupation') }}">{{$informant->occupation_name ?? null}}</td>
                 <td data-th="{{ trans('navigation.anketas') }}">
 {{--                   @if($informant->anketas())
                    <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_informant={{$informant->id}}">

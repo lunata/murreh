@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Ques;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Library\Str;
 
+use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
@@ -59,23 +61,21 @@ class QuestionController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
 
-        $nationality_values = [NULL => ''] + Nationality::getList();
-        $occupation_values = [NULL => ''] + Occupation::getList();        
-        $place_values = [NULL => ''] + Place::getList();
+        $section_values = Qsection::getSectionList();
+        $qsection_values = Qsection::getList();
+
+        $answers = [];
         
         return view('ques.question.create', 
-                compact('nationality_values', 'occupation_values', 
-                        'place_values', 'args_by_get', 'url_args'));
+                compact('answers', 'section_values', 'qsection_values', 
+                        'args_by_get', 'url_args'));
     }
 
     public function validateRequest(Request $request) {
         $this->validate($request, [
-            'name_ru'  => 'required|max:150',
-//            'birth_date' => 'numeric',
-//            'birth_place_id' => 'numeric',
-  //          'place_id' => 'numeric',
-    //        'nationality_id' => 'numeric',
-      //      'occupation_id' => 'numeric',
+            'question'  => 'required|max:150',
+            'section_id' => 'numeric',
+            'qsection_id' => 'numeric',
         ]);
     }
     
@@ -88,6 +88,7 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $this->validateRequest($request);       
+//dd($request->all());        
         $question = Question::create($request->all());
         
         return Redirect::to('/ques/question/'.$this->args_by_get)
@@ -115,14 +116,15 @@ class QuestionController extends Controller
     {
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
+               
+        $section_values = Qsection::getSectionList();
+        $qsection_values = Qsection::getList();
         
-        $place_values = [NULL => ''] + Place::getList();
-        $nationality_values = [NULL => ''] + Nationality::getList();
-        $occupation_values = [NULL => ''] + Occupation::getList();        
+        $answers = $question->answers;
         
         return view('ques.question.edit',
-                compact('question', 'nationality_values', 'occupation_values',
-                        'place_values', 'args_by_get', 'url_args'));
+                compact('answers', 'section_values', 'qsection_values', 'question', 
+                        'args_by_get', 'url_args'));
     }
 
     /**
@@ -137,6 +139,12 @@ class QuestionController extends Controller
         $this->validateRequest($request);
         $question->fill($request->all())->save();
         
+        $answer_name = $question->updateAnswers($request->answers);
+//dd($answer_name);        
+        if ($answer_name) { // answer option that cannot be deleted
+            return Redirect::to('/ques/question/'.$this->args_by_get)
+                           ->withErrors(trans('error.answer_has_anketas', ['name'=>$answer_name]));
+        }        
         return Redirect::to('/ques/question/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
@@ -154,7 +162,7 @@ class QuestionController extends Controller
         $result =[];
         if($question) {
             try{
-                $question_name = $question->name;
+                $question_name = $question->question;
                 $question->delete();
                 $result['message'] = \Lang::get('ques.question_removed', ['name'=>$question_name]);
             }catch(\Exception $ex){
@@ -169,10 +177,10 @@ class QuestionController extends Controller
         }
         
         if ($error) {
-                return Redirect::to('/ques/question/')
+                return Redirect::to('/ques/question/'.$this->args_by_get)
                                ->withErrors($result['error_message']);
         } else {
-            return Redirect::to('/ques/question/')
+            return Redirect::to('/ques/question/'.$this->args_by_get)
                   ->withSuccess($result['message']);
         }
     }

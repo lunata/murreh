@@ -47,7 +47,7 @@
             @foreach($occupations as $occupation)
             <tr>
                 <td data-th="No">{{ $list_count++ }}</td>
-                <td data-th="{{ trans('person.name') }}">{{$occupation->name_ru}}</td>
+                <td data-th="{{ trans('person.name') }}">{{$occupation->name_ru_m}}@if ($occupation->name_ru_f && $occupation->name_ru_f!=$occupation->name_ru_m), {{$occupation->name_ru_f}}@endif</td>
                 <td data-th="{{ trans('navigation.recorders') }}">
                     @if($occupation->recorders)
                         @if ($occupation->recorders()->count())

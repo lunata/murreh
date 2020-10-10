@@ -1,21 +1,16 @@
 <?php
-        $info=[];
-        if ($place->name) {
-            $info[0] = $place->name;
-            if ($place->other_names()->count()) {
-                $other_name = $place->other_names()->where('lang_id',$lang_id)->first();
-                if ($other_name) {
-                    $info[0] .= " (".$other_name->name.")";
-                }
+        $info=[$place->name];
+/*        $names = [];
+        foreach (['name_old_ru', 'name_krl', 'name_old_krl'] as $n) {
+            if ($place->{$n}) {
+                $names[] = $place->{$n};
             }
         }
-        
-        if ($place->district) {
-            $info[] = $place->district->name;
-        }
-        
-        if ($place->region) {
-            $info[] = $place->region->name;
+        if (sizeof ($names)) {
+            $info[0] .= " (".join(', ', $names).")";
+        }*/
+        if ($place->districtNamesWithDates()) {
+            $info[] = $place->districtNamesWithDates();
         }
         
         print join(', ', $info);
