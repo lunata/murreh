@@ -27,7 +27,8 @@ class AnketaController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:edit,/ques/anketas/', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('auth:edit,/');
+//        $this->middleware('auth:edit,/ques/anketas/', ['only' => ['create','store','edit','update','destroy']]);
         
         $this->url_args = Anketa::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);
@@ -117,7 +118,7 @@ class AnketaController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
 
-        $section_values = Qsection::getSectionListWithQuantity();
+        $section_values = Qsection::getSectionListWithQuantity($anketa);
         $qsection_values = Qsection::getListWithSections();
         $question_values = Question::getListWithQsections();
 //dd($question_values);        

@@ -45,11 +45,13 @@
                 <td data-th="{{ trans('person.nationality') }}">{{$recorder->nationality_name}}</td>
                 <td data-th="{{ trans('person.occupation') }}">{{$recorder->occupation_name}}</td>
                 <td data-th="{{ trans('navigation.anketas') }}">
-{{--                   @if($recorder->anketas())
-                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_recorder={{$recorder->id}}">
-                       {{ $recorder->anketas()->count() }} 
-                   </a>
-                    @endif --}}
+                    @if($recorder->anketas()->count())
+                    <a href="/ques/anketas?search_recorder={{$recorder->id}}">
+                        {{ $recorder->anketas()->count() }}
+                    </a>
+                    @else 
+                        0
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

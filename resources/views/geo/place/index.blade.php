@@ -73,23 +73,23 @@
                 <td data-th="{{ trans('geo.population') }}" style="text-align: right">
                     {{ $place->population }}
                 </td>
-                <td class="number-cell" data-th="{{ trans('navigation.informants') }}">
-{{--                    @if($place->informants()->count())
-                    <a href="{{ LaravelLocalization::localizeURL('/geo/informant/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_birth_place={{$place->id}}">
+                <td data-th="{{ trans('navigation.informants') }}">
+                    @if($place->informants()->count())
+                    <a href="/geo/informant?search_place={{$place->id}}">
                         {{ $place->informants()->count() }}
                     </a>
                     @else 
                         0
-                    @endif--}}
+                    @endif
                 </td>
-                <td class="number-cell" data-th="{{ trans('navigation.') }}">
-{{--                    @if($place->informants()->count())
-                    <a href="{{ LaravelLocalization::localizeURL('/geo/informant/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_birth_place={{$place->id}}">
-                        {{ $place->informants()->count() }}
+                <td data-th="{{ trans('navigation.anketas') }}">
+                    @if($place->anketas()->count())
+                    <a href="/ques/anketas?search_place={{$place->id}}">
+                        {{ $place->anketas()->count() }}
                     </a>
                     @else 
                         0
-                    @endif--}}
+                    @endif
                 </td>
                 @if (User::checkAccess('geo.edit'))
                 <td data-th="{{ trans('messages.actions') }}">

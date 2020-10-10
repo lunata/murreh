@@ -61,11 +61,13 @@
                 <td data-th="{{ trans('person.nationality') }}">{{$informant->nationality_name ?? null}}</td>
                 <td data-th="{{ trans('person.occupation') }}">{{$informant->occupation_name ?? null}}</td>
                 <td data-th="{{ trans('navigation.anketas') }}">
-{{--                   @if($informant->anketas())
-                   <a href="/ques/anketa/') }}{{$args_by_get ? $args_by_get.'&' : '?'}}search_informant={{$informant->id}}">
-                       {{ $recorder->anketas()->count() }} 
-                   </a>
-                    @endif --}}
+                    @if($informant->anketas()->count())
+                    <a href="/ques/anketas?search_informant={{$informant->id}}">
+                        {{ $informant->anketas()->count() }}
+                    </a>
+                    @else 
+                        0
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
