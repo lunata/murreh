@@ -12,7 +12,6 @@ function saveAnswer() {
     var code = $( "#code" ).val();
     var answer = $( "#answer" ).val();
     var qid = $( "#qid" ).val();
-console.log('qid: ' +qid);    
     var route = '/ques/answer';
     var test_url = '?qid='+qid+'&code='+code+'&answer='+answer;
     
@@ -24,7 +23,7 @@ console.log('qid: ' +qid);
               },
         type: 'POST',
         success: function(answer_id){       
-console.log('qid: ' +qid);    
+/*console.log('qid: ' +qid);    */
             $("#modalAddAnswer").modal('hide');
             clearAnswerModal();
             if (answer_id) {
@@ -32,7 +31,6 @@ console.log('qid: ' +qid);
                 $("#answers_"+qid+"__id_").append(opt);
                 opt.setAttribute('selected','selected')
             }
-console.log('qid: ' +qid);    
         },
         error: function (jqXHR, textStatus, errorThrown) {
             var text = 'Ajax Request Error: ' + 'XMLHTTPRequestObject status: ('+jqXHR.status + ', ' + jqXHR.statusText+'), ' + 
@@ -58,7 +56,6 @@ function clearAnswerModal() {
  * @returns NULL
  */    
 function addAnswer(qid) {
-console.log('qid: ' +qid);    
     var answer_text = $("#answers_"+qid+"__text_").val();   
     var question = $("#question-"+qid).html();   
     $("#modalAddAnswer").modal('show');
