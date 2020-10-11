@@ -6,7 +6,7 @@
 <head>
 @include('header.head')
 </head>
-<body>
+<body onload="@yield('bodyOnLoad')">
     <!--[if lt IE 7]>
     <p class="browsehappy">Вы используете  <strong>слишком старый</strong> браузер. Пожалуйста <a href="http://browsehappy.com/">обновите ваш браузер</a> для нормального серфинга по современным сайтам.</p>
     <![endif]-->

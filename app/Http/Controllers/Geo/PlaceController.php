@@ -191,4 +191,10 @@ class PlaceController extends Controller
         }
     }
     
+    public function showMap() {
+        $places = Place::where('latitude', '>', 0)
+                       ->where('longitude', '>', 0)
+                       ->orderBy('id')->get();
+        return view('geo.place.map', compact('places')); 
+    }
 }

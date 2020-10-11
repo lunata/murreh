@@ -60,6 +60,8 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 // о том, что письмо отправлено и надо заглянуть в почтовый ящик.
 Route::get('wait', [AuthController::class, 'wait']);
 
+Route::get('geo/place/map', [PlaceController::class, 'showMap']);
+
 //Route::get('import/district_names', [ImportController::class, 'districtNames']);
 Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
 Route::get('import/qsections', [ImportController::class, 'qsections']);
