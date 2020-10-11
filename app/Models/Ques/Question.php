@@ -123,11 +123,11 @@ class Question extends Model
 
     public function newCode() {
         $last_answer = $this->answers->last();
-//dd($last_answer);        
+//dd($last_answer->code);        
         if (!$last_answer) {
             return 'a';
         } else {
-            return $last_answer->code++;
+            return ++$last_answer->code;
         }        
     }
     

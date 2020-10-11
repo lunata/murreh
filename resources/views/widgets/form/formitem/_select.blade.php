@@ -13,7 +13,8 @@ if (!isset($attributes)) {
 if (!isset($attributes['class'])) {
     $attributes['class'] = 'form-control';
 }
-$attributes['id'] = $name;
+$id_name = preg_replace("/[\.\]\[]/","_",$name);
+$attributes['id'] = $id_name;
 
 ?>
 

@@ -2,6 +2,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="Russian language, Veps language, Karelian language, computer-readable dictionary, русский язык, вепсский язык, карельский язык, машиночитаемый словарь">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ trans('main.site_abbr') }} :: @yield('title')</title>
     

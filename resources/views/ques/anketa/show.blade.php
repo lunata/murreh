@@ -37,6 +37,13 @@
 @stop
 
 @section('body')
+        @if (User::checkAccess('corpus.edit'))
+            @include('widgets.modal',['name'=>'modalAddAnswer',
+                                  'title'=>trans('ques.add-answer'),
+                                  'submit_onClick' => 'saveAnswer()',
+                                  'submit_title' => trans('messages.save'),
+                                  'modal_view'=>'ques.answer._form_create'])
+        @endif         
         <p><a href="{{route('anketas.index', $url_args)}}">{{ trans('messages.back_to_list') }}</a>
                     
         @if (User::checkAccess('edit'))
@@ -89,6 +96,7 @@
 
 @section('footScriptExtra')
     {!!Html::script('js/rec-delete-link.js')!!}
+    {!!Html::script('js/ques.js')!!}
 @stop
 
 @section('jqueryFunc')

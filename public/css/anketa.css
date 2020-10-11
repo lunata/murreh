@@ -23,7 +23,9 @@
     padding-top: 0;
 }
 
-.anketa-ques-edit {
+.anketa-ques-edit,
+.call-add-answer {
+    color: #972d1a;
     cursor: pointer;
 }
 

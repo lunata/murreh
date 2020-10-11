@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Ques;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Ques\Answer;
+use App\Models\Ques\Question;
+
 class AnswerController extends Controller
 {
     /**
@@ -35,7 +38,19 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $question_id = (int)$request->question_id;
+        $answer = $request->answer;
+        if (!$question_id || !$answer) { return; }
+        
+        $question = Question::find($question_id);
+        if (!$question) { return; }
+        
+        $answer = Answer::create([
+            'question_id' => $question->id,
+            'code' => $request->code ? $request->code : $question->newCode(), 
+            'answer' => $answer]);
+        
+        return $answer->id;
     }
 
     /**
