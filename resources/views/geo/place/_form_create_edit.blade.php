@@ -12,16 +12,18 @@
                  
         @include('widgets.form.formitem._text', 
                 ['name' => 'name_krl', 
+                 'special_symbol' => true,
                  'title'=>trans('geo.name').' '.trans('messages.in_karelian')])
                  
         @include('widgets.form.formitem._text', 
                 ['name' => 'name_old_krl', 
+                 'special_symbol' => true,
                  'title'=>trans('geo.name_old').' '.trans('messages.in_karelian')])
                                   
     </div>
     <div class="col-sm-6">
         <?php $i=0;?>
-        @foreach ($district_value as $district)
+        @foreach ($district_value ?? [] as $district)
             @include('geo.place._form_district_group', ['district'=>$district])
             <?php $i++;?>
         @endforeach
@@ -41,4 +43,3 @@
     </div>
 </div>                 
 
-@include('widgets.form.formitem._submit', ['title' => $submit_title])

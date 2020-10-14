@@ -103,6 +103,18 @@ class Place extends Model
         
         $list = array();
         foreach ($places as $row) {
+            $list[$row->id] = $row->name;
+        }
+        
+        return $list;         
+    }
+    
+    public static function getListWithDistricts()
+    {     
+        $places = self::orderBy('name_ru')->get();
+        
+        $list = array();
+        foreach ($places as $row) {
             $list[$row->id] = $row->toStringWithDistrict();
         }
         
@@ -229,12 +241,12 @@ class Place extends Model
     }
     
     public function toStringWithDistrict() {
-        $info=[$this->name];
+        $info = $this->name;
         
         if ($this->districtNamesWithDates()) {
-            $info[] = $this->districtNamesWithDates();
+            $info .= ' ('. $this->districtNamesWithDates(). ')';
         }
         
-        return join(', ', $info);
+        return $info;
     }
 }

@@ -9,7 +9,7 @@
         <p><a href="/person/recorder/{{$recorder->id}}{{$args_by_get}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::model($recorder, array('method'=>'PUT', 'route' => array('recorder.update', $recorder->id))) !!}
-        @include('person.recorder._form_create_edit', ['submit_title' => trans('messages.save'),
-                                      'action' => 'edit'])
+        @include('person.recorder._form_create_edit', ['action' => 'edit'])
+        @include('widgets.form.formitem._submit', ['title' => trans('messages.save')])
         {!! Form::close() !!}
 @stop

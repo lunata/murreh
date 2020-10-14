@@ -9,7 +9,7 @@
         <p><a href="/geo/district/{{ $district->id }}{{$args_by_get}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::model($district, array('method'=>'PUT', 'route' => array('district.update', $district->id))) !!}
-        @include('geo.district._form_create_edit', ['submit_title' => trans('messages.save'),
-                                      'action' => 'edit'])
+        @include('geo.district._form_create_edit', ['action' => 'edit'])
+        @include('widgets.form.formitem._submit', ['title' => trans('messages.save')])
         {!! Form::close() !!}
 @stop

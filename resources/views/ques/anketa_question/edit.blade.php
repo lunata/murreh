@@ -17,7 +17,7 @@
                  'value' => $anketa->getAnswer($question->id)->answer_text ?? null])
     </div>                 
     <div class="col-sm-1">   
-        <i onClick="addAnswer('{{$question->id}}')" class="call-add-answer fa fa-plus fa-lg" title="добавить новый вариант ответа"></i>
+        <i onClick="addAnswer('{{$question->id}}')" class="call-add fa fa-plus fa-lg" title="добавить новый вариант ответа"></i>
     </div>
 </div>
 @endforeach

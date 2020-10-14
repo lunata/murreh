@@ -14,6 +14,7 @@
                  
         @include('widgets.form.formitem._text', 
                 ['name' => 'question', 
+                 'special_symbol' => true,
                  'title'=>trans('ques.question')])
                  
     </div>

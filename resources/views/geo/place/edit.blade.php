@@ -13,8 +13,8 @@
         <p><a href="/geo/place/{{$place->id}}{{$args_by_get}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::model($place, ['method'=>'PUT', 'route' => ['place.update', $place->id]]) !!}
-        @include('geo.place._form_create_edit', ['submit_title' => trans('messages.save'),
-                                      'action' => 'edit'])
+        @include('geo.place._form_create_edit', ['action' => 'edit'])
+        @include('widgets.form.formitem._submit', ['title' => trans('messages.save')])
         {!! Form::close() !!}
 @stop
 

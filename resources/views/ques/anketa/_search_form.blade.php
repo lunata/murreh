@@ -1,4 +1,4 @@
-        {!! Form::open(['url' => '/ques/anketa/', 
+        {!! Form::open(['url' => $url, 
                              'method' => 'get']) 
         !!}
 <div class="row">

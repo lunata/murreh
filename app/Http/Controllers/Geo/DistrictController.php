@@ -80,8 +80,12 @@ class DistrictController extends Controller
         
         $district = District::create($request->all());
         
-        return Redirect::to('/geo/district/'.($this->args_by_get))
-            ->withSuccess(\Lang::get('messages.created_success'));        
+        if ($request->from_ajax) {
+            return $district->id;
+        } else {
+            return Redirect::to('/geo/district/'.($this->args_by_get))
+                   ->withSuccess(\Lang::get('messages.created_success'));        
+        }
     }
 
     /**

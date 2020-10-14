@@ -6,34 +6,6 @@
 
 @section('headExtra')
     {!!Html::style('css/anketa.css')!!}
-    <script>
-    function saveAnswers(qid) {
-        var form = $('#change-answers-'+qid);
-        $(form).submit(function(event) {
-            event.preventDefault();
-            var formData = $(form).serialize();
-
-            $.ajax({
-                type: 'PUT',
-                url: $(form).attr('action'),
-                data: formData})
-             .done(function(response) {
-                    $("#anketa-ques-"+qid).html(response);
-                    $("#loading-questions-"+qid).hide();                
-                    $("#anketa-ques-edit-"+qid).show();                
-            })
-        });
-    }
-    
-    function fillAnswer(el, qid) {
-        var answer_field = '#answers_'+qid+'__text_';
-    
-        if ($(answer_field).val() == '') {
-            var a=$(el).find('option:selected').text(); 
-            $(answer_field).val(a);
-        }
-    }
-    </script>
 @stop
 
 @section('body')
@@ -97,10 +69,12 @@
 @section('footScriptExtra')
     {!!Html::script('js/rec-delete-link.js')!!}
     {!!Html::script('js/ques.js')!!}
+    {!!Html::script('js/special_symbols.js')!!}
 @stop
 
 @section('jqueryFunc')
     recDelete('{{ trans('messages.confirm_delete') }}');
+    toggleSpecial();
     
     $(".anketa-ques-edit").click(function() {
         var qid=$(this).data('qid');

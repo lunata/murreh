@@ -12,9 +12,9 @@
         <p><a href="{{route('place.index', $url_args)}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::open(array('method'=>'POST', 'route' => array('place.store'))) !!}
-        @include('geo.place._form_create_edit', ['submit_title' => trans('messages.create_new_m'),
-                                      'action' => 'create',
+        @include('geo.place._form_create_edit', ['action' => 'create',
                                       'district_value' => []])
+        @include('widgets.form.formitem._submit', ['title' => trans('messages.create_new_m')])
         {!! Form::close() !!}
 @stop
 

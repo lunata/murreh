@@ -42,6 +42,22 @@ class District extends Model
         return $list;         
     }
     
+    /** Gets list of districts with regions
+     * 
+     * @return Array [1=>'Бабаевский р-н',..]
+     */
+    public static function getListWithRegions()
+    {     
+        $districts = self::orderBy('name_ru')->get();
+        
+        $list = array();
+        foreach ($districts as $row) {
+            $list[$row->id] = $row->name. ' ('.$row->region->name.')';
+        }
+        
+        return $list;         
+    }
+    
     /** Gets list of districts with quantity of relations $method_name
      * 
      * @return Array [1=>'Бабаевский р-н (199)',..]

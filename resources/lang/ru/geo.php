@@ -11,6 +11,8 @@ return [
     */
 
     'abolition' => 'упразднен',
+    'add_district' => 'Добавить район',
+    'add_place' => 'Добавить населенный пункт',
     
     'district' => 'Район',
     'district_list' => 'Список районов',

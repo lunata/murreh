@@ -98,8 +98,12 @@ class InformantController extends Controller
         $this->validateRequest($request);       
         $informant = Informant::create($request->all());
         
-        return Redirect::to('/person/informant/'.$this->args_by_get)
-            ->withSuccess(\Lang::get('messages.created_success'));        
+        if ($request->from_ajax) {
+            return $informant->id;
+        } else {
+            return Redirect::to('/person/informant/'.$this->args_by_get)
+                ->withSuccess(\Lang::get('messages.created_success'));        
+        }
     }
 
     /**

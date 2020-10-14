@@ -21,4 +21,3 @@
                  'title' => trans('person.occupation')]) 
     </div>
 </div>                
-@include('widgets.form.formitem._submit', ['title' => $submit_title])

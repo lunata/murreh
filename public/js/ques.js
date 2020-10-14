@@ -1,13 +1,3 @@
-/**
- * Sends data to server for saving of an answer.
- * Calls changeWordBlock.
- * Closes the window.
- * 
- * @param {Integer} qid
- * @param {Integer} code
- * @param {String} answer 
- * @returns {undefined}
- */
 function saveAnswer() {
     var code = $( "#code" ).val();
     var answer = $( "#answer" ).val();
@@ -46,15 +36,6 @@ function clearAnswerModal() {
     $('#answer').val(null).trigger('change');    
 }
 
-/**
- * Adds answers for the given question.
- * Opens a window after clicking on the unmarked (black) word.
- * Calls saveAnswer().
- * 
- * @param integer anketa_id 
- * @param integer qid
- * @returns NULL
- */    
 function addAnswer(qid) {
     var answer_text = $("#answers_"+qid+"__text_").val();   
     var question = $("#question-"+qid).html();   
@@ -67,3 +48,37 @@ function addAnswer(qid) {
         clearAnswerModal();
     });
 }
+
+
+/**
+ * Эти 2 функции были в anketa.show в headExtra вместе с     <script></script>
+
+ * @param {type} qid
+ * @returns {undefined}
+ */
+    function saveAnswers(qid) {
+        var form = $('#change-answers-'+qid);
+        $(form).submit(function(event) {
+            event.preventDefault();
+            var formData = $(form).serialize();
+
+            $.ajax({
+                type: 'PUT',
+                url: $(form).attr('action'),
+                data: formData})
+             .done(function(response) {
+                    $("#anketa-ques-"+qid).html(response);
+                    $("#loading-questions-"+qid).hide();                
+                    $("#anketa-ques-edit-"+qid).show();                
+            })
+        });
+    }
+    
+    function fillAnswer(el, qid) {
+        var answer_field = '#answers_'+qid+'__text_';
+    
+        if ($(answer_field).val() == '') {
+            var a=$(el).find('option:selected').text(); 
+            $(answer_field).val(a);
+        }
+    }

@@ -10,12 +10,15 @@ use App\Library\Str;
 
 use App\Models\Geo\District;
 use App\Models\Geo\Place;
+use App\Models\Geo\Region;
 
 use App\Models\Ques\Anketa;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
 use App\Models\Person\Informant;
+use App\Models\Person\Nationality;
+use App\Models\Person\Occupation;
 use App\Models\Person\Recorder;
 
 class AnketaController extends Controller
@@ -70,14 +73,18 @@ class AnketaController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
 
-        $district_values = District::getList();
+        $district_values = District::getListWithRegions();
         $informant_values = Informant::getList();
-        $place_values = Place::getList();
+        $place_values = Place::getListWithDistricts();
         $recorder_values = Recorder::getList();
+        $region_values = Region::getList();
+        $nationality_values = [NULL => ''] + Nationality::getList();
+        $occupation_values = [NULL => ''] + Occupation::getList();        
         
         return view('ques.anketa.create', 
-                compact('district_values', 'informant_values', 'place_values', 
-                        'recorder_values', 'args_by_get', 'url_args'));
+                compact('district_values', 'informant_values', 'nationality_values', 
+                        'occupation_values', 'place_values', 'recorder_values', 
+                        'region_values', 'args_by_get', 'url_args'));
     }
 
     public function validateRequest(Request $request) {

@@ -9,8 +9,7 @@
         <p><a href="/person/informant/{{$informant->id}}{{$args_by_get}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::model($informant, array('method'=>'PUT', 'route' => array('informant.update', $informant->id))) !!}
-        @include('person.informant._form_create_edit', ['submit_title' => trans('messages.save'),
-                                      'action' => 'edit',
-                                      'place_values' => $place_values])
+        @include('person.informant._form_create_edit', ['action' => 'edit'])
+        @include('widgets.form.formitem._submit', ['title' => trans('messages.save')])
         {!! Form::close() !!}
 @stop

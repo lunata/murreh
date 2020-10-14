@@ -14,13 +14,13 @@
         @if (User::checkAccess('edit'))
             <a href="{{route('anketas.create', $url_args)}}">
         @endif
-            {{ trans('messages.create_new_m') }}
+            {{ trans('messages.create_new_f') }}
         @if (User::checkAccess('edit'))
             </a>
         @endif
         </p>
         
-        @include('ques.anketa._search_form',['url' => '/ques/anketa/']) 
+        @include('ques.anketa._search_form',['url' => route('anketas.index')]) 
 
         <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
         

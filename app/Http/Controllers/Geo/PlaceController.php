@@ -93,8 +93,12 @@ class PlaceController extends Controller
         $place = Place::create($request->except('districts'));        
         $place->saveDistricts($request->districts);
         
-        return Redirect::to('/geo/place/'.$this->args_by_get)
-            ->withSuccess(\Lang::get('messages.created_success'));        
+        if ($request->from_ajax) {
+            return $place->id;
+        } else {
+            return Redirect::to('/geo/place/'.$this->args_by_get)
+                ->withSuccess(\Lang::get('messages.created_success'));        
+        }
     }
 
     /**

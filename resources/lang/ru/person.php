@@ -10,6 +10,9 @@ return [
     |
     */
 
+    'add_informant' => 'Добавить информанта',
+    'add_recorder' => 'Добавить собирателя',
+    
     'birth_place' => 'место рождения',
     'birth_year' => 'г.р.',
     

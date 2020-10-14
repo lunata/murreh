@@ -90,8 +90,12 @@ class RecorderController extends Controller
         $this->validateRequest($request);
         $recorder = Recorder::create($request->all());
         
-        return Redirect::to('/person/recorder/'.$this->args_by_get)
-            ->withSuccess(\Lang::get('messages.created_success'));        
+        if ($request->from_ajax) {
+            return $recorder->id;
+        } else {
+            return Redirect::to('/person/recorder/'.$this->args_by_get)
+                ->withSuccess(\Lang::get('messages.created_success')); 
+        }
     }
 
     /**
