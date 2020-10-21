@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+//use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use DB;
-use LaravelLocalization;
 
 use App\Models\User;
 use App\Models\Role;
@@ -38,9 +37,9 @@ class UserController extends Controller
         $users = [];
         
         foreach (Role::all() as $role) {
-            $users[$role->id] = $role->users->sortByDesc('id');
+            $users[$role->id] = $role->all_users->sortByDesc('id');
         }
-        
+//dd($users);        
         return view('user.index',
                     compact('users','roles'));
     }
@@ -106,15 +105,8 @@ class UserController extends Controller
         $perm_values = $user->getPermList();
         $perm_value = $user->permValue();
 
-        $lang_values = Lang::getList();
-        $lang_value = $user->langValue();
-        
-        $dialect_values = Dialect::getGroupedList();
-        $dialect_value = $user->dialectValue();
-        
         return view('user.edit',
-                  compact('dialect_value', 'dialect_values', 'lang_value', 'lang_values', 
-                          'perm_value', 'perm_values', 'role_value', 'role_values', 'user'));
+                  compact('perm_value', 'perm_values', 'role_value', 'role_values', 'user'));
     }
 
     /**
@@ -133,7 +125,7 @@ class UserController extends Controller
         ]);
         
         $user = User::find($id);
-        $user->fill($request->only('email','first_name','last_name','country','city','affilation'));
+        $user->fill($request->only('email','first_name','last_name'));
         $user_perms = [];
         if ($request->permissions) {
             foreach ($request->permissions as $p) {
@@ -146,12 +138,6 @@ class UserController extends Controller
         
         $user->roles()->detach();
         $user->roles()->attach($request->roles);
-        
-        $user->langs()->detach();
-        $user->langs()->attach($request->langs);
-        
-        $user->dialects()->detach();
-        $user->dialects()->attach($request->dialects);
         
         return Redirect::to('/user/?search_id='.$user->id)
             ->withSuccess(\Lang::get('messages.updated_success'));        

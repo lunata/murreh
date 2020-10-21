@@ -51,8 +51,8 @@ return [
     */
 
     'users' => [
-//        'model' => 'Cartalyst\Sentinel\Users\EloquentUser',
-        'model' => 'App\Models\User',
+        'model' => 'Cartalyst\Sentinel\Users\EloquentUser',
+//        'model' => 'App\Models\User',
     ],
 
     /*
@@ -65,8 +65,8 @@ return [
     */
 
     'roles' => [
-//        'model' => 'Cartalyst\Sentinel\Roles\EloquentRole',
-        'model' => 'App\Models\Role',
+        'model' => 'Cartalyst\Sentinel\Roles\EloquentRole',
+//        'model' => 'App\Models\Role',
     ],
 
     /*

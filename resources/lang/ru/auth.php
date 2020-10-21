@@ -20,8 +20,9 @@ return [
     'last_activity' => 'Последняя активность',
     'last_login' => 'Последний вход',
     'last_name' => 'Фамилия',
-    'log_in' => 'Войти в VepKar',
+    'log_in' => 'Войти в Murreh',
     'login' => 'Войти',
+    'name' => 'Имя',
     
     'of_role' => 'роли',
     'of_user' => 'пользователя', 

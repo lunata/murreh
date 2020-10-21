@@ -13,7 +13,7 @@
         $format .= ' class="btn btn-xs btn-danger"';
     }
 
-    $format .= '><i class="fa fa-trash fa-lg'. (isset($class) ? ' '.$class : ''). '"></i> %s</a>';
+    $format .= '><i class="fa fa-trash fa-lg '. ($class ?? ''). '"></i> %s</a>';
 
 //    $link = URL::route($route, $obj);
     $link = URL::route($route, $obj, $args);

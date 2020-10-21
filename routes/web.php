@@ -22,6 +22,9 @@ use App\Http\Controllers\Ques\QuestionController;
 use App\Http\Controllers\Library\ImportController;
 use App\Http\Controllers\Library\ServiceController;
 
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -86,4 +89,7 @@ Route::resources([
     'ques/answer'      => AnswerController::class,
     'ques/qsection'    => QsectionController::class,
     'ques/question'    => QuestionController::class,
+    
+    'role'  => RoleController::class,
+    'user'  => UserController::class,
 ]);

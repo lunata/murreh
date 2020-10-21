@@ -1,6 +1,7 @@
                     @if ($user=Sentinel::check())
                         <div class="user-menu-name">
-                            <?php $user = User::find($user->id);?>
+                            <?php 
+                            $user = App\Models\User::find($user->id)?>
                             {{ $user->name }} ({{ $user->rolesNames() }})
                         </div>
                         <div class="user-menu">

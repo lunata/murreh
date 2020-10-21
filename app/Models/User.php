@@ -27,7 +27,7 @@ class User extends EloquentUser
     }
          
     // User __has_many__ Roles
-/*    public function roles(){
+/*    public function all_roles(){
         return $this->belongsToMany(Role::class, 'role_users');
     }*/
     
@@ -68,8 +68,7 @@ class User extends EloquentUser
         $roles = $this->roles;
         $list = [];
         foreach ($roles as $role) {
-//dd($role);        
-            $list[] = $role->lname;
+            $list[] = $role->name;
         }
         return join(', ', $list);
     }
@@ -134,14 +133,17 @@ class User extends EloquentUser
      * @param  string $permission, f.e. 'dict.edit'
      * @return boolean
      */
-    public static function checkAccess(string $permission)
+    public static function checkAccess($permission)
     {
         $user=Sentinel::check();
         if (!$user)
             return false;
 //print "<pre>";
 //var_dump($user);
-        if ($user->hasAccess('admin') || $user->hasAccess($permission))
+        if (!is_array($permission)) {
+            $permission = (array)$permission;
+        }
+        if ($user->hasAccess(['admin'])/* || $user->hasAccess($permission)*/)
             return true;
         return false;
     }

@@ -149,10 +149,14 @@ class AnketaController extends Controller
         $informant_values = Informant::getList();
         $place_values = Place::getList();
         $recorder_values = Recorder::getList();
+        $region_values = Region::getList();
+        $nationality_values = [NULL => ''] + Nationality::getList();
+        $occupation_values = [NULL => ''] + Occupation::getList();        
         
         return view('ques.anketa.edit', 
-                compact('anketa', 'district_values', 'informant_values', 'place_values', 
-                        'recorder_values', 'args_by_get', 'url_args'));
+                compact('anketa', 'district_values', 'informant_values', 'nationality_values', 
+                        'occupation_values', 'place_values', 'recorder_values', 
+                        'region_values', 'args_by_get', 'url_args'));
     }
 
     /**

@@ -10,7 +10,7 @@
 
 @section('body')
         <h2>{{ trans('messages.editing')}} {{ trans('auth.of_user')}} <span class='imp'>"{{ $user->name}}"</span></h2>
-        <p><a href="{{ LaravelLocalization::localizeURL('/user/'.$user->id) }}">{{ trans('messages.back_to_show') }}</a></p>
+        <p><a href="/user/{{$user->id}}">{{ trans('messages.back_to_show') }}</a></p>
         
         {!! Form::model($user, array('method'=>'PUT', 'route' => array('user.update', $user->id))) !!}
         @include('user._form_create_edit', ['submit_title' => trans('messages.save'),

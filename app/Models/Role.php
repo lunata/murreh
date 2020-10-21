@@ -26,9 +26,9 @@ class Role extends EloquentRole
     }
     
     // Role __has_many__ Users
-/*    public function users(){
-        return $this->belongsToMany(User::class, 'role_users');
-    }*/
+    public function all_users(){
+        return $this->belongsToMany(User::class, 'role_users', 'role_id', 'user_id');
+    }
     
     /**
      * Gets a list of permissions for the user.
