@@ -12,8 +12,11 @@ return [
 
     'add-answer' => 'Добавить вариант ответа',
     'anketa_exists' => 'Существует анкета, связанная с этой записью',
+    
     'of_anketa' => 'анкеты',
+    'of_qsection' => 'раздела',
     'of_question' => 'вопроса',
+    
     'anketa_removed' => 'Анкета :name удалена',
     'answers' => 'ответы',
     'answer_variant' => 'вариант ответа',
@@ -21,7 +24,9 @@ return [
     'fond_number' => 'Фонд / Опись / №',
     'question' => 'вопрос',
     'question_removed' => 'Вопрос удален',
+    'qsection_removed' => 'Раздел вопросов удален',
     'section' => 'раздел',
+    'title' => 'название',
     'speech_sample' => 'образец речи',
     'subsection' => 'подраздел',
     'year' => 'Год записи',

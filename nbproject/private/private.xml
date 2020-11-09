@@ -3,11 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/projects/murreh/app/Models/Ques/Question.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QuestionController.php</file>
+            <file>file:/E:/projects/murreh/resources/views/ques/qsection/index.blade.php</file>
+            <file>file:/E:/projects/murreh/app/Models/Ques/Qsection.php</file>
+            <file>file:/E:/projects/murreh/resources/lang/ru/navigation.php</file>
+            <file>file:/E:/projects/murreh/routes/web.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QsectionController.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Library/ServiceController.php</file>
+            <file>file:/E:/projects/murreh/resources/views/ques/anketa/_form_create_edit.blade.php</file>
             <file>file:/E:/projects/murreh/public/js/person.js</file>
+            <file>file:/E:/projects/murreh/resources/lang/ru/ques.php</file>
             <file>file:/E:/projects/murreh/resources/views/widgets/form/formitem/_select.blade.php</file>
+            <file>file:/E:/projects/murreh/resources/views/ques/anketa/show.blade.php</file>
+            <file>file:/E:/projects/murreh/resources/views/header/top_left_menu.blade.php</file>
+            <file>file:/E:/projects/murreh/resources/views/service/index.blade.php</file>
+            <file>file:/E:/projects/murreh/resources/views/ques/anketa/_question_show.blade.php</file>
             <file>file:/E:/projects/murreh/public/js/geo.js</file>
             <file>file:/E:/projects/murreh/resources/views/ques/anketa/edit.blade.php</file>
-            <file>file:/E:/projects/murreh/resources/views/ques/anketa/_form_create_edit.blade.php</file>
         </group>
     </open-files>
 </project-private>

@@ -20,6 +20,7 @@ return [
     'logout' => 'Выйти',
     'nationalities' => 'Национальности',
     'places' => 'Населенные пункты',
+    'qsections' => 'Разделы вопросов',    
     'ques' => 'Вопросник',
     'questions' => 'Вопросы',    
     'occupations' => 'Виды занятий',

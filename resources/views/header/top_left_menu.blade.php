@@ -12,6 +12,7 @@
                         <ul class="dropdown-menu" role="menu" id='menu2-sub'>
                             <li><a href="/ques/anketas">{{ trans('navigation.anketas') }}</a></li>
                             <li><a href="/ques/question">{{ trans('navigation.questions') }}</a></li>
+                            <li><a href="/ques/qsection">{{ trans('navigation.qsections') }}</a></li>
                         </ul>
                     </li>
                     

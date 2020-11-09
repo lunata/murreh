@@ -5,6 +5,8 @@ namespace App\Models\Ques;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Library\Str;
+
 class Qsection extends Model
 {
     use HasFactory;
@@ -19,6 +21,9 @@ class Qsection extends Model
                 4 => "Лексика",
               ];
     
+    use \App\Traits\Methods\searchStrField;
+    use \App\Traits\Methods\searchIntField;
+
     public function getSections() {
         return $this->sections;
     }
@@ -137,4 +142,25 @@ class Qsection extends Model
                 
         return $list;         
     }
+    
+    public static function urlArgs($request) {
+        $url_args = Str::urlArgs($request) + [
+                    'search_id'   => (int)$request->input('search_id') ? (int)$request->input('search_id') : null,
+                    'search_title' => $request->input('search_title'),
+                    'search_section'   => (int)$request->input('search_section') ? (int)$request->input('search_section') : null,
+                ];
+        
+        return $url_args;
+    }    
+    
+    public static function search(Array $url_args) {
+        $objs = self::orderBy('id');
+
+        $objs = self::searchIntField($objs, 'id', $url_args['search_id']);
+        $objs = self::searchIntField($objs, 'section_id', $url_args['search_section']);
+        $objs = self::searchStrField($objs, 'title', $url_args['search_title']);
+        
+        return $objs;
+    }
+    
 }

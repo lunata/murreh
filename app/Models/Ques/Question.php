@@ -4,7 +4,7 @@ namespace App\Models\Ques;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Redirect;
+//use Illuminate\Support\Facades\Redirect;
 
 use App\Library\Str;
 
