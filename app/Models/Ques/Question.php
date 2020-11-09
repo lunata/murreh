@@ -100,10 +100,11 @@ class Question extends Model
     public static function getListByQsection($qsection_id)
     {     
         $list = array();
-        $objs = self::where('qsection_id', $qsection_id)->orderBy('id')->get();
+        $objs = self::where('qsection_id', $qsection_id)
+                    ->orderBy('sequence_number')->get();
 
         foreach ($objs as $row) {
-            $list[$row->id] = $row->question;
+            $list[$row->id] = [$row->sequence_number, $row->question];
         }
                 
         return $list;         

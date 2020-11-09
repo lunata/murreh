@@ -30,7 +30,7 @@ class AnketaQuestionController extends Controller
     public function edit(int $anketa_id, int $qsection_id)
     {
         $anketa = Anketa::findOrfail($anketa_id);
-        $questions = Question::where('qsection_id', $qsection_id)->get();
+        $questions = Question::where('qsection_id', $qsection_id)->orderBy('sequence_number')->get();
         return view('ques.anketa_question.edit', 
                 compact('anketa', 'questions', 'qsection_id'));
     }

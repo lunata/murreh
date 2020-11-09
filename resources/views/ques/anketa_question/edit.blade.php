@@ -2,7 +2,7 @@
 {!! Form::hidden('qsection_id', $qsection_id) !!}
 @foreach ($questions as $question)
 <div class="row">
-    <div class="col-sm-4" id="question-{{$question->id}}">{{$question->id}}. {{$question->question}}</div>                          
+    <div class="col-sm-4" id="question-{{$question->id}}">{{$question->sequence_number}}. {{$question->question}}</div>                          
     <div class="col-sm-4">                 
         @include('widgets.form.formitem._select', 
                 ['name' => 'answers['.$question->id.'][id]', 
