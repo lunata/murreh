@@ -27,7 +27,7 @@
         <table class="table-bordered table-wide rwd-table wide-md">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>{{ trans('ques.section') }}</th>
                 <th>{{ trans('ques.subsection') }}</th>
                 <th>{{ trans('ques.question') }}</th>
@@ -41,7 +41,7 @@
         <tbody>
             @foreach($questions as $question)
             <tr>
-                <td data-th="No">{{ $question->id }}</td>
+                <td data-th="No">{{ $question->sequence_number }}</td>
                 <td data-th="{{ trans('ques.section') }}">{{$question->section}}</td>
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
                 <td data-th="{{ trans('ques.question') }}">{{$question->question}}</td>

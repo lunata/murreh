@@ -74,6 +74,7 @@ Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestio
 Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
 
 Route::get('service', [ServiceController::class, 'index']);
+Route::get('service/add_sequence_number_to_questions', [ServiceController::class, 'addSequenceNumberToQuestions']);
 
 Route::resources([
     'geo/district' => DistrictController::class,
