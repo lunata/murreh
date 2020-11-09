@@ -10,6 +10,7 @@
     <div class="col-sm-8">
     @include('widgets.form.formitem._text', 
                 ['name' => 'answer',
+                 'special_symbol' => true,
                  'title' => trans('ques.answer_variant')])
     </div>
 </div>

@@ -27,14 +27,17 @@ class ServiceController extends Controller
     }
     
     public function addSequenceNumberToQuestions() {
-        $questions = Question::orderBy('id')->get();
+        $after_num = 706;
+        $insert_num = 1;
+        $questions = Question::where('sequence_number', '>', $after_num)->orderBy('sequence_number')->get();
         
         foreach ($questions as $ques) {
-            if ($ques->id <592) {
+/*            if ($ques->id <$after_num) {
                 $ques->sequence_number =  $ques->id;
             } else {
-                $ques->sequence_number =  23+$ques->id;                
-            }
+                $ques->sequence_number =  $insert_num+$ques->id;                
+            }*/
+            $ques->sequence_number =  $insert_num+$ques->sequence_number;
             $ques->save();
         }
         print "done.";
