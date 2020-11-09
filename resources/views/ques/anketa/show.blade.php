@@ -74,7 +74,7 @@
 
 @section('jqueryFunc')
     recDelete('{{ trans('messages.confirm_delete') }}');
-    toggleSpecial();
+/*    toggleSpecial();*/
     
     $(".anketa-ques-edit").click(function() {
         var qid=$(this).data('qid');

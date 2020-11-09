@@ -14,6 +14,7 @@
     <div class="col-sm-3">                 
         @include('widgets.form.formitem._text', 
                 ['name' => 'answers['.$question->id.'][text]', 
+                 'special_symbol' => true,
                  'value' => $anketa->getAnswer($question->id)->answer_text ?? null])
     </div>                 
     <div class="col-sm-1">   

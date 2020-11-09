@@ -1,4 +1,4 @@
-<a class='special-symbols-link' type='button' data-for='{{$id_name}}-special'>ä</a>
+<a class='special-symbols-link' type='button'  onClick="toggleSpecial('{{$id_name}}-special')">ä</a>
 
 <div id='{{$id_name}}-special' class='special-symbols'>
     @foreach(['ä','ö','ü','č','š','ž','’'] as $sym)
