@@ -46,11 +46,11 @@ print "<pre>";
             if (!$line) {
                 continue;
             }
-            if (!preg_match("/^(\d+)\t(\d+)\t([^\t]+)\t*([^\t]*)$/", $line, $regs)) {
+            if (!preg_match("/^(\d+)\t(\d+)\t(\d+)\t([^\t]+)\t*([^\t]*)$/", $line, $regs)) {
                 dd("Неправильный разбор строки ".$line);
             }
             self::writeQuestion($regs);
-            self::writeAnswers($regs[2], trim($regs[4]));
+            self::writeAnswers($regs[2], trim($regs[5]));
 //dd($regs);            
         }        
     } 
@@ -58,9 +58,9 @@ print "<pre>";
     public static function writeQuestion(array $data) {
         $section_id = Question::getSectionIDBySubsectionID($data[1]);
         if (!$section_id) {
-            dd ("Не определился раздел для вопроса ".$data[2]);
+            dd ("Не определился раздел ".$data[1]." для вопроса ".$data[2]);
         }
-        $question = Question::create(['id'=>$data[2], 'section_id'=>$section_id, 'subsection_id'=>$data[1], 'question'=>$data[3]]);
+        $question = Question::create(['id'=>$data[2], 'section_id'=>$section_id, 'qsection_id'=>$data[1], 'question'=>$data[4], 'sequence_number'=>$data[3]]);
     }
     
     public static function writeAnswers(int $question_id, string $answers) {

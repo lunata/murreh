@@ -10,7 +10,7 @@ class Qsection extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['id', 'parent_id', 'title'];
+    protected $fillable = ['id', 'section_id', 'title'];
     
     public  $sections = [
                 1 => "Социолингвистическая информация",  

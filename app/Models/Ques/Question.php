@@ -50,13 +50,17 @@ class Question extends Model
     }
     
     public static function getSectionIDBySubsectionID(Int $subsection_id) {
+        $subsection = Qsection::find($subsection_id);
+        if (!$subsection) { return NULL; }
+        return $subsection->section_id;
+/*        
         $sections = self::getSections();
         $subsections = self::getSubsections();
         $section_id = $subsections[$subsection_id][0] ?? null;
         if (!$section_id || !isset($sections[$section_id])) {
             return null;
         }
-        return $section_id;
+        return $section_id;*/
     }
     
     /** Gets list of objects
@@ -158,7 +162,7 @@ class Question extends Model
     }
 
     public static function search(Array $url_args) {
-        $objs = self::orderBy('id');
+        $objs = self::orderBy('sequence_number');
 
         $objs = self::searchIntField($objs, 'id', $url_args['search_id']);
         $objs = self::searchIntField($objs, 'section_id', $url_args['search_section']);
