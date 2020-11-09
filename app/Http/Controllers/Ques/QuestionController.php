@@ -91,6 +91,8 @@ class QuestionController extends Controller
 //dd($request->all());        
         $question = Question::create($request->all());
         
+        $question->updateAnswers($request->answers);
+        
         return Redirect::to('/ques/question/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
     }

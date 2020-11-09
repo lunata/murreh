@@ -2,6 +2,10 @@
 
 <div class="row">
     <div class="col-sm-6">
+        @include('widgets.form.formitem._text', 
+                ['name' => 'sequence_number', 
+                 'title'=>trans('messages.sequence_number')])
+                 
         @include('widgets.form.formitem._select', 
                 ['name' => 'section_id', 
                  'values' =>$section_values,
