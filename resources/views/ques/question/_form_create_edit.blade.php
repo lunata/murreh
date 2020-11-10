@@ -4,7 +4,8 @@
     <div class="col-sm-6">
         @include('widgets.form.formitem._text', 
                 ['name' => 'sequence_number', 
-                 'title'=>trans('messages.sequence_number')])
+                 'title'=>trans('messages.sequence_number'),
+                 'attributes'=>['size'=>7] ])
                  
         @include('widgets.form.formitem._select', 
                 ['name' => 'section_id', 

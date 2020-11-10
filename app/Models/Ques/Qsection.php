@@ -12,7 +12,7 @@ class Qsection extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['id', 'section_id', 'title'];
+    protected $fillable = ['id', 'section_id', 'title', 'sequence_number'];
     
     public  $sections = [
                 1 => "Социолингвистическая информация",  
@@ -154,7 +154,7 @@ class Qsection extends Model
     }    
     
     public static function search(Array $url_args) {
-        $objs = self::orderBy('id');
+        $objs = self::orderBy('sequence_number');
 
         $objs = self::searchIntField($objs, 'id', $url_args['search_id']);
         $objs = self::searchIntField($objs, 'section_id', $url_args['search_section']);

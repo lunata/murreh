@@ -55,17 +55,13 @@ class QsectionController extends Controller
      */
     public function create()
     {
-/*        $args_by_get = $this->args_by_get;
+        $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
 
         $section_values = Qsection::getSectionList();
-        $qsection_values = Qsection::getList();
 
-        $answers = [];
-        
         return view('ques.qsection.create', 
-                compact('answers', 'section_values', 'qsection_values', 
-                        'args_by_get', 'url_args'));*/
+                compact('section_values', 'args_by_get', 'url_args'));
     }
 
     public function validateRequest(Request $request) {
@@ -82,14 +78,14 @@ class QsectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {/*
+    {
         $this->validateRequest($request);       
 //dd($request->all());        
         $qsection = Qsection::create($request->all());
         
         return Redirect::to('/ques/qsection/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
-*/    }
+    }
 
     /**
      * Display the specified resource.

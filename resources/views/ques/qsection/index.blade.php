@@ -2,7 +2,7 @@
 @extends('layouts.page')
 
 @section('page_title')
-{{ trans('navigation.questions') }}
+{{ trans('navigation.qsections') }}
 @stop
 
 @section('headExtra')
@@ -10,15 +10,15 @@
 @stop
 
 @section('body')
-{{--        <p>
+        <p>
         @if (User::checkAccess('edit'))
-            <a href="{{route('question.create', $url_args)}}">
+            <a href="{{route('qsection.create', $url_args)}}">
         @endif
             {{ trans('messages.create_new_m') }}
         @if (User::checkAccess('edit'))
             </a>
         @endif
-        </p> --}}
+        </p> 
         
         @include('ques.qsection._search_form',['url' => '/ques/qsection/']) 
 
@@ -27,7 +27,7 @@
         <table class="table-bordered table-wide rwd-table wide-md">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>{{ trans('ques.section') }}</th>
                 <th>{{ trans('ques.title') }}</th>
                 <th>{{ trans('navigation.questions') }}</th>
@@ -39,12 +39,12 @@
         <tbody>
             @foreach($qsections as $qsection)
             <tr>
-                <td data-th="ID">{{ $qsection->id }}</td>
+                <td data-th="No">{{ $qsection->sequence_number }}</td>
                 <td data-th="{{ trans('ques.section') }}">{{$qsection->section}}</td>
                 <td data-th="{{ trans('ques.title') }}">{{$qsection->title}}</td>
                 <td data-th="{{ trans('navigation.questions') }}">
                     @if ($qsection->questions()->count()) 
-                    <a href="/ques/questions?search_qsection={{$qsection->id}}">
+                    <a href="/ques/question?search_qsection={{$qsection->id}}">
                         {{$qsection->questions()->count()}}
                     </a>
                     @else
