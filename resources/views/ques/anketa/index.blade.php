@@ -50,7 +50,7 @@
                 <td data-th="{{ trans('geo.place') }}">{{$anketa->place->name}}</td>
                 <td data-th="{{ trans('ques.year') }}">{{$anketa->year}}</td>
                 <td data-th="{{ trans('person.recorder') }}">{{$anketa->recorder->name}}</td>
-                <td data-th="{{ trans('person.informant') }}">{{$anketa->informant->name}}</td>
+                <td data-th="{{ trans('person.informant') }}">{{$anketa->informant->name ?? ''}}</td>
                 <td data-th="{{ trans('ques.answers') }}">
                     {{ $anketa->answers()->count() }}
                 </td>

@@ -74,7 +74,7 @@ class AnketaController extends Controller
         $url_args = $this->url_args;
 
         $district_values = District::getListWithRegions();
-        $informant_values = Informant::getList();
+        $informant_values = [NULL => ''] + Informant::getList();
         $place_values = Place::getListWithDistricts();
         $recorder_values = Recorder::getList();
         $region_values = Region::getList();
@@ -146,7 +146,7 @@ class AnketaController extends Controller
         $url_args = $this->url_args;
 
         $district_values = District::getList();
-        $informant_values = Informant::getList();
+        $informant_values = [NULL => ''] + Informant::getList();
         $place_values = Place::getList();
         $recorder_values = Recorder::getList();
         $region_values = Region::getList();
@@ -171,7 +171,7 @@ class AnketaController extends Controller
         $this->validateRequest($request);
         $anketa->fill($request->all())->save();
         
-        return Redirect::to('/ques/anketas/'.$this->args_by_get)
+        return Redirect::to('/ques/anketas/'.$anketa->id.'/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 
