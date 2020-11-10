@@ -14,7 +14,7 @@
     
     <h3>Исправление данных</h3>
     <p><a href="service/add_sequence_number_to_questions">Перенумеровать вопросы</a> (вставить пустые номера)</p>
-    <p><a href="service/add_sequence_number_qsections">Перенумеровать разделы вопросов</a> (вставить пустые номера)</p>
+    <p><a href="service/add_sequence_number_to_qsections">Перенумеровать разделы вопросов</a> (вставить пустые номера)</p>
     <p><a href="service/split_qsections">Разбить разделы вопросов</a></p>
     
 @endsection
