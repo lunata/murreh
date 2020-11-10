@@ -48,7 +48,7 @@ class Qsection extends Model
      */
     public static function getList()
     {     
-        $objs = self::orderBy('id')->get();
+        $objs = self::orderBy('sequence_number')->get();
         
         $list = array();
         foreach ($objs as $row) {
@@ -106,7 +106,7 @@ class Qsection extends Model
      */
     public static function getListWithQuantity($method_name='questions')
     {     
-        $objs = self::orderBy('id')->get();
+        $objs = self::orderBy('sequence_number')->get();
         
         $list = array();
         foreach ($objs as $row) {
@@ -133,7 +133,7 @@ class Qsection extends Model
         $list = array();
         foreach (array_keys($sections) as $section_id) {
             $list[$section_id] = [];
-            $objs = self::where('section_id', $section_id)->orderBy('id')->get();
+            $objs = self::where('section_id', $section_id)->orderBy('sequence_number')->get();
         
             foreach ($objs as $row) {
                 $list[$section_id][$row->id] = $row->title;

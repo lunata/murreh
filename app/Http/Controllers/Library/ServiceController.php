@@ -48,6 +48,7 @@ exit(0);
     }
     
     public function addSequenceNumberToQsections() {
+exit(0);
         $after_num = 42;
         $insert_num = 3;
 
@@ -68,6 +69,7 @@ exit(0);
     }
     
     public function splitQsections() {
+exit(0);
         $breakdown = [43=>[632,678], 
                       44=>[679,693],
                       45=>[694,770]];
