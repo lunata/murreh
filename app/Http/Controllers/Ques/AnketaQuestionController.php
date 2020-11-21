@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Ques\Anketa;
-use App\Models\Ques\AnketaQuestion;
+//use App\Models\Ques\AnketaQuestion;
+use App\Models\Geo\Place;
+use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
 class AnketaQuestionController extends Controller
@@ -60,5 +62,43 @@ class AnketaQuestionController extends Controller
         return view('ques.anketa._question_show', 
                 compact('anketa', 'questions', 'qsection_id'));
                
+    }
+    
+    public function compareAnketas(Request $request)
+    {
+        $search_place1 = (int)$request->input('search_place1') ? (int)$request->input('search_place1') : null;
+        $search_place2 = (int)$request->input('search_place2') ? (int)$request->input('search_place2') : null;
+        $search_section = (int)$request->input('search_section') ? (int)$request->input('search_section') : null;
+        $search_qsections = (array)$request->input('search_qsections');
+        
+        $place1 = Place::find($search_place1);
+        $place2 = Place::find($search_place2);
+        
+//        $answers = [];
+        if ($place1 && $place2) {
+            $questions = Question::orderBy('sequence_number');
+            if ($search_section) {
+                $questions = $questions -> where('section_id', $search_section);
+            }
+            if (sizeof($search_qsections)) {
+                $questions = $questions -> whereIn('qsection_id', $search_qsections);
+            }
+            $questions = $questions->get();
+/*            $place1_answers=$place1->anketaAnswersString(); 
+            $place2_answers= $place2->anketaAnswersString();*/
+        } else {
+            $questions=null;
+        }
+
+        $place_values = Place::getListWithDistrictsInAnketas();
+        $section_values = Qsection::getSectionList();
+        $qsection_values = Qsection::getList();
+//        $questions = Question::getListWithQsections();
+        
+        
+        return view('ques.anketa_question.compare_anketas', 
+                compact('place_values', 'search_place1', 'search_place2', 'place1', 'place2',                         
+                        'section_values', 'qsection_values', 'questions', 'search_section', 'search_qsections')); 
+        
     }
 }

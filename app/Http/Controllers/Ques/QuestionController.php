@@ -89,7 +89,16 @@ class QuestionController extends Controller
     {
         $this->validateRequest($request);       
 //dd($request->all());        
-        $question = Question::create($request->all());
+        $data = $request->all();
+        if (!$data['sequence_number']) {
+            $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
+        }
+        $questions = Question::where('sequence_number', '>=', $data['sequence_number'])->orderBy('sequence_number', 'desc')->get();
+        foreach ($questions as $ques) {
+            $ques->sequence_number += 1;
+            $ques->save();
+        }
+        $question = Question::create($data);
         
         $question->updateAnswers($request->answers);
         
@@ -165,8 +174,16 @@ class QuestionController extends Controller
         if($question) {
             try{
                 $question_name = $question->question;
-                $question->delete();
-                $result['message'] = \Lang::get('ques.question_removed', ['name'=>$question_name]);
+                if ($question->anketas()->count() >0) {
+                    $error = true;
+                    $result['error_message'] = \Lang::get('ques.anketa_exists');
+                } else {
+                    foreach ($question->answers as $answer) {
+                        $answer->delete();
+                    }
+                    $question->delete();
+                    $result['message'] = \Lang::get('ques.question_removed', ['name'=>$question_name]);
+                }
             }catch(\Exception $ex){
                 $error = true;
                 $status_code = $ex->getCode();

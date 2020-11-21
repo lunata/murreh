@@ -15,6 +15,31 @@ function selectedValuesToURL(varname) {
     return forURL;
 }
 
+function selectQsection(section_var, placeholder='', allow_clear=false){
+    $(".select-qsection").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/ques/qsection/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              section_id: $( "#"+section_var+" option:selected" ).val(),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
 function langSelect(lang_var="lang_id") {
     $("#"+lang_var)
         .change(function () {

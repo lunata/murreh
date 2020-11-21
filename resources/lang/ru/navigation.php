@@ -13,6 +13,7 @@ return [
     'about_project' => 'О проекте',
     'adm_division' => 'Административное деление',
     'anketas' => 'Анкеты',
+    'compare_anketas' => 'Сравнение анкет',
     'districts' => 'Районы',
     'geo' => 'География',
     'home' => 'Главная',

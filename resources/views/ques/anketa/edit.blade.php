@@ -29,6 +29,7 @@
                               'submit_onClick' => 'saveInformant()',
                               'submit_title' => trans('messages.save'),
                               'modal_view'=>'person.informant._form_create_edit'])
+                              
         {!! Form::model($anketa, array('method'=>'PUT', 'route' => array('anketas.update', $anketa->id))) !!}
         @include('ques.anketa._form_create_edit', ['submit_title' => trans('messages.save'),
                                       'action' => 'edit'])

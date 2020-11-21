@@ -11,6 +11,10 @@ use App\Library\Str;
 //use App\Models\Geo\District;
 use App\Models\Person\Informant;
 //use App\Models\Geo\Region;
+use App\Models\Ques\AnketaQuestion;
+use App\Models\Ques\Answer;
+use App\Models\Ques\Qsection;
+use App\Models\Ques\Question;
 
 class Place extends Model
 {
@@ -115,6 +119,20 @@ class Place extends Model
         
         $list = array();
         foreach ($places as $row) {
+            $list[$row->id] = $row->toStringWithDistrict();
+        }
+        
+        return $list;         
+    }
+    
+    public static function getListWithDistrictsInAnketas()
+    {     
+        $places = self::whereIn('id', function ($query) {
+                          $query->select('place_id')->from('anketas');
+                        })->orderBy('name_ru');
+//dd($places->toSql());        
+        $list = array();
+        foreach ($places->get() as $row) {
             $list[$row->id] = $row->toStringWithDistrict();
         }
         
@@ -248,5 +266,48 @@ class Place extends Model
         }
         
         return $info;
+    }
+    
+    public function anketaAnswersString() {
+        $sections = Qsection::getSectionList();
+        $qsections = Qsection::getListWithSections();
+        $anketa_ids=[];
+        foreach($this->anketas as $anketa) {
+            $anketa_ids[]=$anketa->id;
+        }
+        $info=[];
+        
+        foreach ($sections as $section_id => $section_title) {
+            foreach ($qsections[$section_id] as $qsection_id=>$qsection_title) {
+                foreach (Question::getListByQsection($qsection_id) as $question_id => $question_info) {
+                    $answers = Answer::whereQuestionId($question_id)
+                                     ->whereIn('id', function ($query) use ($anketa_ids) {
+                                         $query->select('answer_id')->from('anketa_question')
+                                               ->whereIn('anketa_id', $anketa_ids);
+                                     })->orderBy('code')->get();
+                    $anketa_answers = [];               
+                    foreach ($answers as $answer) {
+                        $anketa_answers[]=$answer->code;                        
+                    }
+                    $info[$section_title][$qsection_title][$question_info[1]]=array_unique($anketa_answers);
+                }
+            }
+        }
+        
+        return $info;
+    }
+    
+    public function answersByQuestionId($question_id) {
+        $id = $this->id;
+        $out = [];
+        $answers = AnketaQuestion::whereQuestionId($question_id)
+                                 ->whereIn('anketa_id', function ($query) use ($id) {
+                                         $query->select('id')->from('anketas')
+                                               ->where('place_id', $id);
+                                   })->orderBy('answer_text')->get();
+        foreach ($answers as $answer) {
+            $out[]=$answer->answer_text;
+        }
+        return $out;
     }
 }

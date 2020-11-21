@@ -97,6 +97,9 @@ class AnketaController extends Controller
             'recorder_id' => 'numeric',
             'information_id' => 'numeric',
         ]);
+        $data = $request->all();
+        $data['population'] = (int)$data['population'];
+        return $data;
     }
     
     /**
@@ -107,8 +110,7 @@ class AnketaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateRequest($request);       
-        $anketa = Anketa::create($request->all());
+        $anketa = Anketa::create($this->validateRequest($request));
         
         return Redirect::to('/ques/anketas/'.$anketa->id.'/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
@@ -168,8 +170,7 @@ class AnketaController extends Controller
      */
     public function update(Request $request, Anketa $anketa)
     {
-        $this->validateRequest($request);
-        $anketa->fill($request->all())->save();
+        $anketa->fill($this->validateRequest($request))->save();
         
         return Redirect::to('/ques/anketas/'.$anketa->id.'/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        

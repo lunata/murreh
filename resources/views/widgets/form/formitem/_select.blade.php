@@ -15,7 +15,7 @@ $attributes['id'] = $id_name;
 	<label for="{{$name}}">
             {{ $title ?? null }}
             @if (isset($call_add_onClick)) 
-            <i onClick="{{$call_add_onClick}}" class="call-add fa fa-plus fa-lg" title="{{$call_add_title}}"></i>
+            <i onClick="{{$call_add_onClick}}" class="call-add fa fa-plus fa-lg" title="{{$call_add_title ?? ''}}"></i>
             @endif
         </label>
     @endif

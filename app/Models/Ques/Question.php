@@ -166,6 +166,7 @@ class Question extends Model
         $objs = self::orderBy('sequence_number');
 
         $objs = self::searchIntField($objs, 'id', $url_args['search_id']);
+        $objs = self::searchIntField($objs, 'sequence_number', $url_args['search_sequence_number']);
         $objs = self::searchIntField($objs, 'section_id', $url_args['search_section']);
         $objs = self::searchIntField($objs, 'qsection_id', $url_args['search_qsection']);
         $objs = self::searchStrField($objs, 'question', $url_args['search_question']);
@@ -176,6 +177,7 @@ class Question extends Model
     public static function urlArgs($request) {
         $url_args = Str::urlArgs($request) + [
                     'search_id'   => (int)$request->input('search_id') ? (int)$request->input('search_id') : null,
+                    'search_sequence_number'   => (int)$request->input('search_sequence_number') ? (int)$request->input('search_sequence_number') : null,
                     'search_question' => $request->input('search_question'),
                     'search_section'   => (int)$request->input('search_section') ? (int)$request->input('search_section') : null,
                     'search_qsection'   => (int)$request->input('search_qsection') ? (int)$request->input('search_qsection') : null,

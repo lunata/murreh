@@ -21,6 +21,7 @@ return [
     'answers' => 'ответы',
     'answer_variant' => 'вариант ответа',
     'code'=>'код',
+    'compare'=>'сравнить',
     'fond_number' => 'Фонд / Опись / №',
     'question' => 'вопрос',
     'question_removed' => 'Вопрос удален',

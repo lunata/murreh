@@ -13,6 +13,7 @@
                             <li><a href="/ques/anketas">{{ trans('navigation.anketas') }}</a></li>
                             <li><a href="/ques/question">{{ trans('navigation.questions') }}</a></li>
                             <li><a href="/ques/qsection">{{ trans('navigation.qsections') }}</a></li>
+                            <li><a href="/ques/anketa_question/compare_anketas">{{ trans('navigation.compare_anketas') }}</a></li>
                         </ul>
                     </li>
                     

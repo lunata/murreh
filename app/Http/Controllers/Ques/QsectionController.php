@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ques;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Response;
 
 use App\Library\Str;
 
@@ -169,4 +170,32 @@ class QsectionController extends Controller
                   ->withSuccess($result['message']);
         }
 */    }
+
+    /**
+     * Gets list of dialects for drop down list in JSON format
+     * Test url: /ques/qsection/list?section_id=2
+     * 
+     * @return JSON response
+     */
+    public function qsectionList(Request $request)
+    {
+
+        $qsection_name = '%'.$request->input('q').'%';
+        $section_id = $request->input('section_id');
+
+        $list = [];
+        $qsections = Qsection::where('title','like', $qsection_name);
+        if ($section_id) {                 
+            $qsections = $qsections ->where('section_id',$section_id);
+        }
+        
+        $qsections = $qsections->orderBy('sequence_number')->get();
+                         
+        foreach ($qsections as $qsection) {
+            $list[]=['id'  => $qsection->id, 
+                     'text'=> $qsection->title];
+        }  
+//dd($list);        
+        return Response::json($list);
+    }
 }

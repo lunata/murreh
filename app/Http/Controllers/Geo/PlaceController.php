@@ -78,6 +78,9 @@ class PlaceController extends Controller
 //            'district_id' => 'required|numeric',
 //            'region_id' => 'required|numeric',
         ]);
+        $data = $request->all();
+        $data['population'] = (int)$data['population'];
+        return $data;        
     }
 
     /**
@@ -88,10 +91,12 @@ class PlaceController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateRequest($request);
+        $data=$this->validateRequest($request);
         
-        $place = Place::create($request->except('districts'));        
-        $place->saveDistricts($request->districts);
+/*        $place = Place::create($request->except('districts'));        
+        $place->saveDistricts($request->districts);*/
+        $place = Place::create($data);        
+        $place->saveDistricts($data['districts']);
         
         if ($request->from_ajax) {
             return $place->id;
@@ -142,11 +147,12 @@ class PlaceController extends Controller
      */
     public function update(Request $request, Place $place)
     {
-        $this->validateRequest($request);
+        $data=$this->validateRequest($request);
         
-        $place->fill($request->except('districts'))->save();
-
-        $place->saveDistricts($request->districts);
+/*        $place->fill($request->except('districts'))->save();
+        $place->saveDistricts($request->districts);*/
+        $place->fill($data)->save();
+        $place->saveDistricts($data['districts']);
         
         return Redirect::to('/geo/place/'.($this->args_by_get))
             ->withSuccess(\Lang::get('messages.updated_success'));        

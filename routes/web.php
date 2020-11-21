@@ -72,6 +72,8 @@ Route::get('import/questions', [ImportController::class, 'questions']);
 
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
 Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
+Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
+Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
 
 Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);
