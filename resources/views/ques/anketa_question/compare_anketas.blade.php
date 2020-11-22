@@ -26,14 +26,16 @@
         </thead>
         <tbody>
             @foreach($questions as $question)
-                @if (array_diff($place1->answersByQuestionId($question->id), $place2->answersByQuestionId($question->id))) 
+                <?php $codes1 = $place1->answerCodesByQuestionId($question->id);
+                      $codes2 = $place2->answerCodesByQuestionId($question->id); ?>
+                @if (sizeof($codes1) && sizeof($codes2) && array_diff($codes1, $codes2)) 
             <tr>
                 <td data-th="No">{{ $count++ }}</td>
                 <td data-th="{{ trans('ques.section') }}">{{$question->section}}</td>
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
                 <td data-th="{{ trans('ques.question') }}">{{$question->question}}</td>
-                <td>{{join('; ', $place1->answersByQuestionId($question->id))}}</td>
-                <td>{{join('; ', $place2->answersByQuestionId($question->id))}}</td>
+                <td>{{join('; ', $place1->answerTextsByQuestionId($question->id))}}</td>
+                <td>{{join('; ', $place2->answerTextsByQuestionId($question->id))}}</td>
             </tr>
                 @endif 
             @endforeach

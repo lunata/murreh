@@ -297,7 +297,7 @@ class Place extends Model
         return $info;
     }
     
-    public function answersByQuestionId($question_id) {
+    public function answerTextsByQuestionId($question_id) {
         $id = $this->id;
         $out = [];
         $answers = AnketaQuestion::whereQuestionId($question_id)
@@ -307,6 +307,23 @@ class Place extends Model
                                    })->orderBy('answer_text')->get();
         foreach ($answers as $answer) {
             $out[]=$answer->answer_text;
+        }
+        return $out;
+    }
+    
+    public function answerCodesByQuestionId($question_id) {
+        $id = $this->id;
+        $out = [];
+        $answers = Answer::whereQuestionId($question_id)
+                         ->whereIn('id', function ($query) use ($id) {
+                             $query->select('answer_id')->from('anketa_question')
+                                   ->whereIn('anketa_id', function ($q) use ($id) {
+                                         $q->select('id')->from('anketas')
+                                               ->where('place_id', $id);
+                                   });
+                         })->orderBy('code')->get();
+        foreach ($answers as $answer) {
+            $out[]=$answer->code;
         }
         return $out;
     }
