@@ -101,4 +101,41 @@ class AnketaQuestionController extends Controller
                         'section_values', 'qsection_values', 'questions', 'search_section', 'search_qsections')); 
         
     }
+    
+    /**
+     * View list of anketas without <anketa_id> (identified by places and fond number)
+     * and list of question-answers for <qsection_id>
+     * 
+     * test: /ques/anketa_question/list_for_copy/65_1
+     * 
+     * @param int $anketa_id - anketa ID 
+     * @param int $qsection_id - question section ID 
+     */
+    function listForCopy(int $for_anketa, int $qsection_id) {
+        $anketas = Anketa::where('id', '<>', $for_anketa)->get();
+        $question_values = Question::getListWithQsections();
+        
+        return view('ques.anketa_question._list_for_copy_answers', 
+                compact('anketas', 'qsection_id', 'question_values', 'for_anketa'));
+    }
+    
+    function copyAnswers(int $from_anketa, int $to_anketa, int $qsection_id) {
+        $questions = Question::getListByQsection($qsection_id);
+        $anketa_from_obj = Anketa::find($from_anketa);
+        $anketa = Anketa::find($to_anketa);
+        if (!$anketa_from_obj || !$anketa) {
+            return null;
+        }
+        foreach (array_keys($questions) as $question_id) {
+            $answer = $anketa_from_obj->getAnswer($question_id);
+            $anketa->questions()->detach($question_id);
+            if (isset($answer->answer_id)) {
+                $anketa->questions()->attach($question_id,
+                        ['answer_id'=>$answer->answer_id, 'answer_text'=>$answer->answer_text]);
+            }
+        }
+        
+        return view('ques.anketa._question_show', 
+                compact('anketa', 'questions', 'qsection_id'));
+    }
 }

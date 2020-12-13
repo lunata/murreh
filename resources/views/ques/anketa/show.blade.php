@@ -15,6 +15,11 @@
                                   'submit_onClick' => 'saveAnswer()',
                                   'submit_title' => trans('messages.save'),
                                   'modal_view'=>'ques.answer._form_create'])
+            @include('widgets.modal',['name'=>'modalCopyAnswers',
+                                  'title'=>trans('ques.copy_answers'),
+                                  'submit_onClick' => 'copyAnswers()',
+                                  'submit_title' => null,
+                                  'modal_view'=>'ques.anketa_question._for_copy_answers'])
         @endif         
         <p><a href="{{route('anketas.index', $url_args)}}">{{ trans('messages.back_to_list') }}</a>
                     
@@ -55,6 +60,7 @@
             @foreach($qsection_values[$section_id] as $qsection_id=>$qsection_title)
                 <h3>{{$qsection_title}}
                     <i id="anketa-ques-edit-{{$qsection_id}}" class="anketa-ques-edit fa fa-pencil-alt fa-lg" data-qid="{{$qsection_id}}"></i>                
+                    <i id="anketa-ques-copy-{{$qsection_id}}" class="anketa-ques-copy fa fa-copy fa-lg" data-qid="{{$qsection_id}}"></i>                
                 </h3>
                 <img class="img-loading" id="loading-questions-{{$qsection_id}}" src="{{ asset('images/loading.gif') }}">
                 <div id="anketa-ques-{{$qsection_id}}" class="anketa-ques">
@@ -78,26 +84,12 @@
     
     $(".anketa-ques-edit").click(function() {
         var qid=$(this).data('qid');
-        $("#anketa-ques-edit-"+qid).hide();                
-        $("#anketa-ques-"+qid).empty();
-        $("#loading-questions-"+qid).show();
-        $.ajax({
-            url: '/ques/anketa_question/{{$anketa->id}}_'+ qid + '/edit', 
-            type: 'GET',
-            success: function(result){
-                $("#anketa-ques-"+qid).html(result);
-                $("#loading-questions-"+qid).hide();                
-            },
-            error: function() {
-                $("#anketa-ques-"+qid).html('ERROR'); 
-    /*        error: function(jqXHR, textStatus, errorThrown) {
-                var text = 'Ajax Request Error: ' + 'XMLHTTPRequestObject status: ('+jqXHR.status + ', ' + jqXHR.statusText+'), ' + 
-                           'text status: ('+textStatus+'), error thrown: ('+errorThrown+')'; 
-                $("#anketa-ques-"+qid).html(text);*/
-                $("#loading-questions-"+qid).hide();                
-            }
-        }); 
-        
+        loadAnketaQuestionForm({{$anketa->id}}, qid);
     });
     
+    $(".anketa-ques-copy").click(function() {
+        var qid=$(this).data('qid');
+        loadAnketaQuesForCopy({{$anketa->id}}, qid);
+        $("#modalCopyAnswers").modal('show');
+    });
 @stop

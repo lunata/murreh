@@ -82,3 +82,61 @@ function addAnswer(qid) {
             $(answer_field).val(a);
         }
     }
+    
+    function loadAnketaQuestionForm(anketa_id, qid) {
+        $("#anketa-ques-edit-"+qid).hide();                
+        $("#anketa-ques-"+qid).empty();
+        $("#loading-questions-"+qid).show();
+        $.ajax({
+            url: '/ques/anketa_question/' + anketa_id + '_' + qid + '/edit', 
+            type: 'GET',
+            success: function(result){
+                $("#anketa-ques-"+qid).html(result);
+                $("#loading-questions-"+qid).hide();                
+            },
+            error: function() {
+                $("#anketa-ques-"+qid).html('ERROR'); 
+    /*        error: function(jqXHR, textStatus, errorThrown) {
+                var text = 'Ajax Request Error: ' + 'XMLHTTPRequestObject status: ('+jqXHR.status + ', ' + jqXHR.statusText+'), ' + 
+                           'text status: ('+textStatus+'), error thrown: ('+errorThrown+')'; 
+                $("#anketa-ques-"+qid).html(text);*/
+                $("#loading-questions-"+qid).hide();                
+            }
+        });         
+    }
+
+    function loadAnketaQuesForCopy(anketa_id, qid) {
+        $.ajax({
+            url: '/ques/anketa_question/list_for_copy/' + anketa_id + '_' + qid, 
+            type: 'GET',
+            success: function(result){
+                $("#anketas-for-copy").html(result);
+            },
+            error: function() {
+                $("#anketas-for-copy").html('ERROR'); 
+    /*        error: function(jqXHR, textStatus, errorThrown) {
+                var text = 'Ajax Request Error: ' + 'XMLHTTPRequestObject status: ('+jqXHR.status + ', ' + jqXHR.statusText+'), ' + 
+                           'text status: ('+textStatus+'), error thrown: ('+errorThrown+')'; 
+                $("#anketa-ques-"+qid).html(text);*/
+            }
+        });         
+    }
+    
+    function copyAnswers(from_anketa, to_anketa, qid) {
+        $.ajax({
+            url: '/ques/anketa_question/copy/' + from_anketa + '_' + to_anketa + '_' + qid, 
+            type: 'GET',
+            success: function(result){
+                $("#modalCopyAnswers").modal('hide');
+                $("#anketa-ques-"+qid).html(result);
+            },
+            error: function() {
+                $("#anketas-for-copy").html('ERROR'); 
+    /*        error: function(jqXHR, textStatus, errorThrown) {
+                var text = 'Ajax Request Error: ' + 'XMLHTTPRequestObject status: ('+jqXHR.status + ', ' + jqXHR.statusText+'), ' + 
+                           'text status: ('+textStatus+'), error thrown: ('+errorThrown+')'; 
+                $("#anketa-ques-"+qid).html(text);*/
+            }
+        });   
+        
+    }
