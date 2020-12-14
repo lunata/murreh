@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ques;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Response;
 
 use App\Library\Str;
 
@@ -210,5 +211,40 @@ class AnketaController extends Controller
             return Redirect::to('/ques/anketas/')
                   ->withSuccess($result['message']);
         }
+    }
+    
+    /**
+     * Gets list of anketas for drop down list in JSON format
+     * Test url: /ques/anketa/list?without=65
+     * 
+     * @return JSON response
+     */
+    public function anketaList(Request $request)
+    {
+
+        $name = '%'.$request->input('q').'%';
+        $without = $request->input('without');
+
+        $list = [];
+        $anketas = Anketa::where('id', '<>', $without)
+                         ->where(function ($query) use ($name){
+                            $query->whereIn('place_id', function ($q) use ($name) {
+                                $q->select('id')->from('places')
+                                  ->where('name_ru', 'like', $name);
+                            })
+                            ->orwhereIn('district_id', function ($q) use ($name) {
+                                $q->select('id')->from('districts')
+                                  ->where('name_ru', 'like', $name);
+                            });
+                         })
+                         ->get();
+                                
+        foreach ($anketas as $anketa) {
+            $list[]=['id'  => $anketa->id, 
+                     'text'=> $anketa->place->toStringWithDistrict(). ' - '.
+                              $anketa->fond_number];
+        }  
+//dd($list);        
+        return Response::json($list);
     }
 }

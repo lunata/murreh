@@ -20,6 +20,7 @@ return [
     'anketa_removed' => 'Анкета :name удалена',
     'answers' => 'ответы',
     'answer_variant' => 'вариант ответа',
+    'choose_anketa' => 'Выберите анкету',
     'code'=>'код',
     'compare'=>'сравнить',
     'copy_answers' => 'Копировать ответы из анкеты',

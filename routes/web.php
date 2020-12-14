@@ -70,9 +70,10 @@ Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
 Route::get('import/qsections', [ImportController::class, 'qsections']);
 Route::get('import/questions', [ImportController::class, 'questions']);
 
+Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
 Route::get('ques/anketa_question/copy/{from_anketa}_{to_anketa}_{qsection_id}', [AnketaQuestionController::class, 'copyAnswers']);
-Route::get('ques/anketa_question/list_for_copy/{for_anketa}_{qsection_id}', [AnketaQuestionController::class, 'listForCopy']);
+Route::get('ques/anketa_question/list_for_copy/{anketa_id}_{qsection_id}', [AnketaQuestionController::class, 'listForCopy']);
 Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
 Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
 Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);

@@ -122,7 +122,8 @@ function addAnswer(qid) {
         });         
     }
     
-    function copyAnswers(from_anketa, to_anketa, qid) {
+    function copyAnswers(from_anketa, qid) {
+        var to_anketa = $("#anketa-for-copy").val();
         $.ajax({
             url: '/ques/anketa_question/copy/' + from_anketa + '_' + to_anketa + '_' + qid, 
             type: 'GET',

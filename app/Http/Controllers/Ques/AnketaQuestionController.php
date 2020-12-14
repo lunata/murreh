@@ -103,20 +103,20 @@ class AnketaQuestionController extends Controller
     }
     
     /**
-     * View list of anketas without <anketa_id> (identified by places and fond number)
-     * and list of question-answers for <qsection_id>
+     * View list of questions for <anketa_id> (identified by places and fond number)
+     * and for <qsection_id>
      * 
-     * test: /ques/anketa_question/list_for_copy/65_1
+     * test: /ques/anketa_question/list_for_copy/5_1
      * 
      * @param int $anketa_id - anketa ID 
      * @param int $qsection_id - question section ID 
      */
-    function listForCopy(int $for_anketa, int $qsection_id) {
-        $anketas = Anketa::where('id', '<>', $for_anketa)->get();
+    function listForCopy(int $anketa_id, int $qsection_id) {
+        $anketa = Anketa::find($anketa_id);
         $question_values = Question::getListWithQsections();
         
         return view('ques.anketa_question._list_for_copy_answers', 
-                compact('anketas', 'qsection_id', 'question_values', 'for_anketa'));
+                compact('qsection_id', 'question_values', 'anketa'));
     }
     
     function copyAnswers(int $from_anketa, int $to_anketa, int $qsection_id) {

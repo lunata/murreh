@@ -172,7 +172,7 @@ class QsectionController extends Controller
 */    }
 
     /**
-     * Gets list of dialects for drop down list in JSON format
+     * Gets list of question sections for drop down list in JSON format
      * Test url: /ques/qsection/list?section_id=2
      * 
      * @return JSON response

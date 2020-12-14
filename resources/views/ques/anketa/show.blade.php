@@ -5,6 +5,7 @@
 @stop
 
 @section('headExtra')
+    {!!Html::style('css/select2.min.css')!!}
     {!!Html::style('css/anketa.css')!!}
 @stop
 
@@ -17,8 +18,8 @@
                                   'modal_view'=>'ques.answer._form_create'])
             @include('widgets.modal',['name'=>'modalCopyAnswers',
                                   'title'=>trans('ques.copy_answers'),
-                                  'submit_onClick' => 'copyAnswers()',
                                   'submit_title' => null,
+                                  'to_anketa_id' => $anketa->id,
                                   'modal_view'=>'ques.anketa_question._for_copy_answers'])
         @endif         
         <p><a href="{{route('anketas.index', $url_args)}}">{{ trans('messages.back_to_list') }}</a>
@@ -73,14 +74,17 @@
 @stop
 
 @section('footScriptExtra')
+    {!!Html::script('js/select2.min.js')!!}
     {!!Html::script('js/rec-delete-link.js')!!}
     {!!Html::script('js/ques.js')!!}
+    {!!Html::script('js/list_change.js')!!}
     {!!Html::script('js/special_symbols.js')!!}
 @stop
 
 @section('jqueryFunc')
     recDelete('{{ trans('messages.confirm_delete') }}');
 /*    toggleSpecial();*/
+    selectAnketaForCopy({{$anketa->id}}, '', true);
     
     $(".anketa-ques-edit").click(function() {
         var qid=$(this).data('qid');
@@ -89,7 +93,7 @@
     
     $(".anketa-ques-copy").click(function() {
         var qid=$(this).data('qid');
-        loadAnketaQuesForCopy({{$anketa->id}}, qid);
+        $("#qid-for-copy").val(qid);
         $("#modalCopyAnswers").modal('show');
     });
 @stop
