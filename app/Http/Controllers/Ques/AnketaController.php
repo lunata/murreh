@@ -232,7 +232,8 @@ class AnketaController extends Controller
                                 $q->select('id')->from('places')
                                   ->where('name_ru', 'like', $name);
                             })
-                            ->orwhereIn('district_id', function ($q) use ($name) {
+                            ->orWhere('fond_number', 'like', $name)
+                            ->orWhereIn('district_id', function ($q) use ($name) {
                                 $q->select('id')->from('districts')
                                   ->where('name_ru', 'like', $name);
                             });
