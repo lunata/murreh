@@ -75,7 +75,6 @@ function selectAnketaForCopy(without, placeholder='', allow_clear=false){
     $("#search_anketa_from")
         .change(function () {
             var anketa_from=$(".select-anketa option:selected").val();
-console.log($(".select-anketa option:selected").text());    
             if (anketa_from != null) {
                 var qid=$("#qid-for-copy").val();
                 loadAnketaQuesForCopy(anketa_from, qid);

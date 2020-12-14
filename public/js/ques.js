@@ -70,6 +70,7 @@ function addAnswer(qid) {
                     $("#anketa-ques-"+qid).html(response);
                     $("#loading-questions-"+qid).hide();                
                     $("#anketa-ques-edit-"+qid).show();                
+                    $("#anketa-ques-copy-"+qid).show();                
             })
         });
     }
@@ -85,6 +86,7 @@ function addAnswer(qid) {
     
     function loadAnketaQuestionForm(anketa_id, qid) {
         $("#anketa-ques-edit-"+qid).hide();                
+        $("#anketa-ques-copy-"+qid).hide();                
         $("#anketa-ques-"+qid).empty();
         $("#loading-questions-"+qid).show();
         $.ajax({
