@@ -25,6 +25,8 @@ use App\Http\Controllers\Library\ServiceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SOSD\ConceptController;
 use App\Http\Controllers\SOSD\ConceptCategoryController;
+use App\Http\Controllers\SOSD\ConceptPlaceController;
+
 use App\Http\Controllers\UserController;
 
 /*
@@ -87,6 +89,9 @@ Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);
 Route::get('service/add_sequence_number_to_questions', [ServiceController::class, 'addSequenceNumberToQuestions']);
 Route::get('service/split_qsections', [ServiceController::class, 'splitQsections']);
+
+Route::get('sosd/concept_place', [ConceptPlaceController::class, 'index']);
+Route::get('sosd/concept_place/{place_id}', [ConceptPlaceController::class, 'show']);
 
 Route::resources([
     'geo/district' => DistrictController::class,

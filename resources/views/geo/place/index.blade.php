@@ -1,4 +1,3 @@
-<?php $list_count = $url_args['limit_num'] * ($url_args['page']-1) + 1;?>
 @extends('layouts.page')
 
 @section('page_title')

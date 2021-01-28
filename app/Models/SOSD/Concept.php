@@ -15,6 +15,10 @@ class Concept extends Model
     use \App\Traits\Methods\searchIntField;    
     use \App\Traits\Methods\urlArgs;
     
+    public function idInFormat() {
+        return str_pad($this->id, 4, "0", STR_PAD_LEFT);
+    }
+
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');
         $recs = self::searchByCategory($objs, $url_args['search_category']);

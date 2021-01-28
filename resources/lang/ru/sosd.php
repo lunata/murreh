@@ -17,4 +17,5 @@ return [
     'concept_section_B' => 'ЧЕЛОВЕК',
     'concept_section_C' => 'ЧЕЛОВЕК И ВСЕЛЕННАЯ',
     'of_category' => 'темы',
+    'words' => 'слова',
 ];

@@ -25,6 +25,7 @@
                 <th>{{ trans('messages.code') }}</th>
                 <th>{{ trans('messages.section') }}</th>
                 <th>{{ trans('messages.name') }}</th>
+                <th>{{ trans('navigation.concepts') }}</th>
                 @if (User::checkAccess('sosd.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -36,6 +37,13 @@
                 <td data-th="{{ trans('messages.code') }}">{{$concept_category->id}}</td>
                 <td data-th="{{ trans('messages.section') }}">{{$concept_category->section}}</td>
                 <td data-th="{{ trans('messages.name') }}">{{$concept_category->name}}</td>
+                <td data-th="{{ trans('navigation.concepts') }}">
+                    @if ($concept_category->concepts()->count())
+                    <a href="/sosd/concept/?search_category={{$concept_category->id}}">{{$concept_category->concepts()->count()}}</a>
+                    @else
+                    0
+                    @endif
+                </td>
                 @if (User::checkAccess('sosd.edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', [

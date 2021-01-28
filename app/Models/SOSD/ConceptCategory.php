@@ -12,7 +12,10 @@ class ConceptCategory extends Model
     public $timestamps = false;
     protected $keyType = 'string';
     protected $fillable = ['id', 'name'];
-      
+
+    // Has Many Relations
+    use \App\Traits\Relations\HasMany\Concepts;
+    
     public function getSectionAttribute() : String
     {
         return trans("sosd.concept_section_".substr($this->id, 0,1));

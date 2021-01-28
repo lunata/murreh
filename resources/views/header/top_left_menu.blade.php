@@ -49,6 +49,7 @@
                         </a>
                         
                         <ul class="dropdown-menu" role="menu" id='menu5-sub'>
+                            <li><a href="/sosd/concept_place">{{ trans('navigation.concept_place') }}</a></li>
                             <li><a href="/sosd/concept_category">{{ trans('navigation.concept_categories') }}</a></li>
                             <li><a href="/sosd/concept">{{ trans('navigation.concepts') }}</a></li>
                         </ul>

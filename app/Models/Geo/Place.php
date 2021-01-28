@@ -35,6 +35,7 @@ class Place extends Model
     }    
 
     // Belongs To Many Relations
+    use \App\Traits\Relations\BelongsToMany\Concepts;
     use \App\Traits\Relations\BelongsToMany\Districts;
     
 /*    
@@ -85,7 +86,7 @@ class Place extends Model
         return join(', ',$out);
     }
 
-    public function saveDistricts(Array $districts) {
+    public function saveDistricts(array $districts) {
         $this->districts()->detach();
         
         foreach($districts as $district) {
@@ -96,7 +97,27 @@ class Place extends Model
             }
         }        
     }
-    
+
+    public function wordListByConcept($concept_id) {
+        $list = [];
+//dd($concept_id, $this->concepts()->where('concept_id',$concept_id)->get());        
+        foreach ($this->concepts()->where('concept_id',$concept_id)->get() 
+                as $concept_place){
+//dd($concept_place);            
+            $list[$concept_place->pivot->code] = $concept_place->pivot->word;              
+        }
+        
+        return $list;
+    }
+
+    public function wordListByConceptToString($concept_id) {
+        $out = [];
+        foreach ($this->wordListByConcept($concept_id) as $code => $word) {
+            $out[] = "$code) $word";
+        }
+        return join ('; ', $out);
+    }
+
     /** Gets list of places
      * 
      * @return Array [1=>'Пондала (Pondal), Бабаевский р-н, Вологодская обл.',..]

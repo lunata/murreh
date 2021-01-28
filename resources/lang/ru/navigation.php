@@ -15,6 +15,7 @@ return [
     'anketas' => 'Анкеты',
     'compare_anketas' => 'Сравнение анкет',
     'concept_categories' => 'Темы понятий',
+    'concept_place' => 'Словники',
     'concepts'=>'Понятия',
     'districts' => 'Районы',
     'geo' => 'География',
