@@ -51,8 +51,7 @@ class ConceptCategoryController extends Controller
     {
         $this->validate($request, [
             'id' => 'required|max:4',
-            'name_en'  => 'max:75',
-            'name_ru'  => 'required|max:75',
+            'name'  => 'required|max:75',
         ]);
         
         $concept_category = ConceptCategory::create($request->all());
@@ -95,8 +94,7 @@ class ConceptCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name_en'  => 'max:75',
-            'name_ru'  => 'required|max:75',
+            'name'  => 'required|max:75',
         ]);
 //dd($request);       
         

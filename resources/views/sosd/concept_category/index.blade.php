@@ -10,11 +10,11 @@
 
 @section('body')        
         <p style="text-align:right">
-        @if (User::checkAccess('dict.edit'))
-            <a href="/dict/concept_category/create">
+        @if (User::checkAccess('sosd.edit'))
+            <a href="/sosd/concept_category/create">
         @endif
             {{ trans('messages.create_new_f') }}
-        @if (User::checkAccess('dict.edit'))
+        @if (User::checkAccess('sosd.edit'))
             </a>
         @endif
         </p>
@@ -25,7 +25,7 @@
                 <th>{{ trans('messages.code') }}</th>
                 <th>{{ trans('messages.section') }}</th>
                 <th>{{ trans('messages.name') }}</th>
-                @if (User::checkAccess('dict.edit'))
+                @if (User::checkAccess('sosd.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
             </tr>
@@ -36,12 +36,12 @@
                 <td data-th="{{ trans('messages.code') }}">{{$concept_category->id}}</td>
                 <td data-th="{{ trans('messages.section') }}">{{$concept_category->section}}</td>
                 <td data-th="{{ trans('messages.name') }}">{{$concept_category->name}}</td>
-                @if (User::checkAccess('dict.edit'))
+                @if (User::checkAccess('sosd.edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', [
                         'is_button'=>true, 
                         'without_text' => true, 
-                        'route' => '/dict/concept_category/'.$concept_category->id.'/edit'])
+                        'route' => '/sosd/concept_category/'.$concept_category->id.'/edit'])
                     @include('widgets.form.button._delete', [
                         'is_button'=>true, 
                         'without_text' => true, 
