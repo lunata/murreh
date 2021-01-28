@@ -113,7 +113,7 @@ class Place extends Model
     public function wordListByConceptToString($concept_id) {
         $out = [];
         foreach ($this->wordListByConcept($concept_id) as $code => $word) {
-            $out[] = "$code) $word";
+            $out[] = "$code = $word";
         }
         return join ('; ', $out);
     }
