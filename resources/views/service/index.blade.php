@@ -9,6 +9,9 @@
     <p><a href="import/place_coord">Импорт координат для населенных пунктов</a></p>
     <p><a href="import/qsections">Импорт разделов вопросов</a></p>
     <p><a href="import/questions">Импорт вопросов и вариантов ответа</a></p>
+    <p><a href="import/concepts">Импорт понятий из СОСД</a></p>
+    <p><a href="import/concept_categories">Импорт тем понятий из СОСД</a></p>
+    <p><a href="import/concept_place">Импорт словников СОСД</a></p>
     
     <h3>Экспорт</h3>
     

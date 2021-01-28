@@ -43,4 +43,14 @@
                         </ul>
                     </li>
                     
+                    <li class="dropdown" id='menu5'>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                           {{ trans('navigation.sosd') }} <span class="caret"></span>
+                        </a>
+                        
+                        <ul class="dropdown-menu" role="menu" id='menu5-sub'>
+                            <li><a href="/sosd/concept_category">{{ trans('navigation.concept_categories') }}</a></li>
+                            <li><a href="/sosd/concept">{{ trans('navigation.concepts') }}</a></li>
+                        </ul>
+                    </li>
                 </ul>

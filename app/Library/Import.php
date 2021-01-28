@@ -8,6 +8,10 @@ use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
+use App\Models\SOSD\Concept;
+use App\Models\SOSD\ConceptCategory;
+use App\Models\SOSD\ConceptPlace;
+
 /**
  */
 class Import {
@@ -227,4 +231,60 @@ print_r ($data);
         }
     }
     
+    public static function concepts(array $lines) {
+        foreach ($lines as $line) {
+//print "<p>$line</p>";            
+            if (preg_match("/^(\d+)\:([^\:]+)\:/", $line, $regs)) {
+//                print "<p>".$regs[1].":".trim($regs[2])."</p>";
+                Concept::create(['id'=>$regs[1], 'concept_category_id'=>NULL, 'name'=>trim($regs[2])]);
+            }
+        }
+    }
+    
+    public static function conceptСategories(array $lines) {
+        foreach ($lines as $line) {
+//print "<p>$line</p>";            
+            if (preg_match("/^(.+)\t(.+)\t(\d+)\-(\d+)$/", $line, $regs)) {
+//                print "<p>".$regs[1].":".$regs[2].":".$regs[3].":".$regs[4]."</p>";
+                ConceptCategory::create(['id'=>$regs[1], 'name'=>$regs[2]]);
+                for ($i=$regs[3]; $i<=$regs[4]; $i++) {
+                    $concept = Concept::find($i);
+                    $concept->concept_category_id = $regs[1];
+                    $concept->save();
+                }
+            }
+        }
+    }
+    
+    public static function conceptPlace(int $place_id, array $lines) {
+        foreach ($lines as $line) {
+//print "<p>$line</p>";            
+            if (preg_match("/^(\d+)\:([^\:]+)\:([^\:]+)$/", $line, $regs)) {
+//print "<p>".trim($regs[3])."</p>";
+                if (preg_match("/^([^\=]+)\=(.+)$/", $regs[3], $wregs)) {
+//print "<ol>";                    
+                    $code = trim($wregs[1]);
+//dd(mb_strlen($code));                        
+                    $word = trim($wregs[2]);
+                    while (preg_match("/^([^\=]+)\s+([^\=\s]+)\=(.+)$/", $word, $wwregs)) {
+                        $word = trim($wwregs[1]);
+                        conceptPlace::create([
+                            'concept_id'=>$regs[1], 
+                            'place_id'=>$place_id, 
+                            'code'=>$code,
+                            'word'=>$word]);
+//print "<li>$code:($word)</li>";                        
+                        $code = trim($wwregs[2]);
+                        $word = trim($wwregs[3]);
+                    }
+                    conceptPlace::create([
+                        'concept_id'=>$regs[1], 
+                        'place_id'=>$place_id, 
+                        'code'=>$code,
+                        'word'=>$word]);
+//print "<li>$code:($word)</li></ol>";                        
+                }
+            }
+        }
+    }
 }

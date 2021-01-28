@@ -14,6 +14,8 @@ return [
     'adm_division' => 'Административное деление',
     'anketas' => 'Анкеты',
     'compare_anketas' => 'Сравнение анкет',
+    'concept_categories' => 'Темы понятий',
+    'concepts'=>'Понятия',
     'districts' => 'Районы',
     'geo' => 'География',
     'home' => 'Главная',
@@ -31,5 +33,6 @@ return [
     'roles' => 'Роли',
     'selections' => 'Выборки',
     'service' => 'Служебное',
+    'sosd' => 'СОСД',
     'users' => 'Пользователи',
 ];

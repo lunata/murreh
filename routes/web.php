@@ -23,6 +23,8 @@ use App\Http\Controllers\Library\ImportController;
 use App\Http\Controllers\Library\ServiceController;
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SOSD\ConceptController;
+use App\Http\Controllers\SOSD\ConceptCategoryController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -69,6 +71,9 @@ Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
 Route::get('import/qsections', [ImportController::class, 'qsections']);
 Route::get('import/questions', [ImportController::class, 'questions']);
+Route::get('import/concepts', [ImportController::class, 'concepts']);
+Route::get('import/concept_categories', [ImportController::class, 'conceptСategories']);
+Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
 
 Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
@@ -99,5 +104,7 @@ Route::resources([
     'ques/question'    => QuestionController::class,
     
     'role'  => RoleController::class,
+    'sosd/concept'  => ConceptController::class,
+    'sosd/concept_category'  => ConceptCategoryController::class,
     'user'  => UserController::class,
 ]);

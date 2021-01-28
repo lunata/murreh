@@ -11,8 +11,7 @@ class Occupation extends Model
     public $timestamps = false;
     protected $fillable = ['name_ru_m', 'name_ru_f'];
     
-    use \App\Traits\Methods\searchIntField;
-    
+    use \App\Traits\Methods\searchIntField;    
     use \App\Traits\Methods\urlArgs;
     
     // Has To Many Relations
