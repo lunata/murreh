@@ -36,4 +36,12 @@ class ConceptCategory extends Model
         
         return $list;         
     }
+    
+    public static function getSectionList() {     
+        $list = [];
+        foreach(['A', 'B', 'C'] as $l) {
+            $list[$l] = trans("sosd.concept_section_".$l);
+        }
+        return $list;
+    }
 }

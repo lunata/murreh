@@ -16,6 +16,8 @@ use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
+use App\Models\SOSD\ConceptPlace;
+
 class Place extends Model
 {
     use HasFactory;
@@ -155,6 +157,20 @@ class Place extends Model
         $list = array();
         foreach ($places->get() as $row) {
             $list[$row->id] = $row->toStringWithDistrict();
+        }
+        
+        return $list;         
+    }
+    
+    public static function getListInVocs()
+    {     
+        $places = self::whereIn('id', function ($query) {
+                          $query->select('place_id')->from('concept_place');
+                        })->orderBy('name_ru');
+//dd($places->toSql());        
+        $list = array();
+        foreach ($places->get() as $row) {
+            $list[$row->id] = $row->name_ru;
         }
         
         return $list;         
@@ -348,4 +364,28 @@ class Place extends Model
         }
         return $out;
     }
+    
+    public function wordCodesByConceptId($concept_id, $by_first=false) {
+        $out = [];
+        $answers = ConceptPlace::whereConceptId($concept_id)
+                               ->wherePlaceId($this->id)
+                               ->orderBy('code')->get();
+        foreach ($answers as $answer) {
+            $out[]= $by_first ? mb_substr($answer->code, 0, 1) : $answer->code;
+        }
+        return $out;
+    }
+    
+    public function wordsByConceptId($concept_id) {
+        $out = [];
+        $answers = ConceptPlace::whereConceptId($concept_id)
+                               ->wherePlaceId($this->id)
+                               ->orderBy('word')->get();
+        foreach ($answers as $answer) {
+            $out[] = //$answer->code.'. '.
+                     $answer->word;
+        }
+        return $out;
+    }
+    
 }

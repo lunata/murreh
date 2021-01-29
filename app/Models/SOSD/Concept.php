@@ -5,6 +5,8 @@ namespace App\Models\SOSD;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Geo\Place;
+
 class Concept extends Model
 {
     use HasFactory;
@@ -14,7 +16,20 @@ class Concept extends Model
     
     use \App\Traits\Methods\searchIntField;    
     use \App\Traits\Methods\urlArgs;
+
+    // Belongs To Relations
+    use \App\Traits\Relations\BelongsTo\Category;
     
+    public function places()
+    {
+        return $this->belongsToMany(Place::class, 'concept_place');
+    }
+    
+    public function getSectionAttribute() : String
+    {
+        return trans("sosd.concept_section_".substr($this->concept_category_id, 0,1));
+    }    
+
     public function idInFormat() {
         return str_pad($this->id, 4, "0", STR_PAD_LEFT);
     }

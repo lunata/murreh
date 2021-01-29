@@ -40,6 +40,33 @@ function selectQsection(section_var, placeholder='', allow_clear=false){
     });   
 }
 
+function selectConceptCategory(section_var, placeholder='', allow_clear=false){
+/*alert(section_var);    
+alert($( "#"+section_var+" option:selected" ).val());    */
+    $(".select-category").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/sosd/concept_category/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              section_id: $( "#"+section_var+" option:selected" ).val(),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
 /**
  * choose anketa for copy answers
  * 

@@ -22,8 +22,8 @@
                 <th>ID</th>
                 <th>{{ trans('sosd.category') }}</th>
                 <th>{{ trans('messages.name') }}</th>
-                <!--th>{{ trans('navigation.recorders') }}</th>
-                @if (User::checkAccess('edit'))
+                <th>{{ trans('navigation.places') }}</th>
+           <!--     @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th-->
                 @endif
             </tr>
@@ -34,18 +34,10 @@
                 <td data-th="ID">{{$concept->id}}</td>
                 <td data-th="{{ trans('sosd.category') }}">{{$concept->concept_category_id}}</td>
                 <td data-th="{{ trans('messages.name') }}">{{$concept->name}}</td>
-                <!--td data-th="{{ trans('navigation.recorders') }}">
-                    @if($concept->recorders)
-                        @if ($concept->recorders()->count())
-                        <a href="/sosd/recorder/?search_concept={{$concept->id}}">
-                        @endif
-                        {{ $concept->recorders()->count() }}
-                        @if ($concept->recorders()->count())
-                        </a>
-                        @endif
-                    @endif
+                <td data-th="{{ trans('navigation.places') }}">
+                    {{ $concept->places()->count() }}
                 </td>
-                @if (User::checkAccess('edit'))
+               <!-- @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 
                             ['is_button'=>true, 

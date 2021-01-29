@@ -52,6 +52,7 @@
                             <li><a href="/sosd/concept_place">{{ trans('navigation.concept_place') }}</a></li>
                             <li><a href="/sosd/concept_category">{{ trans('navigation.concept_categories') }}</a></li>
                             <li><a href="/sosd/concept">{{ trans('navigation.concepts') }}</a></li>
+                            <li><a href="/sosd/concept_place/compare_vocs">{{ trans('navigation.compare_vocs') }}</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -10,6 +10,7 @@ return [
     |
     */
 
+    'by_first' => 'только по первой букве',
     'category' => 'тема',
     'concept' => 'понятие',
     'concept_removed' => 'Понятие ":name" удалено.',

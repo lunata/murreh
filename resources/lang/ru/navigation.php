@@ -14,6 +14,7 @@ return [
     'adm_division' => 'Административное деление',
     'anketas' => 'Анкеты',
     'compare_anketas' => 'Сравнение анкет',
+    'compare_vocs' => 'Сравнение словников',
     'concept_categories' => 'Темы понятий',
     'concept_place' => 'Словники',
     'concepts'=>'Понятия',

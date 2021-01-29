@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SOSD;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Response;
 
 use App\Models\SOSD\ConceptCategory;
 
@@ -152,5 +153,33 @@ class ConceptCategoryController extends Controller
             return Redirect::to('/sosd/concept_category/')
                   ->withSuccess($result['message']);
         }
+    }
+    
+    /**
+     * Gets list of question sections for drop down list in JSON format
+     * Test url: /sosd/concept_category/list?section_id=A
+     * 
+     * @return JSON response
+     */
+    public function categoryList(Request $request)
+    {
+
+        $category_name = '%'.$request->input('q').'%';
+        $section_id = $request->input('section_id');
+//dd($section_id);
+        $list = [];
+        $categories = ConceptCategory::where('name','like', $category_name);
+        if ($section_id) {                 
+            $categories = $categories->where('id', 'like', $section_id.'%');
+        }
+        
+        $categories = $categories->orderBy('id')->get();
+                         
+        foreach ($categories as $category) {
+            $list[]=['id'  => $category->id, 
+                     'text'=> $category->name];
+        }  
+//dd($list);        
+        return Response::json($list);
     }
 }
