@@ -103,7 +103,7 @@ class ConceptPlaceController extends Controller
         $place=Place::findOrFail($place_id);
         
         $concepts = [];
-        $categories = ConceptCategory::take(3)->get();       
+        $categories = ConceptCategory::all();//take(3)->get();       
         foreach ($categories as $category) {
             $concepts[$category->id]=Concept::whereConceptCategoryId($category->id)->orderBy('id')->get();            
         }

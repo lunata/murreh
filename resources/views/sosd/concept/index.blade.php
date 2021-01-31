@@ -35,7 +35,7 @@
                 <td data-th="{{ trans('sosd.category') }}">{{$concept->concept_category_id}}</td>
                 <td data-th="{{ trans('messages.name') }}">{{$concept->name}}</td>
                 <td data-th="{{ trans('navigation.places') }}">
-                    {{ $concept->places()->count() }}
+                    {{ $concept->countPlaces() }}
                 </td>
                <!-- @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

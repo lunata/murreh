@@ -33,6 +33,15 @@ class Concept extends Model
     public function idInFormat() {
         return str_pad($this->id, 4, "0", STR_PAD_LEFT);
     }
+    
+    public function countPlaces() {
+        $concept_id=$this->id;
+        $places=Place::whereIn('id', function ($q) use ($concept_id) {
+                  $q->select('place_id')->from('concept_place')
+                    ->whereConceptId($concept_id);
+                })->get();
+        return sizeof($places);
+    }
 
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');
