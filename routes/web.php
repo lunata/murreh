@@ -94,6 +94,9 @@ Route::get('sosd/concept_place/compare_vocs', [ConceptPlaceController::class, 'c
 Route::get('sosd/concept_category/list', [ConceptCategoryController::class, 'categoryList']);
 Route::get('sosd/concept_place', [ConceptPlaceController::class, 'index']);
 Route::get('sosd/concept_place/{place_id}', [ConceptPlaceController::class, 'show']);
+Route::get('sosd/concept_place/{place_id}_{category_id}/edit', [ConceptPlaceController::class, 'edit'])->name('concept_place.edit');
+Route::get('sosd/concept_place/{concept_id}_{next_count}/edit_voc', [ConceptPlaceController::class, 'editVoc'])->name('concept_place.edit_voc');
+Route::put('sosd/concept_place/{id}', [ConceptPlaceController::class, 'update'])->name('concept_place.update');
 
 Route::resources([
     'geo/district' => DistrictController::class,

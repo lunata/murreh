@@ -18,7 +18,8 @@ class ConceptPlaceController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:ref.edit,/sosd/concept_place', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('auth:ref.edit,/sosd/concept_place', [
+            'only' => ['create','store','edit','editVoc','update','destroy']]);
     }
     
     /**
@@ -37,6 +38,61 @@ class ConceptPlaceController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(int $place_id, string $category_id)
+    {
+        $place = Place::findOrfail($place_id);
+        $concepts = Concept::whereConceptCategoryId($category_id)->orderBy('id')->get();
+        return view('sosd.concept_place.edit', 
+                compact('place', 'concepts', 'category_id'));
+    }
+    
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editVoc(int $concept_id, int $count)
+    {
+        return view('sosd.concept_place._form_voc_edit', 
+                compact('concept_id', 'count'));
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $place=Place::findOrFail($id);
+        $category_id = $request->category_id;
+        $words = $request->words;
+        
+        foreach ($words as $concept_id=>$vocs) {
+            $place->concepts()->detach($concept_id);
+            foreach ($vocs as $voc) {
+                if ($voc['word']) {
+                    $place->concepts()->attach($concept_id,['code'=>$voc['code'], 'word'=>$voc['word']]);
+                }
+            }
+        }
+        
+        $concepts[$category_id]=Concept::whereConceptCategoryId($category_id)->orderBy('id')->get();
+//dd($concepts);        
+        return view('sosd.concept_place._show',
+                compact('place', 'concepts', 'category_id'));
+               
+    }
+    
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -46,9 +102,14 @@ class ConceptPlaceController extends Controller
     {
         $place=Place::findOrFail($place_id);
         
-        $concepts=Concept::orderBy('id')->get();
+        $concepts = [];
+        $categories = ConceptCategory::take(3)->get();       
+        foreach ($categories as $category) {
+            $concepts[$category->id]=Concept::whereConceptCategoryId($category->id)->orderBy('id')->get();            
+        }
         
-        return view('sosd.concept_place.show',compact('place', 'concepts'));
+        return view('sosd.concept_place.show',
+                compact('place', 'concepts', 'categories'));
     }
     
     public function compareVocs(Request $request) {

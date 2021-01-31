@@ -18,6 +18,8 @@ use App\Models\Ques\Question;
 
 use App\Models\SOSD\ConceptPlace;
 
+use App\Models\User;
+
 class Place extends Model
 {
     use HasFactory;
@@ -115,7 +117,7 @@ class Place extends Model
     public function wordListByConceptToString($concept_id) {
         $out = [];
         foreach ($this->wordListByConcept($concept_id) as $code => $word) {
-            $out[] = "$code = $word";
+            $out[] = User::checkAccess('edit') ? "$code = $word" : $word;
         }
         return join ('; ', $out);
     }
@@ -386,6 +388,12 @@ class Place extends Model
                      $answer->word;
         }
         return $out;
+    }
+    
+    public function getVocsByConceptId($concept_id) {
+        return ConceptPlace::whereConceptId($concept_id)
+                               ->wherePlaceId($this->id)
+                               ->orderBy('code')->get();
     }
     
 }
