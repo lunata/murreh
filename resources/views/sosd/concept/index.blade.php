@@ -21,7 +21,8 @@
             <tr>
                 <th>ID</th>
                 <th>{{ trans('sosd.category') }}</th>
-                <th>{{ trans('messages.name') }}</th>
+                <th>{{ trans('sosd.concept') }}</th>
+                <th>{{ trans('sosd.variants') }}</th>
                 <th>{{ trans('navigation.places') }}</th>
            <!--     @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th-->
@@ -33,7 +34,14 @@
             <tr>
                 <td data-th="ID">{{$concept->id}}</td>
                 <td data-th="{{ trans('sosd.category') }}">{{$concept->concept_category_id}}</td>
-                <td data-th="{{ trans('messages.name') }}">{{$concept->name}}</td>
+                <td data-th="{{ trans('sosd.concept') }}">{{$concept->name}}</td>
+                <td data-th="{{ trans('sosd.variant') }}">
+                    @foreach ($concept->allVariants() as $code => $words)
+                        @foreach ($words as $word => $places)
+                        {{$code}}={{$word}}: <i>{{join(', ', $places)}}</i><br>
+                        @endforeach                    
+                    @endforeach
+                </td>
                 <td data-th="{{ trans('navigation.places') }}">
                     {{ $concept->countPlaces() }}
                 </td>

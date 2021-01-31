@@ -11,12 +11,15 @@ return [
     */
 
     'by_first' => 'только по первой букве',
-    'category' => 'тема',
+    'category' => 'раздел',
+    'claster_maps' => 'кластерные карты',
     'concept' => 'понятие',
     'concept_removed' => 'Понятие ":name" удалено.',
     'concept_section_A' => 'ВСЕЛЕННАЯ',
     'concept_section_B' => 'ЧЕЛОВЕК',
     'concept_section_C' => 'ЧЕЛОВЕК И ВСЕЛЕННАЯ',
-    'of_category' => 'темы',
+    'of_category' => 'раздела',
+    'section' => 'тема',
+    'variants' => 'вырианты',
     'words' => 'слова',
 ];

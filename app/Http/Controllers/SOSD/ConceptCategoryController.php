@@ -119,7 +119,7 @@ class ConceptCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $error = false;
+/*        $error = false;
         $status_code = 200;
         $result =[];
         if($id != "") {
@@ -152,7 +152,7 @@ class ConceptCategoryController extends Controller
         } else {
             return Redirect::to('/sosd/concept_category/')
                   ->withSuccess($result['message']);
-        }
+        } */
     }
     
     /**

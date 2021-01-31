@@ -43,6 +43,17 @@ class Concept extends Model
         return sizeof($places);
     }
 
+    public function allVariants() {
+        $out = [];
+        $vocs=ConceptPlace::whereConceptId($this->id)->orderBy('code')->get();
+        foreach ($vocs as $voc) {
+            $place = Place::find($voc->place_id);
+            $place_name = $place ? $place->name : $voc->place_id;
+            $out[$voc->code][$voc->word][]= $place_name;
+        }
+        return $out;
+    }
+
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');
         $recs = self::searchByCategory($objs, $url_args['search_category']);

@@ -1,6 +1,8 @@
-            @foreach ($concepts[$category_id] as $concept)
+@foreach ($concepts[$category_id] as $concept)
+<?php $words = $place->wordListByConceptToString($concept->id);?>
             <p>
-                {{$concept->idInFormat()}} - {{$concept->name}}: 
-                <b>{{$place->wordListByConceptToString($concept->id)}}</b>
+                <span class='{{$words ? '': 'warning'}}'>
+                {{$concept->idInFormat()}} - {{$concept->name}}</span>: 
+                <b>{{$words}}</b>
             </p>
-            @endforeach
+@endforeach

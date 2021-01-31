@@ -23,9 +23,10 @@
         <thead>
             <tr>
                 <th>{{ trans('messages.code') }}</th>
-                <th>{{ trans('messages.section') }}</th>
-                <th>{{ trans('messages.name') }}</th>
+                <th>{{ trans('sosd.section') }}</th>
+                <th>{{ trans('sosd.category') }}</th>
                 <th>{{ trans('navigation.concepts') }}</th>
+                <th>{{ trans('sosd.claster_maps') }}</th>
                 @if (User::checkAccess('sosd.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -35,8 +36,8 @@
             @foreach($concept_categories as $concept_category)
             <tr>
                 <td data-th="{{ trans('messages.code') }}">{{$concept_category->id}}</td>
-                <td data-th="{{ trans('messages.section') }}">{{$concept_category->section}}</td>
-                <td data-th="{{ trans('messages.name') }}">{{$concept_category->name}}</td>
+                <td data-th="{{ trans('sosd.section') }}">{{$concept_category->section}}</td>
+                <td data-th="{{ trans('sosd.category') }}">{{$concept_category->name}}</td>
                 <td data-th="{{ trans('navigation.concepts') }}">
                     @if ($concept_category->concepts()->count())
                     <a href="/sosd/concept/?search_category={{$concept_category->id}}">{{$concept_category->concepts()->count()}}</a>
@@ -44,18 +45,13 @@
                     0
                     @endif
                 </td>
+                <td data-th="{{ trans('sosd.claster_maps') }}"></td>
                 @if (User::checkAccess('sosd.edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', [
                         'is_button'=>true, 
                         'without_text' => true, 
                         'route' => '/sosd/concept_category/'.$concept_category->id.'/edit'])
-                    @include('widgets.form.button._delete', [
-                        'is_button'=>true, 
-                        'without_text' => true, 
-                        'obj' => $concept_category,
-                        'route' => 'concept_category.destroy', 
-                        'args'=>['id' => $concept_category->id]])
                 </td>
                 @endif
             </tr>
