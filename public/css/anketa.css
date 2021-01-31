@@ -16,13 +16,26 @@
     background-color: #f9f5f5; 
     font-weight: bold;
 }
-.tab-pane h3 {
+.tab-pane h3,
+h3 .btn-link {
     font-size: 18px;
     color: #972d1a;
     margin-top:0;
     padding-top: 0;
 }
 
+h3 .btn-link:hover,
+h3 .btn-link:focus,
+h3 .btn-link:active {
+    color: #972d1a;    
+}
+
+h3 .btn {
+    padding: 0;
+}
+h3 .btn-link {
+    font-size: 16px;
+}
 .anketa-ques-edit,
 .anketa-ques-copy,
 .concept-place-edit,
@@ -37,4 +50,8 @@
 
 .anketa-ques {
     padding: 0 20px 20px; 
+}
+
+.card-body {
+    padding-bottom: 20px;
 }

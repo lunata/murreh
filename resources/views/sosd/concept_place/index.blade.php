@@ -6,10 +6,13 @@
 @stop
 
 @section('headExtra')
+    {!!Html::style('css/select2.min.css')!!}
     {!!Html::style('css/table.css')!!}
 @stop
 
 @section('body')        
+        <p><a href="https://www.google.com/maps/@61.5380378,32.4095993,9z?hl=ru-RU">См. на карте Google</a></p>
+        @include('sosd.concept_place._search_form',['url' => '/sosd/concept_place']) 
         <table class="table table-striped rwd-table wide-lg">
         <thead>
             <tr>
@@ -39,11 +42,14 @@
 @stop
 
 @section('footScriptExtra')
-    {!!Html::script('js/rec-delete-link.js')!!}
+    {!!Html::script('js/select2.min.js')!!}
+    {!!Html::script('js/list_change.js')!!}
 @stop
 
 @section('jqueryFunc')
-    recDelete('{{ trans('messages.confirm_delete') }}');
+    selectConceptCategory('search_section', '{{trans('sosd.category') }}');    
+    selectConcept('search_category', '{{trans('sosd.concept') }}');    
 @stop
+
 
 

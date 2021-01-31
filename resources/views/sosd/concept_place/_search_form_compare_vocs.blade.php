@@ -22,7 +22,7 @@
                 ['name' => 'search_section', 
                  'values' => $section_values,
                  'value' => $search_section ?? null,
-                 'attributes' => ['placeholder' => trans('ques.section')]])                                   
+                 'attributes' => ['placeholder' => trans('sosd.section')]])                                   
     </div>
     <div class="col-sm-6">
         @include('widgets.form.formitem._select2', 

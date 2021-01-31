@@ -19,6 +19,7 @@ return [
     'concept_section_B' => 'ЧЕЛОВЕК',
     'concept_section_C' => 'ЧЕЛОВЕК И ВСЕЛЕННАЯ',
     'of_category' => 'раздела',
+    'of_concept' => 'понятия',
     'section' => 'тема',
     'variants' => 'вырианты',
     'words' => 'слова',

@@ -29,12 +29,46 @@ class ConceptPlaceController extends Controller
      */
     public function index(Request $request)
     {
+        $search_section = $request->input('search_section');
+        $search_category = $request->input('search_category');
+        $search_concept = (int)$request->input('search_concept');
+        
         $places = Place::whereIn('id', function ($q) {
                             $q->select('place_id')->from('concept_place');
-                        })
-                        ->orderBy('name_ru')->get();
-//dd($concept_categories);        
-        return view('sosd.concept_place.index',compact('places'));
+                        });
+        if ($search_section) {
+            $places = $places->whereIn('id', function ($q) use ($search_section) {
+                            $q->select('place_id')->from('concept_place')
+                              ->whereIn('concept_id', function ($q2) use ($search_section) {
+                                $q2->select('id')->from('concepts')
+                                   ->where('concept_category_id', 'like', $search_section.'%');                                  
+                              });
+                        });                                        
+        }
+        if ($search_category) {
+            $places = $places->whereIn('id', function ($q) use ($search_category) {
+                            $q->select('place_id')->from('concept_place')
+                              ->whereIn('concept_id', function ($q2) use ($search_category) {
+                                $q2->select('id')->from('concepts')
+                                   ->where('concept_category_id', $search_category);                                  
+                              });
+                        });                                        
+        }
+        if ($search_concept) {
+            $places = $places->whereIn('id', function ($q) use ($search_concept) {
+                            $q->select('place_id')->from('concept_place')
+                              ->where('concept_id', $search_concept);                                  
+                        });                                        
+        }
+                        
+        $places = $places->orderBy('name_ru')->get();
+        $section_values = ConceptCategory::getSectionList();
+        $category_values = [NULL=>'']+ConceptCategory::getList();       
+        $concept_values = [NULL=>'']+Concept::getList();       
+
+        return view('sosd.concept_place.index',
+                compact('places', 'section_values', 'category_values', 'concept_values',
+                        'search_section', 'search_category','search_concept'));
     }
 
     /**
@@ -103,7 +137,9 @@ class ConceptPlaceController extends Controller
         $place=Place::findOrFail($place_id);
         
         $concepts = [];
-        $categories = ConceptCategory::all();//take(3)->get();       
+        $categories = ConceptCategory::
+                all();
+                //take(3)->get();       
         foreach ($categories as $category) {
             $concepts[$category->id]=Concept::whereConceptCategoryId($category->id)->orderBy('id')->get();            
         }

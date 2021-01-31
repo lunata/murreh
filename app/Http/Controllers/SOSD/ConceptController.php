@@ -4,6 +4,8 @@ namespace App\Http\Controllers\SOSD;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Redirect;
+use Response;
 
 use App\Library\Str;
 use App\Models\SOSD\Concept;
@@ -79,6 +81,13 @@ class ConceptController extends Controller
         return Redirect::to('/sosd/concept/');
     }
 
+    public function validateForm(Request $request) {
+        $this->validate($request, [
+            'concept_category_id'  => 'required|max:4',
+            'name'  => 'required|max:150',
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -87,7 +96,15 @@ class ConceptController extends Controller
      */
     public function edit($id)
     {
-        return Redirect::to('/sosd/concept/');
+        $args_by_get = $this->args_by_get;
+        $url_args = $this->url_args;
+        
+        $concept = Concept::find($id); 
+        $concept_category_values = ConceptCategory::getList();
+
+        return view('sosd.concept.edit', 
+                compact('concept', 'concept_category_values', 
+                        'args_by_get', 'url_args'));
     }
 
     /**
@@ -99,7 +116,13 @@ class ConceptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return Redirect::to('/sosd/concept/');
+        $this->validateForm($request);
+        
+        $concept = Concept::find($id);
+        $concept->fill($request->all())->save();
+        
+        return Redirect::to('/sosd/concept'.($this->args_by_get))
+            ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 
     /**
@@ -111,5 +134,32 @@ class ConceptController extends Controller
     public function destroy($id)
     {
         return Redirect::to('/sosd/concept/');
+    }
+    
+    /**
+     * Gets list of question sections for drop down list in JSON format
+     * Test url: /sosd/concept/list?category_id=A11
+     * 
+     * @return JSON response
+     */
+    public function conceptList(Request $request)
+    {
+        $concept_name = '%'.$request->input('q').'%';
+        $category_id = $request->input('category_id');
+//dd($section_id);
+        $list = [];
+        $concepts = Concept::where('name','like', $concept_name);
+        if ($category_id) {                 
+            $concepts = $concepts->where('concept_category_id', $category_id);
+        }
+        
+        $concepts = $concepts->orderBy('id')->get();
+                         
+        foreach ($concepts as $concept) {
+            $list[]=['id'  => $concept->id, 
+                     'text'=> $concept->name];
+        }  
+//dd($list);        
+        return Response::json($list);
     }
 }

@@ -53,7 +53,23 @@ class Concept extends Model
         }
         return $out;
     }
-
+    
+    /** Gets list dropdown form
+     * 
+     * @return Array [<key> => <value>,..]
+     */
+    public static function getList()
+    {     
+        $objs = self::orderBy('id')->get();
+        
+        $list = array();
+        foreach ($objs as $row) {
+            $list[$row->id] = $row->id .'. '. $row->name;
+        }
+        
+        return $list;         
+    }
+    
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');
         $recs = self::searchByCategory($objs, $url_args['search_category']);

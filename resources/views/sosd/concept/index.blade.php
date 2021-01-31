@@ -24,8 +24,8 @@
                 <th>{{ trans('sosd.concept') }}</th>
                 <th>{{ trans('sosd.variants') }}</th>
                 <th>{{ trans('navigation.places') }}</th>
-           <!--     @if (User::checkAccess('edit'))
-                <th>{{ trans('messages.actions') }}</th-->
+                @if (User::checkAccess('edit'))
+                <th>{{ trans('messages.actions') }}</th>
                 @endif
             </tr>
         </thead>
@@ -38,26 +38,21 @@
                 <td data-th="{{ trans('sosd.variant') }}">
                     @foreach ($concept->allVariants() as $code => $words)
                         @foreach ($words as $word => $places)
-                        {{$code}}={{$word}}: <i>{{join(', ', $places)}}</i><br>
+                            @if (User::checkAccess('edit')){{$code}}=@endif{{$word}}: 
+                            <i>{{join(', ', $places)}}</i><br>
                         @endforeach                    
                     @endforeach
                 </td>
                 <td data-th="{{ trans('navigation.places') }}">
                     {{ $concept->countPlaces() }}
                 </td>
-               <!-- @if (User::checkAccess('edit'))
+                @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 
                             ['is_button'=>true, 
                              'without_text' => 1,
                              'route' => '/sosd/concept/'.$concept->id.'/edit'])
-                    @include('widgets.form.button._delete', 
-                            ['is_button'=>true, 
-                             'without_text' => 1,
-                             'route' => 'concept.destroy', 
-                             'obj' => $concept,
-                             'args'=>['id' => $concept->id]])
-                </td-->
+                </td>
                 @endif
             </tr>
             @endforeach
