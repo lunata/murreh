@@ -44,7 +44,11 @@
                     @endforeach
                 </td>
                 <td data-th="{{ trans('navigation.places') }}">
-                    {{ $concept->countPlaces() }}
+                    @if ($concept->countPlaces())
+                    <a href="/sosd/concept_place?search_concept={{$concept->id}}">{{ $concept->countPlaces() }}</a>
+                    @else
+                    0
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
