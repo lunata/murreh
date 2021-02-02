@@ -29,8 +29,10 @@ class ConceptCategoryController extends Controller
     public function index(Request $request)
     {
         $concept_categories = ConceptCategory::orderBy('id')->get();
+        $map_dir = ConceptCategory::mapDir();
 //dd($concept_categories);        
-        return view('sosd.concept_category.index',compact('concept_categories'));
+        return view('sosd.concept_category.index',
+                compact('concept_categories', 'map_dir'));
     }
 
     /**
@@ -181,5 +183,16 @@ class ConceptCategoryController extends Controller
         }  
 //dd($list);        
         return Response::json($list);
+    }
+    
+    public function map(string $id, int $map_number)
+    {
+        $concept_category = ConceptCategory::findOrFail($id);
+        $map_dir = ConceptCategory::mapDir();
+        
+        $places = $concept_category->getPlacesbyNums();
+        
+        return view('sosd.concept_category.map',
+                compact('concept_category', 'map_number', 'map_dir', 'places'));
     }
 }

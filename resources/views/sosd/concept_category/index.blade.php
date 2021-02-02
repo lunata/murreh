@@ -26,7 +26,7 @@
                 <th>{{ trans('sosd.section') }}</th>
                 <th>{{ trans('sosd.category') }}</th>
                 <th>{{ trans('navigation.concepts') }}</th>
-                <th>{{ trans('sosd.claster_maps') }}</th>
+                <th>{{ trans('navigation.cluster_maps') }}</th>
                 @if (User::checkAccess('sosd.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -45,7 +45,14 @@
                     0
                     @endif
                 </td>
-                <td data-th="{{ trans('sosd.claster_maps') }}"></td>
+                <td data-th="{{ trans('navigation.cluster_maps') }}">
+                    @if(\Storage::disk('public')->exists($map_dir.$concept_category->id.'_1.png'))
+                    <a href="/sosd/concept_category/{{$concept_category->id}}/map/1">1</a>
+                    @endif
+                    @if(\Storage::disk('public')->exists($map_dir.$concept_category->id.'_2.png'))
+                    <a href="/sosd/concept_category/{{$concept_category->id}}/map/2">2</a>
+                    @endif
+                </td>
                 @if (User::checkAccess('sosd.edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', [

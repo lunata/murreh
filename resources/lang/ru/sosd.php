@@ -12,7 +12,6 @@ return [
 
     'by_first' => 'только по первой букве',
     'category' => 'раздел',
-    'claster_maps' => 'кластерные карты',
     'concept' => 'понятие',
     'concept_removed' => 'Понятие ":name" удалено.',
     'concept_section_A' => 'ВСЕЛЕННАЯ',
