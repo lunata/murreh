@@ -54,11 +54,6 @@ class ConceptCategory extends Model
         return trans("sosd.concept_section_".substr($this->id, 0,1));
     }    
     
-    public function getNameAttribute() : String
-    {
-        return $this->name_ru;
-    }    
-    
     public function getPlacesbyNums() {
         $out = [];
         foreach (array_flip($this->place_nums) as $i => $place_id) {
