@@ -28,6 +28,15 @@ a:hover {
     text-decoration: underline;
 }
 
+h2 {
+    font-size: 20px;
+    color: #333;  
+    font-weight: normal;
+    padding-top: 0;
+    line-height: 28px;
+    margin: 0 0 5px;
+}
+
 h3 {
     font-size: 18px;
     color: #972d1a;
@@ -66,13 +75,6 @@ h1:before {
     position: absolute;
     top: 0;
     width: 28px;
-}
-
-h2 {
-    font-size: 22px;
-    font-weight: bold;
-    line-height: 28px;
-    margin: 0 0 20px;
 }
 
 .text-page {
