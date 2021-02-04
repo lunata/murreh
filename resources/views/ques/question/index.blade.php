@@ -31,6 +31,7 @@
                 <th>{{ trans('ques.section') }}</th>
                 <th>{{ trans('ques.subsection') }}</th>
                 <th>{{ trans('ques.question') }}</th>
+                <th>{{ trans('ques.question_ru') }}</th>
                 <th>{{ trans('ques.answers') }}</th>
                 <th>{{ trans('navigation.anketas') }}</th>
                 @if (User::checkAccess('ques.edit'))
@@ -45,6 +46,7 @@
                 <td data-th="{{ trans('ques.section') }}">{{$question->section}}</td>
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
                 <td data-th="{{ trans('ques.question') }}">{{$question->question}}</td>
+                <td data-th="{{ trans('ques.question_ru') }}">{{$question->question_ru}}</td>
                 <td data-th="{{ trans('ques.answers') }}">
                     @foreach ($question->answers as $answer)
                     {{$answer->code}} - {{$answer->answer}}<br>

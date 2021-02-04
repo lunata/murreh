@@ -22,6 +22,9 @@
                  'special_symbol' => true,
                  'title'=>trans('ques.question')])
                  
+        @include('widgets.form.formitem._text', 
+                ['name' => 'question_ru', 
+                 'title'=>'перевод на русский'])
     </div>
     <div class="col-sm-6">
         <?php $i=0;?>

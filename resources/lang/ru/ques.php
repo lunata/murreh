@@ -26,6 +26,7 @@ return [
     'copy_answers' => 'Копировать ответы из анкеты',
     'fond_number' => 'Фонд / Опись / №',
     'question' => 'вопрос',
+    'question_ru' => 'перевод',
     'question_removed' => 'Вопрос удален',
     'qsection_removed' => 'Раздел вопросов удален',
     'section' => 'раздел',
