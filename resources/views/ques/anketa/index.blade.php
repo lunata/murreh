@@ -11,6 +11,7 @@
 
 @section('body')
         <p>
+            <a href="https://www.google.com/maps/d/viewer?mid=17kQntODJtCpiCP5Hkvc5o-w5kMFasK_C&ll=61.684608973609805%2C33.82279095000001&z=5">См. на карте Google</a> |
         @if (User::checkAccess('edit'))
             <a href="{{route('anketas.create', $url_args)}}">
         @endif
