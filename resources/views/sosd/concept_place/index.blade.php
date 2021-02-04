@@ -11,7 +11,7 @@
 @stop
 
 @section('body')        
-        <p><a href="https://www.google.com/maps/@61.4975952,33.9047928,6z/data=!3m1!4b1!4m2!6m1!1s1gGf6-V1f4kYIZor6lCFOZAKVTKGaOkRe?hl=ru-RU">См. на карте Google</a></p>
+        <p><a href="https://www.google.com/maps/@61.4975952,33.9047928,6z/data=!3m1!4b1!4m2!6m1!1s1gGf6-V1f4kYIZor6lCFOZAKVTKGaOkRe?hl=ru-RU" target="_blank">См. на карте Google</a></p>
         @include('sosd.concept_place._search_form',['url' => '/sosd/concept_place']) 
         <table class="table table-striped rwd-table wide-lg">
         <thead>
