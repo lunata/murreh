@@ -19,6 +19,7 @@ use App\Http\Controllers\Ques\AnswerController;
 use App\Http\Controllers\Ques\QsectionController;
 use App\Http\Controllers\Ques\QuestionController;
 
+use App\Http\Controllers\Library\ExportController;
 use App\Http\Controllers\Library\ImportController;
 use App\Http\Controllers\Library\ServiceController;
 
@@ -66,6 +67,8 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 // Сервисная страничка, показываем после заполнения рег формы, формы сброса и т.
 // о том, что письмо отправлено и надо заглянуть в почтовый ящик.
 Route::get('wait', [AuthController::class, 'wait']);
+
+Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 
 Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 
