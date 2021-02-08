@@ -42,6 +42,11 @@ class Qsection extends Model
                     ->orderBy('id');
     }
     
+    public static function mapDir() {
+        return '/cluster_maps/qsection/';
+    }
+
+    
     /** Gets list of objects
      * 
      * @return Array [1=>'Вологодская обл.',..]

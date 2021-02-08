@@ -31,6 +31,7 @@
                 <th>{{ trans('ques.section') }}</th>
                 <th>{{ trans('ques.title') }}</th>
                 <th>{{ trans('navigation.questions') }}</th>
+                <th>{{ trans('navigation.cluster_maps') }}</th>
                 @if (User::checkAccess('ques.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -49,6 +50,14 @@
                     </a>
                     @else
                     0
+                    @endif
+                </td>
+                <td data-th="{{ trans('navigation.cluster_maps') }}">
+                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-1.png'))
+                    <a href="/ques/qsection/{{$qsection->id}}/map/1">1</a>
+                    @endif
+                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-2.png'))
+                    <a href="/ques/qsection/{{$qsection->id}}/map/2">2</a>
                     @endif
                 </td>
                 @if (User::checkAccess('edit'))

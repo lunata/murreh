@@ -9,6 +9,8 @@ use Response;
 
 use App\Library\Str;
 
+use App\Models\Geo\Place;
+
 use App\Models\Ques\Qsection;
 
 class QsectionController extends Controller
@@ -43,10 +45,11 @@ class QsectionController extends Controller
         $qsections = $qsections->paginate($url_args['limit_num']);
         
         $section_values = Qsection::getSectionList();
+        $map_dir = Qsection::mapDir();
         
         return view('ques.qsection.index',
                     compact('numAll', 'qsections', 'section_values', 
-                            'args_by_get', 'url_args'));
+                            'args_by_get', 'url_args', 'map_dir'));
     }
 
     /**
@@ -197,5 +200,18 @@ class QsectionController extends Controller
         }  
 //dd($list);        
         return Response::json($list);
+    }
+    
+    public function map(string $id, int $map_number)
+    {
+        $qsection = Qsection::findOrFail($id);
+        $map_dir = Qsection::mapDir();
+        
+//        $places = $concept_category->getPlacesbyNums();
+        $places = Place::getListInVocs();
+        ksort($places, SORT_NUMERIC);
+//dd($places);        
+        return view('ques.qsection.map',
+                compact('qsection', 'map_number', 'map_dir', 'places'));
     }
 }

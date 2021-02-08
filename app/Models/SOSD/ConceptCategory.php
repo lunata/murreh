@@ -66,7 +66,7 @@ class ConceptCategory extends Model
     }
     
     public static function mapDir() {
-        return '/cluster_maps/';
+        return '/cluster_maps/concept_category/';
     }
 
         /** Gets list dropdown form
