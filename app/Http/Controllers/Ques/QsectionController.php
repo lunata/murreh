@@ -208,7 +208,7 @@ class QsectionController extends Controller
         $map_dir = Qsection::mapDir();
         
 //        $places = $concept_category->getPlacesbyNums();
-        $places = Place::getListInVocs();
+        $places = Place::getListInAnketas();
         ksort($places, SORT_NUMERIC);
 //dd($places);        
         return view('ques.qsection.map',

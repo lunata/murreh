@@ -178,6 +178,20 @@ class Place extends Model
         return $list;         
     }
     
+    public static function getListInAnketas()
+    {     
+        $places = self::whereIn('id', function ($query) {
+                          $query->select('place_id')->from('anketas');
+                        })->orderBy('name_ru');
+//dd($places->toSql());        
+        $list = array();
+        foreach ($places->get() as $row) {
+            $list[$row->id] = $row->name_ru;
+        }
+        
+        return $list;         
+    }
+    
     /** Gets list of places
      * 
      * @return Array [1=>'Dialectal texts (199)',..]
