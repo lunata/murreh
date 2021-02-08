@@ -69,6 +69,7 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 Route::get('wait', [AuthController::class, 'wait']);
 
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
+Route::get('export/translations_by_questions', [ExportController::class, 'translationsByQuestions']);
 
 Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 

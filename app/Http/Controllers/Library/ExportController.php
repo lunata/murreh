@@ -4,20 +4,12 @@ namespace App\Http\Controllers\Library;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Storage;
-use Carbon\Carbon;
 
 use App\Library\Export;
 
-use App\Models\Corpus\Text;
-use App\Models\Dict\Dialect;
-use App\Models\Dict\Gram;
-use App\Models\Dict\GramCategory;
-use App\Models\Dict\Lang;
-use App\Models\Dict\Lemma;
-use App\Models\Dict\PartOfSpeech;
+use App\Models\Ques\Question;
 
 class ExportController extends Controller
 {
@@ -37,6 +29,37 @@ class ExportController extends Controller
             }
 //exit(0);            
         }
+        print "done";
+    }
+
+    public function translationsByQuestions(Request $request) {
+        $from  = (int)$request->input('from');
+        $to  = (int)$request->input('to');
+        $url = Storage::disk('public')->path('/'). 'export/translations/';
+//dd($url);        
+        
+        $list = [];
+        for ($i=$from; $i<=$to; $i++) {
+            $question = Question::whereSequenceNumber($i)->first();
+            if (!$question || !$question->question_ru) {
+                continue;
+            }
+            $list[$question->question_ru] = Export::translationsByQuestion($question->id);            
+        }
+//dd($list);       
+        $qfile=fopen($url.'all.csv', 'w');
+        foreach (array_keys($list[array_key_first($list)]) as $place_id) {
+            $qfiles[$place_id]=fopen($url.$place_id.'.csv', 'w');
+        }        
+        
+        foreach ($list as $question_ru => $places) {
+            fputcsv($qfile, [$question_ru] + array_values($places));
+            foreach ($places as $place_id=>$place_answers) {  
+                fputcsv($qfiles[$place_id], [$question_ru, $place_answers]);
+            }
+//exit(0);            
+        }
+        fclose($qfile);
         print "done";
     }
 

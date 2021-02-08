@@ -4,7 +4,7 @@ namespace App\Library;
 
 use App\Models\Geo\Place;
 
-//use App\Models\Ques\AnketaQuestion;
+use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Answer;
 use App\Models\Ques\Question;
 
@@ -60,4 +60,20 @@ class Export {
         return $out;
     } 
     
+    public static function translationsByQuestion($question_id) {
+        $list = [];
+        for ($p=1; $p<=150; $p++) {
+            $anketa_answers = AnketaQuestion::whereQuestionId($question_id)
+                                    ->whereIn('anketa_id', function ($q2) use ($p) {
+                                            $q2->select('id')->from('anketas')
+                                              ->where('place_id', $p);
+                                    })->orderBy('answer_text')->get();
+            $answers = [];
+            foreach($anketa_answers as $answer) {
+                $answers[] = $answer->answer_text;
+            }      
+            $list[$p] = (sizeof($answers)? join(',', $answers) : '-');
+        }
+        return $list;
+    }
 }
