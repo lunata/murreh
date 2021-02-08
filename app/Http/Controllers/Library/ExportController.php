@@ -9,6 +9,8 @@ use Storage;
 
 use App\Library\Export;
 
+use App\Models\Geo\Place;
+
 use App\Models\Ques\Question;
 
 class ExportController extends Controller
@@ -47,10 +49,14 @@ class ExportController extends Controller
             $list[$question->question_ru] = Export::translationsByQuestion($question->id);            
         }
 //dd($list);       
-        $qfile=fopen($url.'all.csv', 'w');
+        $th = ['перевод'];
         foreach (array_keys($list[array_key_first($list)]) as $place_id) {
             $qfiles[$place_id]=fopen($url.$place_id.'.csv', 'w');
+            $place = Place::find($place_id);
+            $th[]=$place->name;
         }        
+        $qfile=fopen($url.'all.csv', 'w');
+        fputcsv($qfile, $th);
         
         foreach ($list as $question_ru => $places) {
             fputcsv($qfile, [$question_ru] + array_values($places));
