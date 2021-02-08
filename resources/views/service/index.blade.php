@@ -5,13 +5,13 @@
 @endsection
 
 @section('body')
-    <h2>Импорт</h2>
+    <!--h2>Импорт</h2>
     <p><a href="import/place_coord">Импорт координат для населенных пунктов</a></p>
     <p><a href="import/qsections">Импорт разделов вопросов</a></p>
     <p><a href="import/questions">Импорт вопросов и вариантов ответа</a></p>
     <p><a href="import/concepts">Импорт понятий из СОСД</a></p>
     <p><a href="import/concept_categories">Импорт тем понятий из СОСД</a></p>
-    <p><a href="import/concept_place">Импорт словников СОСД</a></p>
+    <p><a href="import/concept_place">Импорт словников СОСД</a></p-->
     
     <h2>Экспорт</h2>
     <p><a href="export/answers_by_questions?from=485&to=800">Экспорт ответов на вопросы с 485 по 800</a>

@@ -73,14 +73,13 @@ Route::get('export/translations_by_questions', [ExportController::class, 'transl
 
 Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 
-//Route::get('import/district_names', [ImportController::class, 'districtNames']);
-Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
+/*Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
 Route::get('import/qsections', [ImportController::class, 'qsections']);
 Route::get('import/questions', [ImportController::class, 'questions']);
 Route::get('import/concepts', [ImportController::class, 'concepts']);
 Route::get('import/concept_categories', [ImportController::class, 'conceptСategories']);
 Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
-
+*/
 Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
 Route::get('ques/anketa_question/copy/{from_anketa}_{to_anketa}_{qsection_id}', [AnketaQuestionController::class, 'copyAnswers']);
