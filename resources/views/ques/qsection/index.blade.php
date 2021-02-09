@@ -55,7 +55,7 @@
                 <td data-th="{{ trans('navigation.cluster_maps') }}">
                     @for ($i=1; $i<=3; $i++)
                         @if(\Storage::disk('public')->exists($map_dir.$qsection->sequence_number.'-'.$i.'.png'))
-                        <a href="/ques/qsection/{{$qsection->sequence_number}}/map/{{$i}}">1</a>
+                        <a href="/ques/qsection/{{$qsection->sequence_number}}/map/{{$i}}">{{$i}}</a>
                         @endif
                     @endfor
                 </td>
