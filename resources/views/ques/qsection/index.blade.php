@@ -59,6 +59,9 @@
                     @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-2.png'))
                     <a href="/ques/qsection/{{$qsection->id}}/map/2">2</a>
                     @endif
+                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-3.png'))
+                    <a href="/ques/qsection/{{$qsection->id}}/map/3">3</a>
+                    @endif
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
