@@ -9,7 +9,7 @@
 @stop
 
 @section('body')  
-    <h2>{{$qsection->name}}</h2>
+    <h2>{{$qsection->title}}</h2>
     <div class="map">
         <img src="/storage{{$map_dir.$qsection->sequence_number.'-'.$map_number.'.png'}}">
         <div class="column">
