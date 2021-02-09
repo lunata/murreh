@@ -53,15 +53,11 @@
                     @endif
                 </td>
                 <td data-th="{{ trans('navigation.cluster_maps') }}">
-                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-1.png'))
-                    <a href="/ques/qsection/{{$qsection->id}}/map/1">1</a>
-                    @endif
-                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-2.png'))
-                    <a href="/ques/qsection/{{$qsection->id}}/map/2">2</a>
-                    @endif
-                    @if(\Storage::disk('public')->exists($map_dir.$qsection->id.'-3.png'))
-                    <a href="/ques/qsection/{{$qsection->id}}/map/3">3</a>
-                    @endif
+                    @for ($i=1; $i<=3; $i++)
+                        @if(\Storage::disk('public')->exists($map_dir.$qsection->sequence_number.'-'.$i.'.png'))
+                        <a href="/ques/qsection/{{$qsection->sequence_number}}/map/{{$i}}">1</a>
+                        @endif
+                    @endfor
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

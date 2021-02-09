@@ -204,7 +204,7 @@ class QsectionController extends Controller
     
     public function map(string $id, int $map_number)
     {
-        $qsection = Qsection::findOrFail($id);
+        $qsection = Qsection::whereSequenceNumber($id);
         $map_dir = Qsection::mapDir();
         
 //        $places = $concept_category->getPlacesbyNums();
