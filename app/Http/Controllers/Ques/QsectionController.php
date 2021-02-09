@@ -205,6 +205,10 @@ class QsectionController extends Controller
     public function map(string $id, int $map_number)
     {
         $qsection = Qsection::whereSequenceNumber($id);
+        if (!$qsection) {
+            return Redirect::to('/ques/qsection/')
+                               ->withErrors('Нет такого раздела');
+        }
         $map_dir = Qsection::mapDir();
         
 //        $places = $concept_category->getPlacesbyNums();
