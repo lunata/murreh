@@ -138,10 +138,9 @@ class AuthController extends Controller
         {
             $activation = Activation::create($sentuser);
             $code = $activation->code;
-            
             $sent = Mail::send('mail.account_activate', compact('sentuser', 'code'), function($m) use ($sentuser)
             {
-                $m->from('nataly@krc.karelia.ru', \Lang::get('main.site_abbr'));
+                $m->from('support@krc.karelia.ru', \Lang::get('main.site_abbr'));
                 $m->to($sentuser->email)->subject(\Lang::get('mail.account_activation_subj'));
             });
             if ($sent === 0)
