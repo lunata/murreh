@@ -143,14 +143,15 @@ class AuthController extends Controller
                 $m->from('support@krc.karelia.ru', \Lang::get('main.site_abbr'));
                 $m->to($sentuser->email)->subject(\Lang::get('mail.account_activation_subj'));
             });
+            
+            $role = Sentinel::findRoleBySlug('user');
+            $role->users()->attach($sentuser);
+
             if ($sent === 0)
             {
                 return Redirect::to('register')
                     ->withErrors(\Lang::get('error.email_activation_error'));
             }
-
-            $role = Sentinel::findRoleBySlug('user');
-            $role->users()->attach($sentuser);
 
             return Redirect::to('login')
                 ->withSuccess(\Lang::get('auth.account_is_created'))

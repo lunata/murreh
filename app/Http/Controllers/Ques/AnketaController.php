@@ -248,4 +248,14 @@ class AnketaController extends Controller
 //dd($list);        
         return Response::json($list);
     }
+    
+    public function onMap() {
+        $places = Place::where('latitude', '>', 0)
+                       ->where('longitude', '>', 0)
+                       ->whereIn('id', function ($q) {
+                           $q->select('place_id')->from('anketas');
+                       })
+                       ->orderBy('id')->get();
+        return view('geo.place.map', compact('places')); 
+    }
 }

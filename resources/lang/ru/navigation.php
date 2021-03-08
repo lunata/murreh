@@ -13,6 +13,7 @@ return [
     'about_project' => 'О проекте',
     'adm_division' => 'Административное деление',
     'anketas' => 'Анкеты',
+    'anketas_on_map' => 'Анкеты на карте',
     'cluster_maps' => 'Кластерные карты',
     'compare_anketas' => 'Сравнение анкет',
     'compare_vocs' => 'Сравнение словников',
