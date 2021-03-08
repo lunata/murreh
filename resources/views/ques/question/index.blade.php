@@ -34,6 +34,7 @@
                 <th>{{ trans('ques.question_ru') }}</th>
                 <th>{{ trans('ques.answers') }}</th>
                 <th>{{ trans('navigation.anketas') }}</th>
+                <th></th>
                 @if (User::checkAccess('ques.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -72,6 +73,7 @@
                     0
                 @endif
                 </td>
+                <td><a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a></td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 

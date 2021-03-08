@@ -256,6 +256,6 @@ class AnketaController extends Controller
                            $q->select('place_id')->from('anketas');
                        })
                        ->orderBy('id')->get();
-        return view('geo.place.map', compact('places')); 
+        return view('ques.anketa.map', compact('places')); 
     }
 }

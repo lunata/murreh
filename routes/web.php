@@ -89,6 +89,7 @@ Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'updat
 Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
 Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
 Route::get('ques/qsection/{id}/map/{map_number}', [QsectionController::class, 'map']);
+Route::get('ques/question/{id}/map', [QuestionController::class, 'onMap']);
 
 Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);

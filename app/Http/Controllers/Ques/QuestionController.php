@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
+use App\Library\Map;
 use App\Library\Str;
 
-//use App\Models\Ques\Answer;
+use App\Models\Geo\Place;
+
+use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
@@ -202,5 +205,33 @@ class QuestionController extends Controller
             return Redirect::to('/ques/question/'.$this->args_by_get)
                   ->withSuccess($result['message']);
         }
+    }
+    
+    public function onMap($id) {
+        $id=(int)$id;
+        $question = Question::findOrFail($id);
+        $answers = Answer::whereQuestionId($id)->get();
+        $default_markers = Map::markers();
+        $answer_places = $markers = [];
+        $count=0;
+        foreach ($answers as $answer) {
+            $answer_id = $answer->id;
+            $places = Place::where('latitude', '>', 0)
+                   ->where('longitude', '>', 0)
+                   ->whereIn('id', function ($q) use ($answer_id) {
+                       $q->select('place_id')->from('anketas')
+                         ->whereIn('id', function ($q2) use ($answer_id) {
+                             $q2->select('anketa_id')->from('anketa_question')
+                                ->whereAnswerId($answer_id);
+                         });
+                   })
+                   ->orderBy('id');
+            if (!$places->count()) { continue; }
+            $markers[$answer->code]=$default_markers[$count++];
+            $answer_places[$answer->code] = $places->get();
+        }
+//dd($answer_places);        
+        return view('ques.question.map', 
+                compact('question', 'answer_places', 'markers')); 
     }
 }
