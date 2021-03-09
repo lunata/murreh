@@ -15,7 +15,7 @@
 {{$question->qsection->title}} :
 {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
 @foreach ($markers as $code => $color)
-<img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - {{$question->answers()->where('code', $code)->first()->answer}}<br>
+<img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - {{$question->answers()->where('code', $code)->first()->answer}} ({{sizeof($answer_places[$code])}})<br>
 @endforeach
 <div id="mapid" style="width: 100%; min-width: 750px; height: 2100px;"></div>
 @stop
