@@ -14,7 +14,7 @@ class AddQuestionRuToQuestionsTable extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->string('question_ru', 150);
+            $table->string('question_ru', 150)->nullable();
         });
     }
 
