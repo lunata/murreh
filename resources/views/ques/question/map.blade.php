@@ -11,7 +11,9 @@
  @stop
 
 @section('body')
-<h2>{{$question->question}}</h2>
+<h2>{{$question->qsection->section}} :
+{{$question->qsection->title}} :
+{{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
 @foreach ($markers as $code => $color)
 <img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - {{$question->answers()->where('code', $code)->first()->answer}}<br>
 @endforeach
