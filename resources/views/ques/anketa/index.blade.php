@@ -34,12 +34,14 @@
                 <th>{{ trans('geo.district') }}</th>
                 <th>{{ trans('geo.place') }}</th>
                 <th>{{ trans('ques.year') }}</th>
+            @if (User::checkAccess('edit'))
                 <th>{{ trans('person.recorder') }}</th>
                 <th>{{ trans('person.informant') }}</th>
+            @endif
                 <th>{{ trans('ques.answers') }}</th>
-                @if (User::checkAccess('ques.edit'))
+            @if (User::checkAccess('ques.edit'))
                 <th>{{ trans('messages.actions') }}</th>
-                @endif
+            @endif
             </tr>
         </thead>
         <tbody>
@@ -50,8 +52,10 @@
                 <td data-th="{{ trans('geo.district') }}">{{$anketa->district->name}}</td>
                 <td data-th="{{ trans('geo.place') }}">{{$anketa->place->name}}</td>
                 <td data-th="{{ trans('ques.year') }}">{{$anketa->year}}</td>
+                @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('person.recorder') }}">{{$anketa->recorder->name}}</td>
                 <td data-th="{{ trans('person.informant') }}">{{$anketa->informant->name ?? ''}}</td>
+                @endif
                 <td data-th="{{ trans('ques.answers') }}">
                     {{ $anketa->answers()->count() }}
                 </td>

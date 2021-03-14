@@ -12,7 +12,7 @@ class Qsection extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['id', 'section_id', 'title', 'sequence_number'];
+    protected $fillable = ['id', 'section_id', 'title', 'sequence_number', 'status'];
     
     public  $sections = [
                 1 => "Социолингвистическая информация",  
@@ -84,16 +84,30 @@ class Qsection extends Model
      * 
      * @return array [1=>'Фонетика (199)',..]
      */
-    public static function getSectionListWithQuantity($anketa=null)
+    public static function getSectionListWithQuantity($anketa=null, $only_publ=false)
     {     
         $qsection = new Qsection;
         $sections = $qsection->getSections();
         
         $list = array();
         foreach ($sections as $section_id=>$title) {
-            $count=Question::where('section_id',$section_id)->count();
+            $questions=Question::where('section_id',$section_id);
+            if ($only_publ) {
+                $questions = $questions->whereIn('qsection_id', function ($q) {
+                    $q -> select('id') -> from('qsections')
+                       -> whereStatus(1);
+                });
+            }
+            $count=$questions->count();
             if ($anketa) {
-                $answer_count=$anketa->questions()->where('section_id', $section_id)->count();
+                $answers = $anketa->questions()->where('section_id', $section_id);
+                if ($only_publ) {
+                    $answers = $answers -> whereIn('qsection_id', function ($q) {
+                        $q -> select('id') -> from('qsections')
+                           -> whereStatus(1);
+                    });
+                }
+                $answer_count = $answers->count();
                 $count = "$answer_count / $count";
             }
             if ($count) {
@@ -130,7 +144,7 @@ class Qsection extends Model
      * 
      * @return Array [1=>[1=>'Вологодская обл.',..], ...]
      */
-    public static function getListWithSections()
+    public static function getListWithSections($only_publ=false)
     {     
         $qsection = new Qsection;
         $sections = $qsection->getSections();
@@ -138,7 +152,11 @@ class Qsection extends Model
         $list = array();
         foreach (array_keys($sections) as $section_id) {
             $list[$section_id] = [];
-            $objs = self::where('section_id', $section_id)->orderBy('sequence_number')->get();
+            $objs = self::where('section_id', $section_id)->orderBy('sequence_number');
+            if ($only_publ) {
+                $objs = $objs->whereStatus(1);
+            }
+            $objs = $objs->get();
         
             foreach ($objs as $row) {
                 $list[$section_id][$row->id] = $row->title;

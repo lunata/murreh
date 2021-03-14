@@ -218,4 +218,12 @@ class QsectionController extends Controller
         return view('ques.qsection.map',
                 compact('qsection', 'map_number', 'map_dir', 'places'));
     }
+    
+    public function changeVisible ($id, $status, Request $request) {
+        $qsection = Qsection::findOrFail($id);
+        $qsection->status=$status ? 1 : 0;
+        $qsection->save();
+        return Redirect::to('/ques/qsection/'.$this->args_by_get)
+            ->withSuccess(\Lang::get('messages.change_status'.$status));        
+    }
 }

@@ -28,8 +28,7 @@
                  'value' => $url_args['search_place'],
                  'attributes' => ['placeholder' => trans('geo.place')]]) 
     </div>
-</div>    
-<div class="row">
+@if (User::checkAccess('edit'))
     <div class="col-sm-4">
         @include('widgets.form.formitem._select', 
                 ['name' => 'search_recorder', 
@@ -44,6 +43,7 @@
                  'value' => $url_args['search_informant'],
                  'attributes' => ['placeholder' => trans('person.informant')]]) 
     </div>
+@endif         
     <div class="col-sm-4 search-button-b">       
         <span>
         {{trans('messages.show_by')}}

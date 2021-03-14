@@ -33,7 +33,7 @@
         @else
             | {{ trans('messages.edit') }} | {{ trans('messages.delete') }}
         @endif 
-            | <a href="">{{ trans('messages.history') }}</a>
+{{--            | <a href="">{{ trans('messages.history') }}</a>--}}
         </p>
         
         <p><b>{{trans('ques.fond_number')}}:</b> {{$anketa->fond_number}}</p>
@@ -41,9 +41,11 @@
         <p><b>{{trans('geo.place')}}:</b> {{$anketa->place->name}}</p>
         <p><b>{{trans('geo.population')}}:</b> {{$anketa->population}}</p>
         <p><b>{{trans('ques.year')}}:</b> {{$anketa->year}}</p>
+        @if (User::checkAccess('corpus.edit'))
         <p><b>{{trans('person.recorder')}}:</b> {{$anketa->recorder->toString()}}</p>
         @include('person.informant._to_string', ['informant'=>$anketa->informant])
         </p>
+        @endif         
         
 <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">           

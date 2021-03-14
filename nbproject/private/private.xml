@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/projects/murreh/resources/views/ques/qsection/index.blade.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QsectionController.php</file>
+            <file>file:/E:/projects/murreh/routes/web.php</file>
+            <file>file:/E:/projects/murreh/resources/lang/ru/messages.php</file>
+            <file>file:/E:/projects/murreh/resources/views/widgets/form/button/_status.blade.php</file>
+        </group>
     </open-files>
 </project-private>

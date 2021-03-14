@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Response;
 
+use App\Models\User;
 use App\Library\Str;
 
 use App\Models\Geo\District;
@@ -31,8 +32,8 @@ class AnketaController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:edit,/');
-//        $this->middleware('auth:edit,/ques/anketas/', ['only' => ['create','store','edit','update','destroy']]);
+//        $this->middleware('auth:edit,/');
+        $this->middleware('auth:edit,/ques/anketas/', ['only' => ['create','store','edit','update','destroy']]);
         
         $this->url_args = Anketa::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);
@@ -128,8 +129,8 @@ class AnketaController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
 
-        $section_values = Qsection::getSectionListWithQuantity($anketa);
-        $qsection_values = Qsection::getListWithSections();
+        $section_values = Qsection::getSectionListWithQuantity($anketa, !User::checkAccess('edit'));
+        $qsection_values = Qsection::getListWithSections(!User::checkAccess('edit'));
         $question_values = Question::getListWithQsections();
 //dd($question_values);        
         return view('ques.anketa.show', 

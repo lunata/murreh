@@ -7,6 +7,7 @@ if(! isset($values)) $values = [];
 <div class="{!! $errors->has($name) ? 'has-error' : null !!}">
     @if($title)
 	<label for="{{$name}}">{{ $title }}</label>
+        {!! isset($with_break) && $with_break ? '<br>' : ''; !!}
     @endif
     @foreach ($values as $value=>$tail)
     {!! Form::radio($name, $value, $value===$checked) !!}
