@@ -49,31 +49,43 @@
                 <td data-th="{{ trans('ques.question') }}">{{$question->question}}</td>
                 <td data-th="{{ trans('ques.question_ru') }}">{{$question->question_ru}}</td>
                 <td data-th="{{ trans('ques.answers') }}">
+                @if (User::checkAccess('edit') || $question->visible)
                     @foreach ($question->answers as $answer)
                     {{$answer->code}} - {{$answer->answer}}<br>
                     @endforeach
-                </td>
-                <td data-th="{{ trans('navigation.anketas') }}">
-                @if($question->anketas()->count())
-                    @foreach ($question->answers as $answer)
-                        {{$answer->code}} - 
-                        @if($answer->anketas()->count())
-                        <a href="/ques/anketas?search_answer={{$answer->id}}">
-                            {{$answer->anketas()->count()}}
-                        </a>
-                        @else
-                        0
-                        @endif
-                        <br>
-                    @endforeach                    
-{{--                    <a href="/ques/anketas?search_question={{$question->id}}">
-                    {{ $question->anketas()->count() }}
-                </a> --}}
-                @else 
-                    0
+                @else
+                    <i class="fa fa-eye-slash fa-lg"></i>
                 @endif
                 </td>
-                <td><a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a></td>
+                <td data-th="{{ trans('navigation.anketas') }}">
+                @if (User::checkAccess('edit') || $question->visible)
+                    @if($question->anketas()->count())
+                        @foreach ($question->answers as $answer)
+                            {{$answer->code}} - 
+                            @if($answer->anketas()->count())
+                            <a href="/ques/anketas?search_answer={{$answer->id}}">
+                                {{$answer->anketas()->count()}}
+                            </a>
+                            @else
+                            0
+                            @endif
+                            <br>
+                        @endforeach                    
+    {{--                    <a href="/ques/anketas?search_question={{$question->id}}">
+                        {{ $question->anketas()->count() }}
+                    </a> --}}
+                    @else 
+                        0
+                    @endif
+                @else
+                    <i class="fa fa-eye-slash fa-lg"></i>
+                @endif
+                </td>
+                <td>
+                @if (User::checkAccess('edit') || $question->visible)
+                    <a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a>
+                @endif
+                </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 

@@ -31,6 +31,13 @@ class Question extends Model
         return $sections[$this->section_id] ?? null;
     }
     
+    public function getVisibleAttribute() {
+        if (!$qsection = $this->qsection) {
+            return null;
+        }
+        return $qsection->status ?? null;
+    }
+    
     
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
