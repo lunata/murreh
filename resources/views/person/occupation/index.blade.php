@@ -29,8 +29,9 @@
         
         @include('person.occupation._search_form',['url' => '/person/occupation/']) 
 
-        <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
+        <p>{{ !$numAll ? trans('messages.not_founded_records') : trans_choice('messages.founded_records', $numAll%20, ['count'=>$numAll]) }}</p>
         
+        @if ($numAll)                
         <table class="table-striped table-wide rwd-table wide-md">
         <thead>
             <tr>
@@ -88,7 +89,7 @@
             @endforeach
         </tbody>
         </table>
-    </div>
+        @endif
 @stop
 
 @section('footScriptExtra')

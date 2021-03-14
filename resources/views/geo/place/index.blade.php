@@ -21,7 +21,7 @@
         
         @include('geo.place._search_form',['url' => '/geo/place/']) 
 
-        <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
+        <p>{{ !$numAll ? trans('messages.not_founded_records') : trans_choice('messages.founded_records', $numAll%20, ['count'=>$numAll]) }}</p>
         
         @if (sizeof($places))
         <table class="table-bordered table-wide rwd-table wide-md">

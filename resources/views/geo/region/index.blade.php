@@ -29,7 +29,7 @@
         
         @include('geo.region._search_form',['url' => '/geo/region/']) 
 
-        <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
+        <p>{{ !$numAll ? trans('messages.not_founded_records') : trans_choice('messages.founded_records', $numAll%20, ['count'=>$numAll]) }}</p>
         
         <table class="table-striped table-wide rwd-table wide-md">
         <thead>

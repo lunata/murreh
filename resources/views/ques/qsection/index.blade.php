@@ -22,8 +22,9 @@
         
         @include('ques.qsection._search_form',['url' => '/ques/qsection/']) 
 
-        <p>{{ trans('messages.founded_records', ['count'=>$numAll]) }}</p>
+        <p>{{ !$numAll ? trans('messages.not_founded_records') : trans_choice('messages.founded_records', $numAll%20, ['count'=>$numAll]) }}</p>
         
+        @if ($numAll)                
         <table class="table-bordered table-wide rwd-table wide-md">
         <thead>
             <tr>
@@ -81,7 +82,7 @@
         </tbody>
         </table>
         {{ $qsections->appends($url_args)->links() }}
-    </div>
+        @endif
 @stop
 
 @section('footScriptExtra')
