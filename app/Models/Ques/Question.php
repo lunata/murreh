@@ -147,10 +147,7 @@ class Question extends Model
         foreach ($answers as $answer_id => $info) {
 //dd($answer_id, $info);            
             if ($answer_id == 'new' && $info['answer']) {
-                $answer = Answer::create([
-                    'question_id' => $this->id,
-                    'code' => $info['code'] ? $info['code'] : $this->newCode(), 
-                    'answer' => $info['answer']]);
+                $answer = Answer::findOrCreate($this->id, $info['answer'], $info['code']);
             } elseif ($answer_id != 'new') {
 //dd($answer_id);                
                 $answer = Answer::find($answer_id);

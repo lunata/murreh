@@ -25,4 +25,22 @@ class Answer extends Model
         return $this->belongsTo(Question::class);
     }
     
+    public static function findOrCreate($question_id, $answer, $code) {
+        if (!$question_id || !$answer) { return; }
+        
+        $question = Question::find($question_id);
+        if (!$question) { return; }
+        
+        $answer_obj = Answer::whereQuestionId($question_id)
+                        ->whereAnswer($answer)
+                        ->orderBy('code')
+                        ->first();
+        if (!$answer_obj) {
+            $answer_obj = Answer::create([
+                'question_id' => $question_id,
+                'code' => $code ? $code : $question->newCode(), 
+                'answer' => $answer]);
+        }
+        return $answer_obj;
+    }
 }

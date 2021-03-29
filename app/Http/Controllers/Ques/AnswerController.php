@@ -38,19 +38,9 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        $question_id = (int)$request->question_id;
-        $answer = $request->answer;
-        if (!$question_id || !$answer) { return; }
-        
-        $question = Question::find($question_id);
-        if (!$question) { return; }
-        
-        $answer = Answer::create([
-            'question_id' => $question->id,
-            'code' => $request->code ? $request->code : $question->newCode(), 
-            'answer' => $answer]);
-        
-        return $answer->id;
+        $answer_obj = Answer::findOrCreate((int)$request->question_id, $request->answer, $request->code);
+                
+        return $answer_obj ? $answer_obj->id : null;
     }
 
     /**
