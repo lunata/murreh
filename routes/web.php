@@ -96,6 +96,7 @@ Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);
 Route::get('service/add_sequence_number_to_questions', [ServiceController::class, 'addSequenceNumberToQuestions']);
 Route::get('service/split_qsections', [ServiceController::class, 'splitQsections']);
+Route::get('service/merge_answers', [ServiceController::class, 'mergeAnswers']);
 
 Route::get('sosd/concept/list', [ConceptController::class, 'conceptList']);
 Route::get('sosd/concept_category/list', [ConceptCategoryController::class, 'categoryList']);

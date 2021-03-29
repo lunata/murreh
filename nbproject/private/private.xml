@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/projects/murreh/resources/views/ques/qsection/index.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Ques/Question.php</file>
-            <file>file:/E:/projects/murreh/resources/views/ques/anketa/index.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Ques/Qsection.php</file>
-            <file>file:/E:/projects/murreh/resources/views/ques/anketa/show.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QsectionController.php</file>
-            <file>file:/E:/projects/murreh/routes/web.php</file>
-            <file>file:/E:/projects/murreh/resources/lang/ru/messages.php</file>
-            <file>file:/E:/projects/murreh/resources/views/ques/anketa/_search_form.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/AnketaController.php</file>
-            <file>file:/E:/projects/murreh/resources/views/widgets/form/button/_status.blade.php</file>
-            <file>file:/E:/projects/murreh/resources/views/ques/question/index.blade.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

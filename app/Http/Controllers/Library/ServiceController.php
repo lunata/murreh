@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use DB;
 use App\Http\Controllers\Controller;
 
-use App\Library\Service;
+//use App\Library\Service;
 
+use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
@@ -84,6 +85,34 @@ exit(0);
                          ." where sequence_number >=".$questions[0]." and sequence_number<=".$questions[1]);
         }
         print "done.";
+    }
+    
+    /**
+     * select question_id, answer, count(*) as count from answers group by question_id, answer having count>1;
+     */
+    public function mergeAnswers() {
+        $answers = Answer::selectRaw("question_id, answer, count(*)")
+                         ->groupBy('question_id')
+                         ->groupBy('answer')
+                         ->havingRaw('count(*) > 1')
+                         ->get();
+print "<ol>";        
+        foreach ($answers as $answer) {
+            $dubl_answers = Answer::whereQuestionId($answer->question_id)
+                                  ->whereAnswer($answer->answer)
+                                  ->orderBy('code')
+                                  ->get();
+//dd($dubl_answers, $dubl_answers[0], $dubl_answers[1]);    
+            $right_answer=$dubl_answers[0]->id;        
+/*            for ($i=1; $i<sizeof($dubl_answers); $i++) {
+                $query = "UPDATE anketa_question SET answer_id=".$right_answer. " WHERE answer_id=".$dubl_answers[$i]->id;
+//print "<p>$query</p>"; 
+                DB::statement($query);
+                $dubl_answers[$i]->delete();
+            }*/
+print '<li><a href="http://murreh.krc.karelia.ru/ques/question?search_id='.$dubl_answers[0]->question_id.'">'.$dubl_answers[0]->question_id.'</a></li>';
+//exit(0);            
+        }
     }
     
 }
