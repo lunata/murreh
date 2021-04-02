@@ -56,6 +56,18 @@ class Question extends Model
                     ->orderBy('code');
     }
     
+    public function getAnswerTexts() {
+        $out = [];
+        
+        $answers = AnketaQuestion::whereQuestionId($this->id)->get();
+        foreach ($answers as $answer) {            
+            $out[Answer::getCodeById($answer->answer_id)][$answer->answer_text][$answer->anketa_id]
+                    = Anketa::find($answer->anketa_id);
+        }
+        ksort($out);
+        return $out;
+    }
+
     public static function getSectionIDBySubsectionID(Int $subsection_id) {
         $subsection = Qsection::find($subsection_id);
         if (!$subsection) { return NULL; }

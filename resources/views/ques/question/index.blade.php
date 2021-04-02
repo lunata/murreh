@@ -47,7 +47,7 @@
                 <td data-th="No">{{ $question->sequence_number }}</td>
                 <td data-th="{{ trans('ques.section') }}">{{$question->section}}</td>
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
-                <td data-th="{{ trans('ques.question') }}">{{$question->question}}</td>
+                <td data-th="{{ trans('ques.question') }}"><a href="/ques/question/{{$question->id}}{{$args_by_get}}">{{$question->question}}</a></td>
                 <td data-th="{{ trans('ques.question_ru') }}">{{$question->question_ru}}</td>
                 <td data-th="{{ trans('ques.answers') }}">
                 @if (User::checkAccess('edit') || $question->visible)

@@ -99,4 +99,12 @@ class Anketa extends Model
         }
  /*       return $question->pivot->answer_id;*/
     }
+    
+    public static function getFondNumberById($id) {
+        $anketa = self::find($id);
+        if (!$anketa) {
+            return;
+        }
+        return $anketa->fond_number;
+    }
 }

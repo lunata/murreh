@@ -10,7 +10,8 @@ trait Anketas
     public function anketas()
     {
         return $this->belongsToMany(Anketa::class, 'anketa_question')
-//                    ->withPivot('question_id')->withPivot('answer_text')
+//                    ->withPivot('question_id')
+//                    ->withPivot('answer_text')
                     ->orderBy('fond_number');
     }
 }

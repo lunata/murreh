@@ -117,7 +117,11 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        return Redirect::to('/ques/question/'.$this->args_by_get);
+        $args_by_get = $this->args_by_get;
+        $url_args = $this->url_args;
+
+        return view('ques.question.show', 
+                compact('question', 'args_by_get', 'url_args'));
     }
 
     /**

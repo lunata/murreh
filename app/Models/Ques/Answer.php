@@ -43,4 +43,12 @@ class Answer extends Model
         }
         return $answer_obj;
     }
+    
+    public static function getCodeById($id) {
+        $answer = self::find($id);
+        if (!$answer) {
+            return;
+        }
+        return $answer->code;
+    }
 }
