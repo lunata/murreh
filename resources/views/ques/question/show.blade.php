@@ -22,7 +22,7 @@
             | {{ trans('messages.edit') }} | {{ trans('messages.delete') }}
         @endif 
         @if (User::checkAccess('edit') || $question->visible)
-            | <img src="/images/markers/marker-icon-blue.png" style="height: 20px; margin-top:-5px"> <a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a>
+        | <a href="/ques/question/{{$question->id}}/map"><i class="fa fa-map-marker-alt fa-lg"></i> {{ trans('messages.on_map') }}</a>
         @endif
         </p>
         
