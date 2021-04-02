@@ -21,6 +21,9 @@
         @else
             | {{ trans('messages.edit') }} | {{ trans('messages.delete') }}
         @endif 
+        @if (User::checkAccess('edit') || $question->visible)
+            | <img src="/images/markers/marker-icon-blue.png" style="height: 20px; margin-top:-5px"> <a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a>
+        @endif
         </p>
         
         <h3>{{$question->section}} / {{$question->qsection->title}}</h3>
