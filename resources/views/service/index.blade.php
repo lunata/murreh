@@ -16,6 +16,7 @@
     <h2>Экспорт</h2>
     <p><a href="export/answers_by_questions?from=485&to=800">Экспорт ответов на вопросы с 485 по 800</a>
     <p><a href="export/translations_by_questions?from=485&to=800">Экспорт переводов на вопросы с 485 по 800</a>
+    <p><a href="export/concepts">Экспорт понятий с вариантами из СОСДа</a>
     
     <h2>Исправление данных</h2>
     <p><a href="service/add_sequence_number_to_questions">Перенумеровать вопросы</a> (вставить пустые номера)</p>

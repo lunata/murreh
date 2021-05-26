@@ -37,7 +37,7 @@
                 <td data-th="{{ trans('sosd.variant') }}">
                     @foreach ($concept->allVariants() as $code => $words)
                         @foreach ($words as $word => $places)
-                            @if (User::checkAccess('edit')){{$code}}=@endif{{$word}}: 
+                            {{(User::checkAccess('edit')? $code : '')}}={{$word}}: 
                             <i>{{join(', ', $places)}}</i><br>
                         @endforeach                    
                     @endforeach

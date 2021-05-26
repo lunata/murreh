@@ -10,7 +10,8 @@ use Storage;
 use App\Library\Export;
 
 use App\Models\Geo\Place;
-
+use App\Models\SOSD\Concept;
+use App\Models\SOSD\ConceptCategory;
 use App\Models\Ques\Question;
 
 class ExportController extends Controller
@@ -69,4 +70,29 @@ class ExportController extends Controller
         print "done";
     }
 
+    public function concepts(Request $request) {
+        $fname = '/export/concepts.html';
+//dd($url);                
+        $concepts = Concept::orderBy('id')->get();
+        $category_values = ConceptCategory::getList();
+        
+        Storage::disk('public')->put($fname, "<html>\n\t<body>\n\t\t<table>\n\t\t\t<tr>"
+                ."<th>".trans('sosd.category')."</th>"
+                ."<th>".trans('sosd.concept')."</th>"
+                ."<th>".trans('sosd.variants')."</th></tr>");
+        foreach ($concepts as $concept) {
+            $str = "\t\t\t<tr><td>".$concept->concept_category_id."</td>"
+                ."<td>".$concept->name."</td>"
+                ."<td>";
+            foreach ($concept->allVariants() as $code => $words) {
+                foreach ($words as $word => $places) {
+                    $str .= "$code=$word<br>"; 
+                }                    
+            }
+            Storage::disk('public')->append($fname, $str."</td></tr>");
+//exit(0);            
+        }
+        Storage::disk('public')->append($fname, "\t\t</table>\n\t</body>\n</html>");
+        print "done";
+    }
 }

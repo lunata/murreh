@@ -20,6 +20,6 @@ return [
     'of_category' => 'раздела',
     'of_concept' => 'понятия',
     'section' => 'тема',
-    'variants' => 'вырианты',
+    'variants' => 'варианты',
     'words' => 'слова',
 ];
