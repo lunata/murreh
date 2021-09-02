@@ -79,8 +79,8 @@ Route::get('import/qsections', [ImportController::class, 'qsections']);
 Route::get('import/questions', [ImportController::class, 'questions']);
 Route::get('import/concepts', [ImportController::class, 'concepts']);
 Route::get('import/concept_categories', [ImportController::class, 'conceptСategories']);
-Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
 */
+Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
 Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa/map', [AnketaController::class, 'onMap']);
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
