@@ -23,6 +23,7 @@
                 <th>{{ trans('sosd.concept') }}</th>
                 <th>{{ trans('sosd.variants') }}</th>
                 <th>{{ trans('navigation.places') }}</th>
+                <th></th>
                 @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -48,6 +49,11 @@
                     @else
                     0
                     @endif
+                </td>
+                <td>
+{{--                @if (User::checkAccess('edit') || $question->visible)--}}
+                    <a href="/sosd/concept/{{$concept->id}}/map">{{ trans('messages.on_map') }}</a>
+{{--                @endif--}}
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">

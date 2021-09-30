@@ -100,6 +100,7 @@ Route::get('service/split_qsections', [ServiceController::class, 'splitQsections
 Route::get('service/merge_answers', [ServiceController::class, 'mergeAnswers']);
 
 Route::get('sosd/concept/list', [ConceptController::class, 'conceptList']);
+Route::get('sosd/concept/{id}/map', [ConceptController::class, 'onMap']);
 Route::get('sosd/concept_category/list', [ConceptCategoryController::class, 'categoryList']);
 Route::get('sosd/concept_category/{id}/map/{map_number}', [ConceptCategoryController::class, 'map']);
 

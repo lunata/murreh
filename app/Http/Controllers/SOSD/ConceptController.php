@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use Redirect;
 use Response;
 
+use App\Library\Map;
 use App\Library\Str;
+
+use App\Models\Geo\Place;
+
 use App\Models\SOSD\Concept;
 use App\Models\SOSD\ConceptCategory;
+use App\Models\SOSD\ConceptPlace;
 
 class ConceptController extends Controller
 {
@@ -161,5 +166,24 @@ class ConceptController extends Controller
         }  
 //dd($list);        
         return Response::json($list);
+    }
+    
+    public function onMap($id) {
+        $id=(int)$id;
+        $concept = Concept::findOrFail($id);
+        $default_markers = Map::markers();
+        $code_places = $markers = [];
+        $count=0;
+        $vocs=ConceptPlace::whereConceptId($concept->id)->orderBy('code')->get();
+        foreach ($vocs as $voc) {
+            $code = substr($voc->code, 0, 1);
+            if (!isset($markers[$code])) {
+                $markers[$code]=$default_markers[$count++];
+            }
+            $code_places[$code][] = Place::find($voc->place_id);
+        }
+//dd($answer_places);        
+        return view('sosd.concept.map', 
+                compact('concept', 'code_places', 'markers')); 
     }
 }
