@@ -45,13 +45,8 @@
 
 @foreach ($code_places as $code => $places)
     @foreach ($places as $place)
-    <?php
-/*        $anketa_count = $place->anketas()->count();
-        $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
-                trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a>" : '';*/
-    ?>
     L.marker([{{$place->latitude}}, {{$place->longitude}}], {icon: {{$code}}Icon}).addTo(mymap)
-            .bindPopup("<b>{{$place->name_ru}}</b>{{--{!!$anketa_link!!}--}}").openPopup();
+            .bindPopup("<b>{{$place->name_ru}}</b><br>{{join(', ', $place->concepts()->whereConceptId($concept->id)->pluck('word')->toArray())}}").openPopup();
     @endforeach
 @endforeach
 </script>
