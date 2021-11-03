@@ -96,7 +96,7 @@ class QuestionController extends Controller
         if (!$data['sequence_number']) {
             $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
         }
-        $questions = Question::where('sequence_number', '>=', $data['sequence_number'])->orderBy('sequence_number', 'desc')->get();
+        $questions = Question::where('sequence_number', '>=', $data['sequence_number'])->latest('sequence_number')->get();
         foreach ($questions as $ques) {
             $ques->sequence_number += 1;
             $ques->save();
