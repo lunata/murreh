@@ -2,11 +2,16 @@
 
 namespace App\Library;
 
+use Storage;
+
 use App\Models\Geo\Place;
 
 use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Answer;
 use App\Models\Ques\Question;
+
+use App\Models\SOSD\Concept;
+use App\Models\SOSD\ConceptPlace;
 
 /**
  */
@@ -75,5 +80,31 @@ class Export {
             $list[$p] = (sizeof($answers)? join(',', $answers) : '-');
         }
         return $list;
+    }
+    
+    public static function conceptsByPlaces($dname) {
+        $places = Place::whereIn('id', function ($q) {
+            $q->select('place_id')->from('concept_place');
+        })->get();
+        foreach ($places as $place) {
+            $fname=$dname.$place->id.'.csv';
+            self::conceptsByPlace($fname, $place);
+//exit(0);            
+        }
+    }
+    
+    public static function conceptsByPlace($fname, $place) {
+        $concepts = Concept::orderBy('id')->get();
+        Storage::disk('public')->put($fname,$place->name);
+        foreach ($concepts as $concept) {
+            $words = ConceptPlace::wherePlaceId($place->id)
+                                 ->whereConceptId($concept->id)
+                                 ->orderBy('code')
+                                 ->pluck('word')->toArray();
+//dd($words);            
+            Storage::disk('public')->append($fname, $concept->id."\t".$concept->name."\t".
+                    join(', ', $words));
+//exit(0);            
+        }
     }
 }

@@ -70,7 +70,7 @@ class ExportController extends Controller
         print "done";
     }
 
-    public function concepts(Request $request) {
+    public function concepts() {
         $fname = '/export/concepts.html';
 //dd($url);                
         $concepts = Concept::orderBy('id')->get();
@@ -93,6 +93,12 @@ class ExportController extends Controller
 //exit(0);            
         }
         Storage::disk('public')->append($fname, "\t\t</table>\n\t</body>\n</html>");
+        print "done";
+    }
+
+    public function conceptsByPlaces() {
+        $dname = '/export/concepts_by_places/';
+        Export::conceptsByPlaces($dname);
         print "done";
     }
 }

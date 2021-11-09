@@ -70,6 +70,7 @@ Route::get('wait', [AuthController::class, 'wait']);
 
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);
+Route::get('export/concepts_by_places', [ExportController::class, 'conceptsByPlaces']);
 Route::get('export/translations_by_questions', [ExportController::class, 'translationsByQuestions']);
 
 //Route::get('geo/place/map', [PlaceController::class, 'showMap']);
