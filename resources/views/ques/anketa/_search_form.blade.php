@@ -22,11 +22,12 @@
                  'attributes' => ['placeholder' => trans('geo.district')]]) 
     </div>
     <div class="col-sm-4">
-        @include('widgets.form.formitem._select', 
+        @include('widgets.form.formitem._select2', 
                 ['name' => 'search_place', 
                  'values' => $place_values,
                  'value' => $url_args['search_place'],
-                 'attributes' => ['placeholder' => trans('geo.place')]]) 
+                 'is_multiple' => false,
+                 'class'=>'select-place form-control'])                                   
     </div>
 @if (User::checkAccess('edit'))
     <div class="col-sm-4">

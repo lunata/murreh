@@ -55,10 +55,10 @@ class AnketaController extends Controller
 
         $anketas = $anketas->paginate($url_args['limit_num']);
         
-        $district_values = District::getListWithQuantity('anketas');
-        $informant_values = Informant::getListWithQuantity('anketas');
-        $place_values = Place::getListWithQuantity('anketas');
-        $recorder_values = Recorder::getListWithQuantity('anketas');
+        $district_values = District::getListWithQuantity('anketas', true);
+        $informant_values = Informant::getListWithQuantity('anketas', true);
+        $place_values = [NULL=>''] + Place::getListWithQuantity('anketas', true);
+        $recorder_values = Recorder::getListWithQuantity('anketas', true);
         
         return view('ques.anketa.index',
                     compact('anketas', 'district_values', 'informant_values', 'numAll', 

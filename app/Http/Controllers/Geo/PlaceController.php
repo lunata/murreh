@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Geo;
 
+use Response;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -207,4 +209,43 @@ class PlaceController extends Controller
                        ->orderBy('id')->get();
         return view('geo.place.map', compact('places')); 
     }
+    
+    /**
+     * Gets list of places for drop down list in JSON format
+     * Test url: /geo/place/list?district_id=16
+     * 
+     * @return JSON response
+     */
+    public function placeList(Request $request)
+    {
+        $place_name = '%'.$request->input('q').'%';
+        $method_count = $request->input('method_count');
+        $district_id = $request->input('district_id');
+
+        $list = [];
+        $places = Place::where('name_ru','like', $place_name);
+        if ($district_id) {                 
+            $places -> whereIn('id', function ($q) use ($district_id) {
+                $q->select('place_id')->from('district_place')
+                  ->whereDistrictId($district_id);
+            });
+        }
+        
+        $places -> orderBy('name_ru');
+//dd($places);                         
+        foreach ($places->get() as $place) {
+            if ($method_count) {
+                $count=$place->$method_count()->count();
+                if ($count) {
+                    $list[]=['id'  => $place->id, 
+                             'text'=> $place->name_ru. ' ('.$count.')'];                    
+                }
+            } else {
+                $list[]=['id'  => $place->id, 
+                         'text'=> $place->name_ru];
+            }
+        }  
+//dd($list);        
+        return Response::json($list);
+    }    
 }

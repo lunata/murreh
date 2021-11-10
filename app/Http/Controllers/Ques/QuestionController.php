@@ -47,7 +47,7 @@ class QuestionController extends Controller
         $questions = $questions->paginate($url_args['limit_num']);
         
         $section_values = Qsection::getSectionListWithQuantity();
-        $qsection_values = Qsection::getListWithQuantity();
+        $qsection_values = [NULL=>'']+Qsection::getListWithQuantity();
         
         return view('ques.question.index',
                     compact('numAll', 'questions', 'section_values', 

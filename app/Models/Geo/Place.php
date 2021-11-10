@@ -29,6 +29,8 @@ class Place extends Model
                            'latitude', 'longitude', 'population'];
     
     use \App\Traits\Methods\getNameAttribute;
+    use \App\Traits\Methods\getList;
+    use \App\Traits\Methods\getListWithQuantity;
 
     // Has To Many Relations
     use \App\Traits\Relations\HasMany\Anketas;
@@ -122,22 +124,6 @@ class Place extends Model
         return join ('; ', $out);
     }
 
-    /** Gets list of places
-     * 
-     * @return Array [1=>'Пондала (Pondal), Бабаевский р-н, Вологодская обл.',..]
-     */
-    public static function getList()
-    {     
-        $places = self::orderBy('name_ru')->get();
-        
-        $list = array();
-        foreach ($places as $row) {
-            $list[$row->id] = $row->name;
-        }
-        
-        return $list;         
-    }
-    
     public static function getListWithDistricts()
     {     
         $places = self::orderBy('name_ru')->get();
@@ -192,27 +178,6 @@ class Place extends Model
         return $list;         
     }
     
-    /** Gets list of places
-     * 
-     * @return Array [1=>'Dialectal texts (199)',..]
-     */
-    public static function getListWithQuantity($method_name)
-    {     
-        $places = self::orderBy('name_ru')->get();
-        
-        $list = array();
-        foreach ($places as $row) {
-            $count=$row->$method_name()->count();
-            $name = $row->name;
-            if ($count) {
-                $name .= " ($count)";
-            }
-            $list[$row->id] = $name;
-        }
-        
-        return $list;         
-    }
-
     /**
      * Gets full information about place
      * 

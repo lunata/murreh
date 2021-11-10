@@ -73,6 +73,7 @@ Route::get('export/concepts', [ExportController::class, 'concepts']);
 Route::get('export/concepts_by_places', [ExportController::class, 'conceptsByPlaces']);
 Route::get('export/translations_by_questions', [ExportController::class, 'translationsByQuestions']);
 
+Route::get('geo/place/list', [PlaceController::class, 'placeList']);
 //Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 
 /*Route::get('import/place_coord', [ImportController::class, 'placeCoord']);

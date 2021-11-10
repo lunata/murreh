@@ -16,6 +16,8 @@ class District extends Model
     protected $fillable = ['region_id', 'name_ru', 'foundation', 'abolition'];
     
     use \App\Traits\Methods\getNameAttribute;
+    use \App\Traits\Methods\getList;
+    use \App\Traits\Methods\getListWithQuantity;
     
     // Belongs To Relations
     use \App\Traits\Relations\BelongsTo\Region;
@@ -26,22 +28,6 @@ class District extends Model
     // Has To Many Relations
     use \App\Traits\Relations\HasMany\Anketas;
 
-    /** Gets list of districts
-     * 
-     * @return Array [1=>'Бабаевский р-н',..]
-     */
-    public static function getList()
-    {     
-        $districts = self::orderBy('name_ru')->get();
-        
-        $list = array();
-        foreach ($districts as $row) {
-            $list[$row->id] = $row->name;
-        }
-        
-        return $list;         
-    }
-    
     /** Gets list of districts with regions
      * 
      * @return Array [1=>'Бабаевский р-н',..]
@@ -53,27 +39,6 @@ class District extends Model
         $list = array();
         foreach ($districts as $row) {
             $list[$row->id] = $row->name. ' ('.$row->region->name.')';
-        }
-        
-        return $list;         
-    }
-    
-    /** Gets list of districts with quantity of relations $method_name
-     * 
-     * @return Array [1=>'Бабаевский р-н (199)',..]
-     */
-    public static function getListWithQuantity($method_name)
-    {     
-        $districts = self::orderBy('name_ru')->get();
-        
-        $list = array();
-        foreach ($districts as $row) {
-            $count=$row->$method_name()->count();
-            $name = $row->name;
-            if ($count) {
-                $name .= " ($count)";
-            }
-            $list[$row->id] = $name;
         }
         
         return $list;         

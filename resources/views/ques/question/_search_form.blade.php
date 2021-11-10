@@ -28,11 +28,12 @@
                  'attributes' => ['placeholder' => trans('ques.section')]])                                   
     </div>
     <div class="col-sm-5">
-        @include('widgets.form.formitem._select', 
+        @include('widgets.form.formitem._select2', 
                 ['name' => 'search_qsection', 
                  'values' => $qsection_values,
                  'value' => $url_args['search_qsection'],
-                 'attributes' => ['placeholder' => trans('ques.subsection')]])                                   
+                 'is_multiple' => false,
+                 'class'=>'select-qsection form-control'])                                   
     </div>
     <div class="col-sm-3 search-button-b">       
         <span>

@@ -6,7 +6,7 @@ trait getListWithQuantity
      * 
      * @return Array [1=>'Вологодская обл. (199)',..]
      */
-    public static function getListWithQuantity($method_name)
+    public static function getListWithQuantity($method_name, $only_not_null=false)
     {     
         $objs = self::orderBy('name_ru')->get();
         
@@ -17,10 +17,11 @@ trait getListWithQuantity
             if ($count) {
                 $name .= " ($count)";
             }
-            $list[$row->id] = $name;
+            if (!$only_not_null || $count) {
+                $list[$row->id] = $name;
+            }
         }
         
         return $list;         
     }
-    
 }

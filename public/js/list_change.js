@@ -148,4 +148,30 @@ function langSelect(lang_var="lang_id") {
         .change();    
 }
 
+function selectPlace(district_var, placeholder='', allow_clear=false){
+    $(".select-place").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/geo/place/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              method_count: 'anketas',
+              district_id: $( "#"+district_var+" option:selected" ).val(),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
 
