@@ -99,11 +99,18 @@ class Export {
         foreach ($concepts as $concept) {
             $words = ConceptPlace::wherePlaceId($place->id)
                                  ->whereConceptId($concept->id)
-                                 ->orderBy('code')
-                                 ->pluck('word')->toArray();
-//dd($words);            
+                                 ->orderBy('code')//->get();
+                                 ->pluck('word','code')->toArray();
+//dd($words);  
+            $gr_words = [];
+            foreach ($words as $code=>$word) {
+                $gr_words[substr($code,0,1)][] = $word;
+            }
+            foreach ($gr_words as $code=>$words) {
+                $gr_words[$code] = join(', ', $words);
+            }
             Storage::disk('public')->append($fname, $concept->id."\t".$concept->name."\t".
-                    join('\t', $words));
+                    join("\t", array_values($gr_words)));
 //exit(0);            
         }
     }
