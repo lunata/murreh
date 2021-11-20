@@ -103,7 +103,7 @@ class Export {
                                  ->pluck('word')->toArray();
 //dd($words);            
             Storage::disk('public')->append($fname, $concept->id."\t".$concept->name."\t".
-                    join(', ', $words));
+                    join('\t', $words));
 //exit(0);            
         }
     }
