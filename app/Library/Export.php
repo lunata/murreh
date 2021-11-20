@@ -89,7 +89,7 @@ class Export {
         foreach ($places as $place) {
             $fname=$dname.$place->id.'.csv';
             self::conceptsByPlace($fname, $place);
-//exit(0);            
+exit(0);            
         }
     }
     
@@ -107,10 +107,9 @@ class Export {
                 $gr_words[substr($code,0,1)][] = $word;
             }
             foreach ($gr_words as $code=>$words) {
-                $gr_words[$code] = join(', ', $words);
+                Storage::disk('public')->append($fname, $concept->name."\t".
+                        join(', ', $words));
             }
-            Storage::disk('public')->append($fname, $concept->id."\t".$concept->name."\t".
-                    join("\t", array_values($gr_words)));
 //exit(0);            
         }
     }
