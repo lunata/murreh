@@ -89,7 +89,7 @@ class Export {
         foreach ($places as $place) {
             $fname=$dname.$place->id.'.csv';
             self::conceptsByPlace($fname, $place);
-exit(0);            
+//exit(0);            
         }
     }
     
