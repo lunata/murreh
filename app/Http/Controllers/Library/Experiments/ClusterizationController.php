@@ -19,9 +19,17 @@ class ClusterizationController extends Controller
     
     public function index(Request $request) {
         $qsection_id = (int)$request->input('qsection_id') ? (int)$request->input('qsection_id') : 2;
-        $distance_limit = (int)$request->input('distance_limit') ? (int)$request->input('distance_limit') : 3;
-        $total_limit = (int)$request->input('total_limit') ? (int)$request->input('total_limit') : 20;
+        $distance_limit = (int)$request->input('distance_limit');
+        if (!$distance_limit || $distance_limit<0) {
+            $distance_limit = 2;
+        }
+        
+        $total_limit = (int)$request->input('total_limit');
+        if (!$total_limit || $total_limit<1 || $total_limit>20) {
+            $total_limit = 20;
+        }
 
+        $qsection_values = Qsection::getList();
         $qsection = Qsection::find($qsection_id);        
         $places = Place::getFromAnketas();        
         $answers = Answer::getForPlacesQsection($places, $qsection_id);        
@@ -35,7 +43,7 @@ class ClusterizationController extends Controller
         list($markers, $cluster_places) = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_id);
         
         return view('experiments/anketa_cluster/index', 
-                compact('qsection', 'last_step', 'total_limit', 'qsection_id',
+                compact('qsection', 'last_step', 'total_limit', 'qsection_id', 'qsection_values',
                         'clusters', 'distance_limit', 'cluster_places', 'markers'));
     }
     
