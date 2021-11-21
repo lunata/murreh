@@ -5,6 +5,6 @@ namespace App\Library;
 class Map
 {
     public static function markers() {
-        return ['blue','gold','red','green','orange','yellow','violet','grey','black'];
+        return ['red','orange','green','skyblue','magenta','brown','blue','olive','purple','teal','pink','sandy','lime','cyan','violet','coral','white','grey','darkgrey','black'];
     }
 }

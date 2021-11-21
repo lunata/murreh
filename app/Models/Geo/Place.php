@@ -371,8 +371,20 @@ class Place extends Model
     
     public function getVocsByConceptId($concept_id) {
         return ConceptPlace::whereConceptId($concept_id)
-                               ->wherePlaceId($this->id)
-                               ->orderBy('code')->get();
+                           ->wherePlaceId($this->id)
+                           ->orderBy('code')->get();
     }
     
+    public static function getNameById($id) {
+        $place = self::find($id);
+        return $place->name_ru;
+    }
+
+    public static function namesByIdsToString($ids) {
+        $names = [];
+        foreach ($ids as $id) {
+            $names[] = self::getNameById($id);
+        }
+        return join(', ', $names);
+    }
 }
