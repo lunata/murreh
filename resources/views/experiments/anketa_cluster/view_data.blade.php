@@ -17,7 +17,9 @@
         
         @foreach ($answers as $place_id => $questions)
         <tr>
-            <th style="text-align: left">{{$place_names[$place_id]}}</th>
+            <th style="text-align: left">
+                <a href=/ques/anketas?search_place={{$place_id}}>{{$place_names[$place_id]}}</a>
+            </th>
         @foreach (array_values($questions) as $answers)
             <td>{{sizeof($answers) ? join(', ', array_keys($answers)). ' ('. join(', ', array_values($answers)). ')' : '-'}}</td>
         @endforeach
