@@ -5,6 +5,7 @@
                             {{ $user->name }} ({{ $user->rolesNames() }})
                         </div>
                         <div class="user-menu">
+                            <a href="{{ url('/experiments') }}">{{ trans('navigation.experiments') }}</a>
                             @if (User::checkAccess('admin'))
                             <a href="{{ url('/service') }}">{{ trans('navigation.service') }}</a>
                             <a href="{{ url('/user') }}"><i class="fa fa-btn fa-user user-menu-img"></i>{{ trans('navigation.users') }}</a>
