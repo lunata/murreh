@@ -73,7 +73,8 @@ Route::get('wait', [AuthController::class, 'wait']);
 Route::get('experiments', function () {
     return view('experiments.index');
 });
-Route::get('experiments/clusterization/', [ClusterizationController::class, 'index']);
+Route::get('experiments/anketa_cluster/', [ClusterizationController::class, 'index']);
+Route::get('experiments/anketa_cluster/view_data', [ClusterizationController::class, 'viewData']);
         
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);

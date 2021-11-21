@@ -51,4 +51,21 @@ class Answer extends Model
         }
         return $answer->code;
     }
+    
+    public static function getForPlacesQsection($places, $qsection_id) {
+        $questions = Question::whereQsectionId($qsection_id)->get();
+        $answers = [];
+        foreach ($places as $place) {
+            $answers[$place->id] = [];
+            foreach ($questions as $question) {
+                $pq_answers = self::where('answers.question_id',$question->id)
+                        ->join('anketa_question', 'answers.id', '=', 'anketa_question.answer_id')
+                        ->join('anketas', 'anketas.id', '=', 'anketa_question.anketa_id')
+                        ->wherePlaceId($place->id)
+                        ->pluck('answer_text','code')->toArray();
+                $answers[$place->id][$question->question] = (array)$pq_answers;
+            }
+        }
+        return $answers;
+    }    
 }

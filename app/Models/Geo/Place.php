@@ -380,6 +380,13 @@ class Place extends Model
         return $place->name_ru;
     }
 
+    public static function getFromAnketas() {
+        return Place::whereIn('id', function ($q) {
+                    $q->select('place_id')->from('anketas');
+                })
+                ->orderBy('name_ru')->get();
+    }
+
     public static function namesByIdsToString($ids) {
         $names = [];
         foreach ($ids as $id) {

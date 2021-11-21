@@ -5,5 +5,5 @@
 @endsection
 
 @section('body')
-<p><a href="/experiments/clusterization">{{trans('navigation.clusterization')}}</a></p>
+<p><a href="/experiments/anketa_cluster">{{trans('navigation.anketa_cluster')}}</a></p>
 @endsection

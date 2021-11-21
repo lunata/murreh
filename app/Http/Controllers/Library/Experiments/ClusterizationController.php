@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Library\Experiments;
 
 use App\Http\Controllers\Controller;
-//use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
-use App\Library\Map;
 use App\Library\Experiments\Clusterization;
 
 use App\Models\Geo\Place;
 use App\Models\Ques\Qsection;
-use App\Models\Ques\Question;
 use App\Models\Ques\Answer;
 
 class ClusterizationController extends Controller
@@ -19,65 +17,40 @@ class ClusterizationController extends Controller
         $this->middleware('auth:dict.edit,/experiments/');
     }
     
-    public function index() {
-        $qsection_id = 2;
-        $clusterization_limit = 4;
-        
-        $qsection = Qsection::find($qsection_id);
-        $places = Place::whereIn('id', function ($q) {
-                    $q->select('place_id')->from('anketas');
-                })
-                ->orderBy('name_ru')->get();
-//        $place_names = $places->pluck('id')->toArray();
-        
-        foreach ($places as $place) {
-            $place_names[$place->id] = $place->name_ru;
-        }
-        $questions = Question::whereQsectionId($qsection_id)->get();
-        
-        $answers = [];
-        foreach ($places as $place) {
-            $answers[$place->id] = [];
-            foreach ($questions as $question) {
-                $pq_answers = Answer::whereQuestionId($question->id)
-                        ->whereIn('id', function ($q1) use ($question,$place) {
-                        $q1->select('answer_id')->from('anketa_question')
-                           ->whereQuestionId($question->id)
-                            ->whereIn('anketa_id', function ($q2) use ($place) {
-                                $q2->select('id')->from('anketas')
-                                   ->wherePlaceId($place->id);
-                            });
-                        })->pluck('code')->toArray();
-                $answers[$place->id][$question->question] = (array)$pq_answers;
-            }
-        }
+    public function index(Request $request) {
+        $qsection_id = (int)$request->input('qsection_id') ? (int)$request->input('qsection_id') : 2;
+        $distance_limit = (int)$request->input('distance_limit') ? (int)$request->input('distance_limit') : 3;
+        $total_limit = (int)$request->input('total_limit') ? (int)$request->input('total_limit') : 20;
 
-        $differences = [];
-        foreach ($places as $place1) {
-            foreach ($places as $place2) {
-               $differences[$place1->id][$place2->id] 
-                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id]);
-            }
-        }  
+        $qsection = Qsection::find($qsection_id);        
+        $places = Place::getFromAnketas();        
+        $answers = Answer::getForPlacesQsection($places, $qsection_id);        
+        $differences = Clusterization::distanceForPlaces($places, $answers);
         
         $clusterization = Clusterization::init($places, $differences);
-        $clusterization->completeLinkage(1, $clusterization_limit);
+        $clusterization->completeLinkage(1, $distance_limit, $total_limit);
         $clusters = $clusterization->getClusters();
         $last_step = array_key_last($clusters);
         
-        $default_markers = Map::markers();
-        $cluster_places = $markers = [];
-        $count=0;
-        foreach ($clusters[$last_step] as $cl_num => $cluster) {
-            $cluster_places[$cl_num] = [];
-            $markers[$cl_num]=$default_markers[$count++];
-            foreach ($cluster as $place_id) {
-                $cluster_places[$cl_num][] = $places->where('id', $place_id)->first();
-            }
-        }
+        list($markers, $cluster_places) = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_id);
         
-        return view('experiments/clusterization/index', 
-                compact('answers', 'qsection', 'differences', 'place_names', 'last_step',
-                        'clusters', 'clusterization_limit', 'cluster_places', 'markers'));
+        return view('experiments/anketa_cluster/index', 
+                compact('qsection', 'last_step', 'total_limit', 'qsection_id',
+                        'clusters', 'distance_limit', 'cluster_places', 'markers'));
+    }
+    
+    public function viewData(Request $request) {
+        $qsection_id = (int)$request->input('qsection_id') ?? 2;
+        
+        $qsection = Qsection::find($qsection_id);
+        
+        $places = Place::getFromAnketas();
+        $place_names = $places->pluck('name_ru', 'id')->toArray();
+        
+        $answers = Answer::getForPlacesQsection($places, $qsection_id);
+        $differences = Clusterization::distanceForPlaces($places, $answers);
+        
+        return view('experiments/anketa_cluster/view_data', 
+                compact('answers', 'qsection', 'differences', 'place_names'));
     }
 }
