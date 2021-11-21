@@ -23,6 +23,8 @@ use App\Http\Controllers\Library\ExportController;
 use App\Http\Controllers\Library\ImportController;
 use App\Http\Controllers\Library\ServiceController;
 
+use App\Http\Controllers\Library\Experiments\ClusterizationController;
+
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SOSD\ConceptController;
 use App\Http\Controllers\SOSD\ConceptCategoryController;
@@ -68,6 +70,11 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 // о том, что письмо отправлено и надо заглянуть в почтовый ящик.
 Route::get('wait', [AuthController::class, 'wait']);
 
+Route::get('experiments', function () {
+    return view('experiments.index');
+});
+Route::get('experiments/clusterization/', [ClusterizationController::class, 'index']);
+        
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);
 Route::get('export/concepts_by_places', [ExportController::class, 'conceptsByPlaces']);
