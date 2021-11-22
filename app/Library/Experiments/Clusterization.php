@@ -122,11 +122,12 @@ class Clusterization
                 $place = $places->where('id', $place_id)->first();
                 $anketa_count = $place->anketas()->count();
                 $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
-                        trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a>" : '';
+                        trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a><br>" : '';
+                $answers = join(', ', $place->getAnswersForQsection($qsection_id));
                 $cluster_places[$default_markers[$count]][] 
                         = ['latitude'=>$place->latitude,
                            'longitude'=>$place->longitude,
-                           'popup' => '<b>'.$place->name_ru.'</b>'.$anketa_link];
+                           'popup' => '<b>'.$place->name_ru.'</b>'.$anketa_link.$answers];
             }
             $markers[$default_markers[$count]] 
                     = '<b>'. $cl_num. '</b>: '

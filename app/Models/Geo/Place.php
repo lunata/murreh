@@ -394,4 +394,16 @@ class Place extends Model
         }
         return join(', ', $names);
     }
+    
+    public function getAnswersForQsection($qsection_id) {
+        $place_id = $this->id;
+        $answers = AnketaQuestion::whereIn('question_id', function ($q) use ($qsection_id) {
+                            $q->select('id')->from('questions')
+                              ->whereQsectionId($qsection_id);
+                        })->whereIn('anketa_id', function ($q) use ($place_id) {
+                            $q->select('id')->from('anketas')
+                              ->wherePlaceId($place_id);
+                        })->pluck('answer_text')->toArray();
+        return array_unique($answers);
+    }
 }
