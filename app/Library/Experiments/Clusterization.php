@@ -4,6 +4,8 @@ namespace App\Library\Experiments;
 
 use App\Library\Map;
 
+use App\Models\Ques\AnketaQuestion;
+
 class Clusterization
 {
     protected $clusters=[];
@@ -52,40 +54,52 @@ class Clusterization
     }
     
     public static function distanceForAnswers($answers1, $answers2) {
-        $difference = 0;
-        foreach ($answers1 as $question => $answer) {
-            if (sizeof($answer) && sizeof($answers2[$question]) && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$question])))) {
-                $difference +=1;
+        $distance = 0;
+        foreach ($answers1 as $qsection => $questions) {
+            $difference = 0;
+            foreach ($questions as $question => $answer) {
+                if (sizeof($answer) && sizeof($answers2[$qsection][$question]) 
+                    && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
+                    $difference +=1;
+                }
             }
+            $distance += $difference/sizeof($questions);
         }
         
-        return $difference;
+        return $distance;
     }
     
     public function completeLinkage($step, $distance_limit, $total_limit) {
         $clusters = $this->getClusters();
         
         $cluster_dist = $this->clusterDistances($clusters[$step]);
-        $min = min(array_keys($cluster_dist));        
-        
+//dd($cluster_dist);        
+        $min = min(array_values($cluster_dist));        
         // если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита
         if ($min>$distance_limit && sizeof($clusters[$step]) <= $total_limit) {
             return; 
         }
         
-        $this->setClusters($this->mergeClusters($clusters[$step], $cluster_dist[$min][0], $cluster_dist[$min][1]), 
-                           $step+1);
-        
+        if (!preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums)) {
+            return;
+        }
+        $new_clusters = $this->mergeClusters($clusters[$step], $nearest_cluster_nums[1], $nearest_cluster_nums[2]);
+        $this->setClusters($new_clusters, $step+1);
+        if (sizeof($new_clusters)<2) {
+            return;
+        }        
         $this->completeLinkage($step+1, $distance_limit, $total_limit);
     }
     
     // вычисляем расстояния между всеми кластерами
     public function clusterDistances($clusters) {
         $cluster_dist = [];
+//dd($this->getDifferences(), $clusters);
+
         foreach ($clusters as $cluster1_num => $cluster1) {
             foreach ($clusters as $cluster2_num => $cluster2) {
                 if ($cluster1_num != $cluster2_num) {
-                   $cluster_dist[$this->clusterDistance($cluster1, $cluster2)] = [$cluster1_num, $cluster2_num];
+                   $cluster_dist[$cluster1_num.'_'.$cluster2_num] = $this->clusterDistance($cluster1, $cluster2);
                 }
             }
         }
@@ -112,7 +126,7 @@ class Clusterization
         return $clusters;
     }
     
-    public static function dataForMap($clusters, $places, $qsection_id) {
+    public static function dataForMap($clusters, $places, $qsection_ids) {
         $default_markers = Map::markers();
         $cluster_places = $markers = [];
         $count=0;
@@ -123,7 +137,7 @@ class Clusterization
                 $anketa_count = $place->anketas()->count();
                 $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
                         trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a><br>" : '';
-                $answers = join(', ', $place->getAnswersForQsection($qsection_id));
+                $answers = join(', ', $place->getAnswersForQsections($qsection_ids));
                 $cluster_places[$default_markers[$count]][] 
                         = ['latitude'=>$place->latitude,
                            'longitude'=>$place->longitude,
@@ -131,7 +145,7 @@ class Clusterization
             }
             $markers[$default_markers[$count]] 
                     = '<b>'. $cl_num. '</b>: '
-                    .join(', ', \App\Models\Ques\AnketaQuestion::getAnswersForPlacesQsection($cluster, $qsection_id));
+                    .join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids));
             $count++;
         }
         return [$markers, $cluster_places];

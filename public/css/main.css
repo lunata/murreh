@@ -456,6 +456,7 @@ h1:before {
 
 .compact-search-form {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .compact-search-form .form-group {

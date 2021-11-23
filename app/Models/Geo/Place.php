@@ -395,11 +395,11 @@ class Place extends Model
         return join(', ', $names);
     }
     
-    public function getAnswersForQsection($qsection_id) {
+    public function getAnswersForQsections($qsection_ids) {
         $place_id = $this->id;
-        $answers = AnketaQuestion::whereIn('question_id', function ($q) use ($qsection_id) {
+        $answers = AnketaQuestion::whereIn('question_id', function ($q) use ($qsection_ids) {
                             $q->select('id')->from('questions')
-                              ->whereQsectionId($qsection_id);
+                              ->whereIn('qsection_id',$qsection_ids);
                         })->whereIn('anketa_id', function ($q) use ($place_id) {
                             $q->select('id')->from('anketas')
                               ->wherePlaceId($place_id);

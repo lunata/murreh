@@ -148,7 +148,7 @@ function langSelect(lang_var="lang_id") {
         .change();    
 }
 
-function selectPlace(district_var, placeholder='', allow_clear=false){
+function selectPlace(district_var='', placeholder='', allow_clear=false){
     $(".select-place").select2({
         allowClear: allow_clear,
         placeholder: placeholder,
@@ -161,7 +161,7 @@ function selectPlace(district_var, placeholder='', allow_clear=false){
             return {
               q: params.term, // search term
               method_count: 'anketas',
-              district_id: $( "#"+district_var+" option:selected" ).val(),
+              district_id: district_var ? $( "#"+district_var+" option:selected" ).val() : '',
             };
           },
           processResults: function (data) {

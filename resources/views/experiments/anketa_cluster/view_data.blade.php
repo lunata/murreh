@@ -5,27 +5,28 @@
 @endsection
 
 @section('body')
-    <h2>{{$qsection->title}}</h2>
-    <h3>Ответы</h3>
+    @foreach ($answers as $qsection_name => $qs_places)
+    <h3>Ответы на раздел "{{$qsection_name}}"</h3>
     <table class="table-bordered table-wide table-striped rwd-table wide-md">
         <tr>
             <th>Населенный пункт</th>
-        @foreach (array_keys($answers[array_key_first($answers)]) as $question)
+        @foreach (array_keys($qs_places[array_key_first($qs_places)]) as $question)
             <th>{{$question}}</th>
         @endforeach
         </tr>
         
-        @foreach ($answers as $place_id => $questions)
+        @foreach ($qs_places as $place_id => $questions)
         <tr>
             <th style="text-align: left">
                 <a href=/ques/anketas?search_place={{$place_id}}>{{$place_names[$place_id]}}</a>
             </th>
-        @foreach (array_values($questions) as $answers)
-            <td>{{sizeof($answers) ? join(', ', array_keys($answers)). ' ('. join(', ', array_values($answers)). ')' : '-'}}</td>
+        @foreach (array_values($questions) as $qanswers)
+            <td>{{sizeof($qanswers) ? join(', ', array_keys($qanswers)). ' ('. join(', ', array_values($qanswers)). ')' : '-'}}</td>
         @endforeach
         </tr>
         @endforeach
     </table>
+    @endforeach
     
     <h3 style="margin-top: 20px">Различия в ответах</h3>
     <table class="table-bordered table-wide table-striped rwd-table wide-md">

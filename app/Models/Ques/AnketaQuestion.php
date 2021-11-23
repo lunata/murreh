@@ -20,10 +20,10 @@ class AnketaQuestion extends Model
      * @param int $qsection_id - ID of a question section
      * @return array
      */
-    public static function getAnswersForPlacesQsection($place_ids, $qsection_id) {
-        $answers = self::whereIn('question_id', function ($q) use ($qsection_id) {
+    public static function getAnswersForPlacesQsections($place_ids, $qsection_ids) {
+        $answers = self::whereIn('question_id', function ($q) use ($qsection_ids) {
                             $q->select('id')->from('questions')
-                              ->whereQsectionId($qsection_id);
+                              ->whereIn('qsection_id',$qsection_ids);
                         })->whereIn('anketa_id', function ($q) use ($place_ids) {
                             $q->select('id')->from('anketas')
                               ->whereIn('place_id', $place_ids);
