@@ -2,14 +2,14 @@
                              'method' => 'get']) 
         !!}
 <div class="row">
-    <div class="col-sm-2">
+{{--    <div class="col-sm-2">
     @include('widgets.form.formitem._select', 
             ['name' => 'section_id', 
              'values' => $section_values,
              'value' => $section_id,
-             'title' => trans('ques.section')])                                   
-    </div>
-    <div class="col-sm-5">
+             'title' => trans('ques.section')])                                  
+    </div> --}}
+    <div class="col-sm-6">
     @include('widgets.form.formitem._select2', 
             ['name' => 'qsection_ids', 
              'values' => $qsection_values,
@@ -17,7 +17,7 @@
              'title' => trans('ques.subsection'),   
              'class'=>'select-qsection form-control'])                                   
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-4">
     @include('widgets.form.formitem._select2', 
             ['name' => 'place_ids', 
              'values' => $place_values,
@@ -35,6 +35,13 @@
     @include('widgets.form.formitem._text', 
             ['name' => 'total_limit', 
              'value' => $total_limit])
+             
+    <label for="normalize" style="padding-right: 10px">Делить расстояния на количество ответов</label>
+    @include('widgets.form.formitem._checkbox', ['name' => 'normalize', 'value' => 1, 'checked'=>$normalize==1] )                 
+    
+    <label for="with_geo" style="padding: 0 10px 0 20px">Учитывать географическое положение</label>
+    @include('widgets.form.formitem._checkbox', ['name' => 'with_geo', 'value' => 1, 'checked'=>$with_geo==1] )                 
+    
     @include('widgets.form.formitem._submit', ['title' => 'запустить'])
 </div>
         {!! Form::close() !!}

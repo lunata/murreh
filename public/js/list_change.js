@@ -15,7 +15,7 @@ function selectedValuesToURL(varname) {
     return forURL;
 }
 
-function selectQsection(section_var, placeholder='', allow_clear=false){
+function selectQsection(section_var='', placeholder='', allow_clear=false){
     $(".select-qsection").select2({
         allowClear: allow_clear,
         placeholder: placeholder,
@@ -27,7 +27,7 @@ function selectQsection(section_var, placeholder='', allow_clear=false){
           data: function (params) {
             return {
               q: params.term, // search term
-              section_id: $( "#"+section_var+" option:selected" ).val(),
+              section_id: section_var ? $( "#"+section_var+" option:selected" ).val() : '',
             };
           },
           processResults: function (data) {

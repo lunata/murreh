@@ -54,11 +54,12 @@ class Answer extends Model
     
     public static function getForPlacesQsection($places, $qsection_ids) {
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();
+
         $answers = [];
-        foreach ($qsections as $qsection) {
-            $questions = Question::whereQsectionId($qsection_ids)->get();
-            foreach ($places as $place) {
-                $answers[$place->id] = [];
+        foreach ($places as $place) {
+            $answers[$place->id] = [];
+            foreach ($qsections as $qsection) {
+                $questions = Question::whereQsectionId($qsection->id)->get();
                 foreach ($questions as $question) {
                     $pq_answers = self::where('answers.question_id',$question->id)
                             ->join('anketa_question', 'answers.id', '=', 'anketa_question.answer_id')

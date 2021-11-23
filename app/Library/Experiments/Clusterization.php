@@ -4,14 +4,17 @@ namespace App\Library\Experiments;
 
 use App\Library\Map;
 
+use App\Models\Geo\Place;
+
 use App\Models\Ques\AnketaQuestion;
 
 class Clusterization
 {
     protected $clusters=[];
-    protected $differences=[]; 
+    protected $distances=[]; 
+    protected $min_cl_distance = 0;
     
-    public static function init($places, $differences) {
+    public static function init($places, $distances) {
         $clusters = [];
         foreach ($places as $place) {
             $clusters[] = [$place->id];
@@ -19,21 +22,26 @@ class Clusterization
         
         $clusterization = new Clusterization;
         $clusterization->setClusters($clusters, 1);  
-        $clusterization->differences = $differences;
+        $clusterization->distances = $distances;
         
         return $clusterization;
     }
     
-    public function setClusters($clusters, $step) {
+    public function setClusters($clusters, $step, $min=0) {
         $this->clusters[$step] = $clusters;
+        $this->min_cl_distance = $min;
     }
     
     public function getClusters() {
         return $this->clusters;
     }
     
-    public function getDifferences() {
-        return $this->differences;
+    public function getDistances() {
+        return $this->distances;
+    }
+    
+    public function getMinClusterDistance() {
+        return $this->min_cl_distance;
     }
     
     /**
@@ -42,18 +50,18 @@ class Clusterization
      * @param array $answers
      * @return array
      */
-    public static function distanceForPlaces($places, $answers) {
-        $differences = [];
+    public static function distanceForPlaces($places, $answers, $normalize=true) {
+        $distances = [];
         foreach ($places as $place1) {
             foreach ($places as $place2) {
-               $differences[$place1->id][$place2->id] 
-                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id]);
+               $distances[$place1->id][$place2->id] 
+                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize);
             }
         }  
-        return $differences;
+        return $distances;
     }
     
-    public static function distanceForAnswers($answers1, $answers2) {
+    public static function distanceForAnswers($answers1, $answers2, $normalize=true) {
         $distance = 0;
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
@@ -63,13 +71,13 @@ class Clusterization
                     $difference +=1;
                 }
             }
-            $distance += $difference/sizeof($questions);
+            $distance += $normalize ? $difference/sizeof($questions) : $difference;
         }
         
-        return $distance;
+        return round($distance, 2);
     }
     
-    public function completeLinkage($step, $distance_limit, $total_limit) {
+    public function completeLinkage($step, $distance_limit, $total_limit, $with_geo=false) {
         $clusters = $this->getClusters();
         
         $cluster_dist = $this->clusterDistances($clusters[$step]);
@@ -80,21 +88,55 @@ class Clusterization
             return; 
         }
         
-        if (!preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums)) {
-            return;
-        }
-        $new_clusters = $this->mergeClusters($clusters[$step], $nearest_cluster_nums[1], $nearest_cluster_nums[2]);
-        $this->setClusters($new_clusters, $step+1);
+        list($cluster_num1, $cluster_num2) = self::searchNearestClusters($clusters[$step], $cluster_dist, $min, $with_geo);
+        $new_clusters = $this->mergeClusters($clusters[$step], $cluster_num1, $cluster_num2);
+        $this->setClusters($new_clusters, $step+1, $min);
         if (sizeof($new_clusters)<2) {
             return;
         }        
         $this->completeLinkage($step+1, $distance_limit, $total_limit);
     }
     
+    /**
+     * 
+     * @param array $clusters
+     * @param array $min_cl_nums
+     */
+    public static function searchNearestClusters($clusters, $cluster_dist, $min, $with_geo=false) {
+        if ($with_geo) {
+            $cl_pair_nums = array_keys(array_filter($cluster_dist, function ($v) use ($min) {return $v==$min;}));
+            return self::geoClusterDistances($clusters, $cl_pair_nums);
+        }
+        
+        preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums);
+        return [$nearest_cluster_nums[1], $nearest_cluster_nums[2]];        
+    }
+
+    public static function geoClusterDistances($clusters, $cl_pair_nums) {
+        $min=1000;
+        $num1=$num2=null;
+        foreach ($cl_pair_nums as $pair) {
+            preg_match('/^(.+)\_(.+)$/', $pair, $cl_nums);
+            $cl_dist = self::geoClusterDistance($clusters[$cl_nums[1]], $clusters[$cl_nums[2]]);
+            if ($cl_dist < $min) {
+                $min=$cl_dist;
+                $num1 = $cl_nums[1];
+                $num2 = $cl_nums[2];
+            }
+        }
+        return [$num1, $num2];
+    }
+
+    public static function geoClusterDistance($cluster1, $cluster2) {
+        list($x1, $y1) = Place::geoCenter($cluster1);
+        list($x2, $y2) = Place::geoCenter($cluster2);
+        return sqrt(($x1-$x2)^2+($y1-$y2)^2);        
+    }
+    
     // вычисляем расстояния между всеми кластерами
     public function clusterDistances($clusters) {
         $cluster_dist = [];
-//dd($this->getDifferences(), $clusters);
+//dd($this->getDistances(), $clusters);
 
         foreach ($clusters as $cluster1_num => $cluster1) {
             foreach ($clusters as $cluster2_num => $cluster2) {
@@ -108,12 +150,12 @@ class Clusterization
     
     // вычисляем расстояния между двумя кластерами
     public function clusterDistance($cluster1, $cluster2) {
-        $differences = $this->getDifferences();
+        $distances = $this->getDistances();
         $max=0;
         foreach ($cluster1 as $p1) {
             foreach ($cluster2 as $p2) {
-                if ($differences[$p1][$p2]>$max) {
-                    $max = $differences[$p1][$p2];
+                if ($distances[$p1][$p2]>$max) {
+                    $max = $distances[$p1][$p2];
                 }
             }        
         }

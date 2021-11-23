@@ -5,22 +5,22 @@
 @endsection
 
 @section('body')
-    @foreach ($answers as $qsection_name => $qs_places)
-    <h3>Ответы на раздел "{{$qsection_name}}"</h3>
+    @foreach ($answers[array_key_first($answers)] as $qsection_name => $questions)
+    <h3 style="margin-top: 20px">Ответы на раздел "{{$qsection_name}}"</h3>
     <table class="table-bordered table-wide table-striped rwd-table wide-md">
         <tr>
             <th>Населенный пункт</th>
-        @foreach (array_keys($qs_places[array_key_first($qs_places)]) as $question)
+        @foreach (array_keys($questions) as $question)
             <th>{{$question}}</th>
         @endforeach
         </tr>
         
-        @foreach ($qs_places as $place_id => $questions)
+        @foreach ($answers as $place_id => $sec_questions)
         <tr>
             <th style="text-align: left">
                 <a href=/ques/anketas?search_place={{$place_id}}>{{$place_names[$place_id]}}</a>
             </th>
-        @foreach (array_values($questions) as $qanswers)
+        @foreach (array_values($sec_questions[$qsection_name]) as $qanswers)
             <td>{{sizeof($qanswers) ? join(', ', array_keys($qanswers)). ' ('. join(', ', array_values($qanswers)). ')' : '-'}}</td>
         @endforeach
         </tr>
@@ -38,7 +38,7 @@
         @endforeach
         </tr>
         
-        @foreach ($differences as $place_id => $place_diff)
+        @foreach ($distances as $place_id => $place_diff)
         <tr>
             <th style="text-align: right">{{$place_id}}</th>
             <th style="text-align: left">{{$place_names[$place_id]}}</th>

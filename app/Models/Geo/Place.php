@@ -380,11 +380,21 @@ class Place extends Model
         return $place->name_ru;
     }
 
-    public static function getFromAnketas() {
-        return Place::whereIn('id', function ($q) {
-                    $q->select('place_id')->from('anketas');
-                })
-                ->orderBy('name_ru')->get();
+    public static function getForClusterization($place_ids, $total_answers=null) {
+        if (sizeof($place_ids)) {
+            $places = Place::whereIn('id', $place_ids);
+        } else {
+            $places = Place::whereIn('id', function ($q) use ($total_answers){
+                        $q->select('place_id')->from('anketas');
+                        if ($total_answers) {
+                            $q->whereIn('id', function ($q2) use ($total_answers){
+                                $q2->select('anketa_id')->from('anketa_question')
+                                   ->groupBy('anketa_id')->havingRaw('count(*)>'.$total_answers);
+                            });
+                        }
+                    });
+        }
+        return $places->orderBy('name_ru')->get();
     }
 
     public static function namesByIdsToString($ids) {
@@ -405,5 +415,16 @@ class Place extends Model
                               ->wherePlaceId($place_id);
                         })->pluck('answer_text')->toArray();
         return array_unique($answers);
+    }
+    
+    public static function geoCenter($place_ids) {
+        $places = self::whereIn('id', $place_ids)->get();
+        $X=0;
+        $Y=0;
+        foreach ($places as $place) {
+            $X += $place->longitude; // долгота
+            $Y += $place->latitude; // широта
+        }
+        return [$X/sizeof($places), $Y/sizeof($places)];
     }
 }

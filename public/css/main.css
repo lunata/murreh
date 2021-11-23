@@ -463,9 +463,9 @@ h1:before {
     padding: 0 10px;
 }
 
-.compact-search-form label {
+/*.compact-search-form label {
     white-space: nowrap;
-}
+}*/
 
 @media screen and (min-width: 768px) {   
     .comment {
