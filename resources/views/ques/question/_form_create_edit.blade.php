@@ -2,11 +2,18 @@
 
 <div class="row">
     <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-6">
         @include('widgets.form.formitem._text', 
                 ['name' => 'sequence_number', 
-                 'title'=>trans('messages.sequence_number'),
-                 'attributes'=>['size'=>7] ])
-                 
+                 'title'=>trans('messages.sequence_number') ])
+            </div>
+            <div class="col-sm-6">
+        @include('widgets.form.formitem._text', 
+                ['name' => 'weight', 
+                 'title'=>trans('ques.weight') ])
+            </div>
+        </div>
         @include('widgets.form.formitem._select', 
                 ['name' => 'section_id', 
                  'values' =>$section_values,

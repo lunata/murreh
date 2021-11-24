@@ -15,7 +15,7 @@ class Question extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $fillable = ['id', 'section_id', 'qsection_id', 'question', 'question_ru', 'sequence_number'];
+    protected $fillable = ['id', 'section_id', 'qsection_id', 'question', 'question_ru', 'sequence_number', 'weight'];
     
     use \App\Traits\Methods\searchStrField;
     use \App\Traits\Methods\searchIntField;

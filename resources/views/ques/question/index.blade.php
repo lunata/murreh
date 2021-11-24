@@ -30,6 +30,7 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>{{ trans('ques.weight') }}</th>
                 <th>{{ trans('ques.section') }}</th>
                 <th>{{ trans('ques.subsection') }}</th>
                 <th>{{ trans('ques.question') }}</th>
@@ -46,6 +47,7 @@
             @foreach($questions as $question)
             <tr>
                 <td data-th="No">{{ $question->sequence_number }}</td>
+                <td data-th="{{ trans('ques.weight') }}">{{$question->weight}}</td>
                 <td data-th="{{ trans('ques.section') }}">{{$question->section}}</td>
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
                 <td data-th="{{ trans('ques.question') }}"><a href="/ques/question/{{$question->id}}{{$args_by_get}}">{{$question->question}}</a></td>

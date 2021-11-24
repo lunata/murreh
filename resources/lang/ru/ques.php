@@ -34,4 +34,5 @@ return [
     'speech_sample' => 'образец речи',
     'subsection' => 'подраздел',
     'year' => 'Год записи',
+    'weight' => 'Вес',
 ];
