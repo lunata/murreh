@@ -12,7 +12,7 @@ class Clusterization
 {
     protected $clusters=[];
     protected $distances=[]; 
-    protected $min_cl_distance = 0;
+    protected $min_cl_distance = 0; // минимальное расстояние между кластерами на последнем шаге
     
     public static function init($places, $distances) {
         $clusters = [];
@@ -50,25 +50,25 @@ class Clusterization
      * @param array $answers
      * @return array
      */
-    public static function distanceForPlaces($places, $answers, $normalize=true) {
+    public static function distanceForPlaces($places, $answers, $normalize=true, $weights=[]) {
         $distances = [];
         foreach ($places as $place1) {
             foreach ($places as $place2) {
                $distances[$place1->id][$place2->id] 
-                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize);
+                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize, $weights);
             }
         }  
         return $distances;
     }
     
-    public static function distanceForAnswers($answers1, $answers2, $normalize=true) {
+    public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[]) {
         $distance = 0;
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
             foreach ($questions as $question => $answer) {
                 if (sizeof($answer) && sizeof($answers2[$qsection][$question]) 
                     && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
-                    $difference +=1;
+                    $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
                 }
             }
             $distance += $normalize ? $difference/sizeof($questions) : $difference;

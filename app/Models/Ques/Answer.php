@@ -52,7 +52,8 @@ class Answer extends Model
         return $answer->code;
     }
     
-    public static function getForPlacesQsection($places, $qsection_ids) {
+    public static function getForPlacesQsection($places, $qsection_ids, $with_weight=false) {
+        $weights = [];
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();
 
         $answers = [];
@@ -67,9 +68,12 @@ class Answer extends Model
                             ->wherePlaceId($place->id)
                             ->pluck('answer_text','code')->toArray();
                     $answers[$place->id][$qsection->title][$question->question] = (array)$pq_answers;
+                    if ($with_weight) {
+                        $weights[$qsection->title][$question->question] = $question->weight;
+                    }
                 }
             }
         }
-        return $answers;
+        return [$answers, $weights];
     }    
 }

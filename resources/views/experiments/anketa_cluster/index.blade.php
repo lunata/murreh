@@ -16,7 +16,7 @@
 
     @include('experiments.anketa_cluster._search_form') 
 
-    <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
+    <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
     
 {{--    @foreach ($clusters as $step => $step_clusters) --}}
     <h4>Шаг {{$last_step}}, 
