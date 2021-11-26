@@ -168,30 +168,34 @@ class Clusterization
         return $clusters;
     }
     
-    public static function dataForMap($clusters, $places, $qsection_ids) {
+    public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors) {
         $default_markers = Map::markers();
-        $cluster_places = $markers = $cl_markers=[];
+        $cluster_places = $markers =[];
         $count=0;
+        $new_markers = sizeof($cl_colors) != sizeof($clusters) || sizeof(array_diff(array_keys($cl_colors), array_keys($clusters)));
         foreach ($clusters as $cl_num => $cluster) {
-            $cluster_places[$default_markers[$count]] = [];
+            $cur_color = $new_markers ? $default_markers[$count] : $cl_colors[$cl_num];
+            $cluster_places[$cur_color] = [];
             foreach ($cluster as $place_id) {
                 $place = $places->where('id', $place_id)->first();
                 $anketa_count = $place->anketas()->count();
                 $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
                         trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a><br>" : '';
-                $answers = join(', ', $place->getAnswersForQsections($qsection_ids));
-                $cluster_places[$default_markers[$count]][] 
+                $answers = join(', ', $place->getAnswersForQsections($qsection_ids, $question_ids));
+                $cluster_places[$cur_color][] 
                         = ['latitude'=>$place->latitude,
                            'longitude'=>$place->longitude,
                            'popup' => '<b>'.$place->name_ru.'</b>'.$anketa_link.$answers];
             }
-            $markers[$default_markers[$count]] 
+            $markers[$cur_color] 
                     = //'<b>'. $cl_num. '</b>: '.
-                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids));
-            $cl_markers[$cl_num] = $default_markers[$count];            
+                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids));
+            if ($new_markers) {
+                $cl_colors[$cl_num] = $cur_color;    
+            }
             $count++;
         }
         
-        return [$markers, $cluster_places, $cl_markers];
+        return [$markers, $cluster_places, $cl_colors];
     }
 }

@@ -55,5 +55,4 @@
     
     @include('widgets.form.formitem._submit', ['title' => 'запустить'])
 </div>
-        {!! Form::close() !!}
 

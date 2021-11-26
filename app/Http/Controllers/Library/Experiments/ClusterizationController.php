@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Library\Experiments\Clusterization;
+use App\Library\Map;
 
 use App\Models\Geo\Place;
 use App\Models\Ques\Qsection;
@@ -25,6 +26,7 @@ class ClusterizationController extends Controller
         $question_ids = (array)$request->input('question_ids');
         $normalize = (int)$request->input('normalize');
         $with_geo = (int)$request->input('with_geo');
+        $cl_colors = (array)$request->input('cl_colors');
         $with_weight = (int)$request->input('with_weight');
 
         $qsection_ids = (array)$request->input('qsection_ids');
@@ -49,6 +51,7 @@ class ClusterizationController extends Controller
             $total_limit = sizeof($places)-1;
         }
         
+        $color_values = Map::markers(true);
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
@@ -59,11 +62,12 @@ class ClusterizationController extends Controller
         $last_step = array_key_last($clusters);
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
-        list($markers, $cluster_places, $cl_markers) 
-                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids);
+        list($markers, $cluster_places, $cl_colors) 
+                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors);
        
+        
         return view('experiments/anketa_cluster/index', 
-                compact('cl_markers', 'cluster_places', 'clusters', 'distance_limit', 
+                compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 'distance_limit', 
                         'last_step', 'markers', 'min_cl_distance', 'normalize', //'section_id', 
                         'place_ids', 'place_values', 'qsection_ids', 
                         'qsection_values', 'question_ids', 'question_values',

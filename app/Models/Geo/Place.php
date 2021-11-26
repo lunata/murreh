@@ -405,16 +405,21 @@ class Place extends Model
         return join(', ', $names);
     }
     
-    public function getAnswersForQsections($qsection_ids) {
+    public function getAnswersForQsections($qsection_ids, $question_ids) {
         $place_id = $this->id;
-        $answers = AnketaQuestion::whereIn('question_id', function ($q) use ($qsection_ids) {
-                            $q->select('id')->from('questions')
-                              ->whereIn('qsection_id',$qsection_ids);
-                        })->whereIn('anketa_id', function ($q) use ($place_id) {
+        $answers = AnketaQuestion::whereIn('anketa_id', function ($q) use ($place_id) {
                             $q->select('id')->from('anketas')
                               ->wherePlaceId($place_id);
-                        })->pluck('answer_text')->toArray();
-        return array_unique($answers);
+                        });
+        if (sizeof($question_ids)) {
+            $answers->whereIn('question_id', $question_ids);
+        } elseif (sizeof($qsection_ids)) {
+            $answers->whereIn('question_id', function ($q) use ($qsection_ids) {
+                            $q->select('id')->from('questions')
+                              ->whereIn('qsection_id',$qsection_ids);
+                        });
+        }
+        return array_unique($answers->pluck('answer_text')->toArray());
     }
     
     public static function geoCenter($place_ids) {

@@ -24,12 +24,22 @@
         минимальное расстояние между кластерами: {{$min_cl_distance}}
     </h4>
         @foreach ($clusters[$last_step] as $cl_num => $cluster) 
-        <P><img src="/images/markers/marker-icon-{{$cl_markers[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px">
-           <b>{{$cl_num}}</b> ({{sizeof($cluster)}}): {{\App\Models\Geo\Place::namesByIdsToString($cluster)}}
-           <br><span style="font-style: italic; color:grey">({{$markers[$cl_markers[$cl_num]]}})</span>
-        </P>
+        <div class="cluster-info">
+            <div class="cluster-marker">
+                <img src="/images/markers/marker-icon-{{$cl_colors[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px">
+                @include('widgets.form.formitem._select', 
+                        ['name' => "cl_colors[$cl_num]", 
+                         'values' => $color_values,
+                         'value' => $cl_colors[$cl_num]])                                              
+                <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
+            </div>
+           {{\App\Models\Geo\Place::namesByIdsToString($cluster)}}
+           <br><span style="font-style: italic; color:grey">({{$markers[$cl_colors[$cl_num]]}})</span>
+        </div>
         @endforeach
 {{--    @endforeach --}}
+
+        {!! Form::close() !!}
     
     @include('widgets.leaflet.map', ['markers'=>[]])
 @endsection

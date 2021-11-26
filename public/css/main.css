@@ -467,6 +467,19 @@ h1:before {
     white-space: nowrap;
 }*/
 
+.cluster-info {
+    margin: 20px 0;
+}
+
+.cluster-marker {
+    display: flex;
+    align-items: flex-start;
+}
+
+.cluster-marker .form-group {
+    margin: 0 10px 0 0;
+}
+
 @media screen and (min-width: 768px) {   
     .comment {
         margin-top: -50px;
