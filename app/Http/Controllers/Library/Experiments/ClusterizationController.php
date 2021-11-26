@@ -6,11 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Library\Experiments\Clusterization;
-use App\Library\Map;
 
-use App\Models\Geo\Place;
-use App\Models\Ques\Qsection;
-use App\Models\Ques\Question;
 use App\Models\Ques\Answer;
 
 class ClusterizationController extends Controller
@@ -20,38 +16,12 @@ class ClusterizationController extends Controller
     }
     
     public function index(Request $request) {
-        $total_answers = 1000;
-//        $section_id = (int)$request->input('qsection_id');
-        $place_ids = (array)$request->input('place_ids');
-        $question_ids = (array)$request->input('question_ids');
-        $normalize = (int)$request->input('normalize');
-        $with_geo = (int)$request->input('with_geo');
-        $cl_colors = (array)$request->input('cl_colors');
-        $with_weight = (int)$request->input('with_weight');
-
-        $qsection_ids = (array)$request->input('qsection_ids');
-        if (!sizeof($qsection_ids)) {
-            $qsection_ids = [2];
-        }
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight)
+                = Clusterization::getRequestDataForView($request);
+        list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
+                $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
+                = Clusterization::getRequestDataForCluster($request, $places);
         
-        $distance_limit = $request->input('distance_limit');
-        
-        $total_limit = (int)$request->input('total_limit');
-        if (!$total_limit || $total_limit<1 || $total_limit>20) {
-            $total_limit = 20;
-        }
-
-        $section_values = [NULL=>'']+Qsection::getSectionListWithQuantity();
-        $qsection_values = Qsection::getList();
-        $question_values = Question::getList();
-        
-        $places = Place::getForClusterization($place_ids, $total_answers);  
-        $place_values = $places->pluck('name_ru', 'id')->toArray();
-        if (sizeof($places)<$total_limit) {
-            $total_limit = sizeof($places)-1;
-        }
-        
-        $color_values = Map::markers(true);
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
@@ -67,25 +37,18 @@ class ClusterizationController extends Controller
        
         
         return view('experiments/anketa_cluster/index', 
-                compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 'distance_limit', 
-                        'last_step', 'markers', 'min_cl_distance', 'normalize', //'section_id', 
+                compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 
+                        'distance_limit', 'last_step', 'markers', 'method_id', //'section_id', 
+                        'method_values', 'min_cl_distance', 'normalize', 
                         'place_ids', 'place_values', 'qsection_ids', 
-                        'qsection_values', 'question_ids', 'question_values',
-                        'section_values', 'total_limit', 'with_geo', 'with_weight'));
+                        'qsection_values', 'question_ids', 'question_values', // 'section_values', 
+                        'total_limit', 'with_geo', 'with_weight'));
     }
     
     public function viewData(Request $request) {
-        $total_answers = 1000;
-        $place_ids = (array)$request->input('place_ids');
-        $question_ids = (array)$request->input('question_ids');
-        $normalize = (int)$request->input('normalize');
-        $with_weight = (int)$request->input('with_weight');
-        $qsection_ids = (array)$request->input('qsection_ids');
-        if (!sizeof($qsection_ids)) {
-            $qsection_ids = [2];
-        }
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight)
+                = Clusterization::getRequestDataForView($request);
         
-        $places = Place::getForClusterization($place_ids, $total_answers);  
         $place_names = $places->pluck('name_ru', 'id')->toArray();
         
         list($answers, $weights) 

@@ -1,6 +1,6 @@
-        {!! Form::open(['url' => '/ques/question/', 
-                             'method' => 'get']) 
-        !!}
+    {!! Form::open(['url' => '/ques/question/', 
+                         'method' => 'get']) 
+    !!}
 <div class="row">
     <div class="col-sm-1">
         @include('widgets.form.formitem._text', 

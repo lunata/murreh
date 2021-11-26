@@ -34,16 +34,29 @@
              'class'=>'select-place form-control'])                                   
     </div>
 </div>
-<div class='compact-search-form'>
-    <label for="distance_limit">Расстояние между кластерами не больше</label>
+<div class="row">
+    <div class="col-sm-4">
+                @include('widgets.form.formitem._select', 
+                        ['name' => "method_id", 
+                         'values' => $method_values,
+                         'value' => $method_id,
+                         'title' => 'Метод'])                                                      
+    </div>
+    <div class="col-sm-4">
     @include('widgets.form.formitem._text', 
             ['name' => 'distance_limit', 
-             'value' => $distance_limit])
-    <label for="total_limit">Количество кластеров не больше</label>
+             'value' => $distance_limit,
+             'title' => 'Расстояние между кластерами не больше'])
+    </div>
+    <div class="col-sm-4">
     @include('widgets.form.formitem._text', 
             ['name' => 'total_limit', 
-             'value' => $total_limit])
+             'value' => $total_limit,
+             'title' => 'Количество кластеров не больше'])
              
+    </div>
+</div>
+<div class='compact-search-form'>
     <label for="normalize" style="padding-right: 10px">Делить расстояния на количество ответов</label>
     @include('widgets.form.formitem._checkbox', ['name' => 'normalize', 'value' => 1, 'checked'=>$normalize==1] )                 
     

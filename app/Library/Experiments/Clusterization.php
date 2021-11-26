@@ -7,6 +7,8 @@ use App\Library\Map;
 use App\Models\Geo\Place;
 
 use App\Models\Ques\AnketaQuestion;
+use App\Models\Ques\Qsection;
+use App\Models\Ques\Question;
 
 class Clusterization
 {
@@ -66,8 +68,10 @@ class Clusterization
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
             foreach ($questions as $question => $answer) {
-                if (sizeof($answer) && sizeof($answers2[$qsection][$question]) 
-                    && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
+//                if (sizeof($answer) && sizeof($answers2[$qsection][$question]) 
+  //                  && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
+                if (/*!sizeof($answer) || sizeof($answers2[$qsection][$question])
+                    ||*/ !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
                     $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
                 }
             }
@@ -197,5 +201,50 @@ class Clusterization
         }
         
         return [$markers, $cluster_places, $cl_colors];
+    }
+    
+    public static function getRequestDataForView($request) {
+        $total_answers = 1000;
+        $place_ids = (array)$request->input('place_ids');
+        $question_ids = (array)$request->input('question_ids');
+        $normalize = (int)$request->input('normalize');
+        $with_weight = (int)$request->input('with_weight');
+        
+        $qsection_ids = (array)$request->input('qsection_ids');
+        if (!sizeof($qsection_ids)) {
+            $qsection_ids = [2];
+        }
+        
+        $places = Place::getForClusterization($place_ids, $total_answers);  
+        
+        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight];
+    }
+    
+    public static function getRequestDataForCluster($request, $places) {
+//        $section_id = (int)$request->input('qsection_id');      
+        $with_geo = (int)$request->input('with_geo');
+        $cl_colors = (array)$request->input('cl_colors');        
+        $distance_limit = $request->input('distance_limit');
+        
+        $total_limit = (int)$request->input('total_limit');
+        if (sizeof($places)<$total_limit) {
+            $total_limit = sizeof($places)-1;
+        } elseif (!$total_limit || $total_limit<1 || $total_limit>20) {
+            $total_limit = 20;
+        }
+        
+        $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
+                          2=>'Соллина'
+                         ];
+        $method_id = isset($method_values[$request->input('method_id')]) 
+                ? $request->input('method_id') : 1;
+        
+//        $section_values = [NULL=>'']+Qsection::getSectionListWithQuantity();
+        $qsection_values = Qsection::getList();
+        $question_values = Question::getList();
+        $color_values = Map::markers(true);
+        $place_values = $places->pluck('name_ru', 'id')->toArray();
+        
+        return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo];
     }
 }
