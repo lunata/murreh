@@ -52,7 +52,7 @@ class Answer extends Model
         return $answer->code;
     }
     
-    public static function getForPlacesQsection($places, $qsection_ids, $with_weight=false) {
+    public static function getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight=false) {
         $weights = [];
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();
 
@@ -60,8 +60,11 @@ class Answer extends Model
         foreach ($places as $place) {
             $answers[$place->id] = [];
             foreach ($qsections as $qsection) {
-                $questions = Question::whereQsectionId($qsection->id)->get();
-                foreach ($questions as $question) {
+                $questions = Question::whereQsectionId($qsection->id);
+                if ($question_ids) {
+                    $questions->whereIn('id', $question_ids);
+                }
+                foreach ($questions->get() as $question) {
                     $pq_answers = self::where('answers.question_id',$question->id)
                             ->join('anketa_question', 'answers.id', '=', 'anketa_question.answer_id')
                             ->join('anketas', 'anketas.id', '=', 'anketa_question.anketa_id')

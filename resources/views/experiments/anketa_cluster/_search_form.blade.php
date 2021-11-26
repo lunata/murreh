@@ -9,13 +9,21 @@
              'value' => $section_id,
              'title' => trans('ques.section')])                                  
     </div> --}}
-    <div class="col-sm-6">
+    <div class="col-sm-4">
     @include('widgets.form.formitem._select2', 
             ['name' => 'qsection_ids', 
              'values' => $qsection_values,
              'value' => $qsection_ids,
              'title' => trans('ques.subsection'),   
              'class'=>'select-qsection form-control'])                                   
+    </div>
+    <div class="col-sm-4">
+    @include('widgets.form.formitem._select2', 
+            ['name' => 'question_ids', 
+             'values' => $question_values,
+             'value' => $question_ids,
+             'title' => trans('ques.question'),   
+             'class'=>'select-question form-control'])                                   
     </div>
     <div class="col-sm-4">
     @include('widgets.form.formitem._select2', 

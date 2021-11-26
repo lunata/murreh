@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ques;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Response;
 
 use App\Library\Map;
 use App\Library\Str;
@@ -238,4 +239,32 @@ class QuestionController extends Controller
         return view('ques.question.map', 
                 compact('question', 'answer_places', 'markers')); 
     }
+    
+    /**
+     * Gets list of questions for drop down list in JSON format
+     * Test url: /ques/question/list?qsection_ids[]=2&qsection_ids[]=5
+     * 
+     * @return JSON response
+     */
+    public function questionList(Request $request)
+    {
+        $question = '%'.$request->input('q').'%';
+        $qsection_ids = (array)$request->input('qsection_ids');
+
+        $list = [];
+        $questions = Question::where('question','like', $question);
+        if (sizeof($qsection_ids)) {                 
+            $questions ->whereIn('qsection_id', $qsection_ids);
+        }
+        
+        $questions = $questions->orderBy('sequence_number')->get();
+                         
+        foreach ($questions as $question) {
+            $list[]=['id'  => $question->id, 
+                     'text'=> $question->question];
+        }  
+        return Response::json($list);
+    }
+    
+    
 }

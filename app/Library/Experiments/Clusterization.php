@@ -170,7 +170,7 @@ class Clusterization
     
     public static function dataForMap($clusters, $places, $qsection_ids) {
         $default_markers = Map::markers();
-        $cluster_places = $markers = [];
+        $cluster_places = $markers = $cl_markers=[];
         $count=0;
         foreach ($clusters as $cl_num => $cluster) {
             $cluster_places[$default_markers[$count]] = [];
@@ -186,10 +186,12 @@ class Clusterization
                            'popup' => '<b>'.$place->name_ru.'</b>'.$anketa_link.$answers];
             }
             $markers[$default_markers[$count]] 
-                    = '<b>'. $cl_num. '</b>: '
-                    .join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids));
+                    = //'<b>'. $cl_num. '</b>: '.
+                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids));
+            $cl_markers[$cl_num] = $default_markers[$count];            
             $count++;
         }
-        return [$markers, $cluster_places];
+        
+        return [$markers, $cluster_places, $cl_markers];
     }
 }

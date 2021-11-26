@@ -16,7 +16,7 @@
 
     @include('experiments.anketa_cluster._search_form') 
 
-    <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
+    <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
     
 {{--    @foreach ($clusters as $step => $step_clusters) --}}
     <h4>Шаг {{$last_step}}, 
@@ -24,11 +24,14 @@
         минимальное расстояние между кластерами: {{$min_cl_distance}}
     </h4>
         @foreach ($clusters[$last_step] as $cl_num => $cluster) 
-        <P><b>{{$cl_num}}</b> ({{sizeof($cluster)}}): {{\App\Models\Geo\Place::namesByIdsToString($cluster)}}</P>
+        <P><img src="/images/markers/marker-icon-{{$cl_markers[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px">
+           <b>{{$cl_num}}</b> ({{sizeof($cluster)}}): {{\App\Models\Geo\Place::namesByIdsToString($cluster)}}
+           <br><span style="font-style: italic; color:grey">({{$markers[$cl_markers[$cl_num]]}})</span>
+        </P>
         @endforeach
 {{--    @endforeach --}}
     
-    @include('widgets.leaflet.map')
+    @include('widgets.leaflet.map', ['markers'=>[]])
 @endsection
 
 @section('footScriptExtra')
@@ -39,5 +42,6 @@
 
 @section('jqueryFunc')
     selectQsection();    
+    selectQuestion('qsection_ids');    
     selectPlace();    
 @stop

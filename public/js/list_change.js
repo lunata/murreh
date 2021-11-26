@@ -40,6 +40,46 @@ function selectQsection(section_var='', placeholder='', allow_clear=false){
     });   
 }
 
+function selectQuestion(qsection_var='', placeholder='', allow_clear=false){
+    $(".select-question").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/ques/question/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              'qsection_ids[]': getMultiValues(qsection_var),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
+function getMultiValues(var_name) {
+    if (var_name === '') {
+        return '';
+    }
+    return $("#"+var_name+" option:selected").map(function() {
+                    return this.value;
+                }).get();
+/*    var values = [];
+    $( "#"+var_name+" option:selected" ).each(function (entry) {
+        values.push = entry.val();
+    });
+console.log(values);    
+    return values;*/
+}
+
 function selectConceptCategory(section_var, placeholder='', allow_clear=false){
     $(".select-category").select2({
         allowClear: allow_clear,
