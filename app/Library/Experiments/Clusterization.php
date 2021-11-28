@@ -15,17 +15,24 @@ class Clusterization
     protected $clusters=[];
     protected $distances=[]; 
     protected $min_cl_distance = 0; // минимальное расстояние между кластерами на последнем шаге
+    protected $method_id=1;
+    protected $with_geo=false;
+    protected $distance_limit=0;
+    protected $total_limit=20;
     
-    public static function init($places, $distances) {
+    public static function init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit) {
         $clusters = [];
         foreach ($places as $place) {
-            $clusters[] = [$place->id];
+            $clusters[$place->id] = [$place->id];
         }
         
         $clusterization = new Clusterization;
         $clusterization->setClusters($clusters, 1);  
         $clusterization->distances = $distances;
-        
+        $clusterization->method_id = $method_id;
+        $clusterization->with_geo = $with_geo;
+        $clusterization->distance_limit = $distance_limit;
+        $clusterization->total_limit = $total_limit;
         return $clusterization;
     }
     
@@ -45,6 +52,52 @@ class Clusterization
     public function getMinClusterDistance() {
         return $this->min_cl_distance;
     }
+    
+    public function getMethod() {
+        return $this->method_id;
+    }
+    
+    public function getWithGeo() {
+        return $this->with_geo;
+    }
+    
+    public function getDistanceLimit() {
+        return $this->distance_limit;
+    }
+    
+    public function getTotalLimit() {
+        return $this->total_limit;        
+    }
+    
+    public function selectDistanceLimit() {
+        $old_total = $this->distance_limit;
+        $more_distances = [];
+        foreach ($this->distances as $p1 => $places) {
+            foreach ($places as $p2 => $d) {
+                if ($d>$old_total) {
+                    $more_distances[] = $d;
+                }
+            }
+        }
+        $more_distances=array_unique($more_distances);
+        sort($more_distances);
+        $this->distance_limit = $more_distances[array_key_first($more_distances)];
+    }
+    
+    public function getLastStep() {
+        $clusters = $this->getClusters();
+        return array_key_last($clusters);
+    }
+    
+    /**
+     * get clusters for the last step
+     */
+    public function getLastClusters() {
+        $clusters = $this->getClusters();
+        $last_step = $this->getLastStep();
+        return $clusters[$last_step];
+    }
+    
     
     /**
      * Get distances for all places
@@ -81,42 +134,72 @@ class Clusterization
         return round($distance, 2);
     }
     
-    public function completeLinkage($step, $distance_limit, $total_limit, $with_geo=false) {
-        $clusters = $this->getClusters();
-        
-        $cluster_dist = $this->clusterDistances($clusters[$step]);
-//dd($cluster_dist);        
-        $min = min(array_values($cluster_dist));        
-        // если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита
-        if ($min>$distance_limit && sizeof($clusters[$step]) <= $total_limit) {
-            return; 
+    public function clusterization() {        
+        if ($this->getMethod() == 2) {
+            $new_clusters = $this->bySollin();
+        } else {
+            $new_clusters = $this->byCompleteLinkage();
         }
-        
-        list($cluster_num1, $cluster_num2) = self::searchNearestClusters($clusters[$step], $cluster_dist, $min, $with_geo);
-        $new_clusters = $this->mergeClusters($clusters[$step], $cluster_num1, $cluster_num2);
-        $this->setClusters($new_clusters, $step+1, $min);
-        if (sizeof($new_clusters)<2) {
+        if (!$new_clusters || sizeof($new_clusters)<2) {
             return;
         }        
-        $this->completeLinkage($step+1, $distance_limit, $total_limit);
+        $this->clusterization();
     }
     
     /**
+     * Метод точных связей
+     * 0. Считаем все расстояния между кластерами
+     * 1. Ищем минимальное расстояние между кластерами - min
+     * 2. Если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита, то выход.
+     * 3. Ищем два самых близких кластера с расстоянием min
+     * 4. Соединяем их
+     * 5. Записываем новые кластеры
      * 
-     * @param array $clusters
+     * @return array
+     */
+    public function byCompleteLinkage() {
+        $clusters = $this->getLastClusters();
+        $cluster_dist = $this->clusterDistances(); // 0
+//dd($cluster_dist);        
+        $min = min(array_values($cluster_dist));   // 1     
+
+        if ($min>$this->getDistanceLimit() && sizeof($clusters) <= $this->getTotalLimit()) { // 2
+            return; 
+        }
+        
+        list($cluster_num1, $cluster_num2) 
+                = $this->search2NearestClusters($cluster_dist, $min); // 3
+        
+        $new_clusters = $this->mergeClusters($cluster_num1, $cluster_num2); // 4
+        
+        $this->setClusters($new_clusters, 1+$this->getLastStep(), $min); // 5
+        return $new_clusters;
+    }
+    
+    /**
+     * Ищем два самых близких кластера с заданным расстоянием min
+     * 
+     * @param array $cluster_dist
      * @param array $min_cl_nums
      */
-    public static function searchNearestClusters($clusters, $cluster_dist, $min, $with_geo=false) {
-        if ($with_geo) {
+    public function search2NearestClusters($cluster_dist, $min) {
+        if ($this->getWithGeo()) {
             $cl_pair_nums = array_keys(array_filter($cluster_dist, function ($v) use ($min) {return $v==$min;}));
-            return self::geoClusterDistances($clusters, $cl_pair_nums);
+            return $this->geoClusterDistances($cl_pair_nums);
         }
         
         preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums);
         return [$nearest_cluster_nums[1], $nearest_cluster_nums[2]];        
     }
 
-    public static function geoClusterDistances($clusters, $cl_pair_nums) {
+    /**
+     * Из имеющихся пар кластеров на одинаковом расстоянии выбираем самые ближайшие географически
+     * 
+     * @param array $cl_pair_nums
+     * @return array
+     */
+    public function geoClusterDistances($cl_pair_nums) {
+        $clusters = $this->getLastClusters();
         $min=1000;
         $num1=$num2=null;
         foreach ($cl_pair_nums as $pair) {
@@ -137,8 +220,9 @@ class Clusterization
         return sqrt(($x1-$x2)^2+($y1-$y2)^2);        
     }
     
-    // вычисляем расстояния между всеми кластерами
-    public function clusterDistances($clusters) {
+    // вычисляем все расстояния между всеми кластерами
+    public function clusterDistances() {
+        $clusters = $this->getLastClusters();
         $cluster_dist = [];
 //dd($this->getDistances(), $clusters);
 
@@ -152,8 +236,20 @@ class Clusterization
         return $cluster_dist;
     }
     
-    // вычисляем расстояния между двумя кластерами
+    // вычисляем расстояние между двумя кластерами
     public function clusterDistance($cluster1, $cluster2) {
+        $method_id = $this->getMethod();
+        
+        if ($method_id==2) {
+            $distance = $this->clusterDistanceMin($cluster1, $cluster2);
+        } else {
+            $distance = $this->clusterDistanceMax($cluster1, $cluster2);
+        }
+        return $distance;
+    }
+    
+    // вычисляем расстояние между двумя кластерами = расстояние между самыми отдаленными элементами
+    public function clusterDistanceMax($cluster1, $cluster2) {
         $distances = $this->getDistances();
         $max=0;
         foreach ($cluster1 as $p1) {
@@ -166,10 +262,157 @@ class Clusterization
         return $max;
     }
     
-    public function mergeClusters($clusters, $merge_num, $unset_num) {
+    // вычисляем расстояние между двумя кластерами = расстояние между самыми ближайшими элементами
+    public function clusterDistanceMin($cluster1, $cluster2) {
+        $distances = $this->getDistances();
+        $min=1000;
+        foreach ($cluster1 as $p1) {
+            foreach ($cluster2 as $p2) {
+                if ($distances[$p1][$p2]<$min) {
+                    $min = $distances[$p1][$p2];
+                }
+            }        
+        }
+        return $min;
+    }
+    
+    public function mergeClusters($merge_num, $unset_num) {
+        $clusters = $this->getLastClusters();
         $clusters[$merge_num] = array_merge($clusters[$merge_num], $clusters[$unset_num]);
         unset($clusters[$unset_num]);
         return $clusters;
+    }
+    
+    /**
+     * Метод Соллина
+     * 1. Для каждого кластера ищем ближайший кластер, получаем пары c1=>c2 и минимальное расстояние между кластерами
+     * 2. Если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита, то выход.
+     * 3. Собираем связанные пары в кластеры: c1=>c2, c2=>c3 и т.д.
+     * 3a. Корень кластера = ck: ck=>cm, cm=>ck
+     * 4. Записываем новые кластеры
+     * 
+     * @return array
+     */
+    public function bySollin() {
+        $clusters = $this->getLastClusters();
+        list($pairs, $lonely, $min) = $this->searchNearestPairs();
+/*if ($this->getLastStep()==3) {         
+dd($lonely);        
+}*/
+        while (sizeof($lonely)>1+$this->getTotalLimit()) {
+            $this->selectDistanceLimit();
+            list($pairs, $lonely, $min) = $this->searchNearestPairs();
+        }
+
+        if ($min > $this->getDistanceLimit() && sizeof($clusters) <= $this->getTotalLimit()) { // 2
+            return; 
+        }
+
+        $new_clusters = $this->linkPairs($pairs); // 3
+        foreach ($lonely as $n=>$cl) {
+            foreach ($cl as $place_id) {
+                $new_clusters[$n][] = $place_id;                
+            }
+        }
+        
+        $this->setClusters($new_clusters, 1+$this->getLastStep(), $min); // 4
+//dd($this->getClusters());        
+        return $new_clusters;
+    }
+
+    /**
+     * Для каждого кластера ищем ближайший кластер, получаем пары c1=>c2
+     * 
+     * @return array
+     */
+    public function searchNearestPairs() {
+        $clusters = $this->getLastClusters();
+        $distances = $this->getDistances();
+        $min = 1000;
+        
+        $pairs = $lonely = [];
+        foreach ($clusters as $cl_num=>$cluster) {
+            list($nearest_cl, $cl_min) = $this->distancesForCluster($cl_num);
+            if ($cl_min > $this->getDistanceLimit()) {
+                $lonely[$cl_num] = $cluster;
+            } else {
+                $pairs[$cl_num] = $nearest_cl;
+                if ($cl_min < $min) {
+                    $min = $cl_min;
+                }
+            }
+        }
+        return [$pairs, $lonely, $min];
+    }
+    
+    /**
+     * Вычисляем все расстояния от кластера $cl1_num до остальных
+     * 1. Вычисляем расстояния от $cl1_num до каждого другого кластера
+     * 2. Вычисляем минимальное расстояние
+     * 
+     * @param type $cl1_num
+     * @return type
+     */
+    public function distancesForCluster($cl1_num) {
+        $clusters = $this->getLastClusters();
+        $cluster_dist = [];
+
+        foreach ($clusters as $cl2_num => $cluster2) { // 1
+            if ($cl1_num != $cl2_num) {
+                $cluster_dist[$cl2_num] = $this->clusterDistance($clusters[$cl1_num], $cluster2);
+            }
+        }
+        
+        $min = min(array_values($cluster_dist));   // 2
+        
+        $cl_nearest = array_search($min, $cluster_dist);
+        
+        return [$cl_nearest, $min];
+    }
+    
+    /**
+     * Собираем связанные пары в кластеры: c1=>c2, c2=>c3 и т.д.
+     * 3a. Корень кластера = ck: ck=>cm, cm=>ck
+     * @param array $pairs
+     * @return array
+     */
+    public function linkPairs($pairs) {
+        $clusters = $this->getLastClusters();
+//var_dump($pairs);        
+        $new_clusters = [];
+        
+        while (sizeof($pairs)) {
+            $root=false;
+            $n1 = array_key_first($pairs);
+            $links = [$n1];
+            while (!$root && !in_array($pairs[$n1], $links)) { // собираем кластеры, ссылающиеся друг на друга
+                $n2 = $pairs[$n1];
+                $links[] = $n2;
+                unset($pairs[$n1]);
+                if ($pairs[$n2] == $n1) {
+                    $root = $n1;
+                    unset($pairs[$n2]);
+                } 
+                $n1 = $n2;
+            }
+            $new_clusters[$root] = [];
+
+            while (sizeof($links)) {
+                $new_links = [];
+                $new_links = array_keys(array_filter($pairs, 
+                        function ($v) use ($links) {return in_array($v,$links);}));
+                foreach ($new_links as $n) {
+                    unset($pairs[$n]);
+                }
+                foreach ($links as $cl) {
+                    foreach ($clusters[$cl] as $place_id) {
+                        $new_clusters[$root][] = $place_id;
+                    }
+                }
+                $links = $new_links;
+            }    
+        }
+        return $new_clusters;
     }
     
     public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors) {

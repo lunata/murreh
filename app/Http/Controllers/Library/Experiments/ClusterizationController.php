@@ -26,9 +26,10 @@ class ClusterizationController extends Controller
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
 
-        $clusterization = Clusterization::init($places, $distances);
-        $clusterization->completeLinkage(1, $distance_limit, $total_limit, $with_geo);
+        $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit);
+        $clusterization->clusterization();
         $clusters = $clusterization->getClusters();
+//dd($clusters);        
         $last_step = array_key_last($clusters);
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
