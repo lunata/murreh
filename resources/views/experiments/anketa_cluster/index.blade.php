@@ -15,7 +15,8 @@
     @include('experiments.anketa_cluster._search_form') 
 
     <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
-{{--    
+{{----}}    
+@if ($method_id==2)
     @foreach ($clusters as $step => $step_clusters) 
         @if ($step != $last_step)
     <h4>Шаг {{$step}}, 
@@ -27,7 +28,9 @@
     </p>        
             @endforeach
         @endif
-    @endforeach --}}
+    @endforeach 
+@endif    
+{{----}}
     
     <h4>Шаг {{$last_step}}, 
         количество кластеров: {{sizeof($clusters[$last_step])}},

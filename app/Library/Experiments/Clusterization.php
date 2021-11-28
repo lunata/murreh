@@ -316,7 +316,7 @@ dd($lonely);
         }
         
         $this->setClusters($new_clusters, 1+$this->getLastStep(), $min); // 4
-//dd($this->getClusters());        
+//dd($this->getDistanceLimit(), $this->getClusters());        
         return $new_clusters;
     }
 
