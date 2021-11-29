@@ -33,13 +33,13 @@ class ClusterizationController extends Controller
         $last_step = array_key_last($clusters);
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
-        list($markers, $cluster_places, $cl_colors) 
+        list(/*$markers, */$cluster_places, $cl_colors) 
                 = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors);
-       
+//dd($cl_colors);       
         
         return view('experiments/anketa_cluster/index', 
                 compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 
-                        'distance_limit', 'last_step', 'markers', 'method_id', //'section_id', 
+                        'distance_limit', 'last_step', 'method_id', //'section_id', 'markers', 
                         'method_values', 'min_cl_distance', 'normalize', 
                         'place_ids', 'place_values', 'qsection_ids', 
                         'qsection_values', 'question_ids', 'question_values', // 'section_values', 

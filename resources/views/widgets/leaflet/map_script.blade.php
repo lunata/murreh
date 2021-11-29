@@ -4,7 +4,7 @@
     
 <script>
     var mymap = L.map('mapid').setView([61.8, 33.9], 7);
-@foreach (array_keys($markers) as $color)
+@foreach ($colors as $color)
     var {{$color}}Icon = new L.Icon({
       iconUrl: '/images/markers/marker-icon-{{$color}}.png',
       iconAnchor: [12, 41],

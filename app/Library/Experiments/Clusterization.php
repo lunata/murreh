@@ -436,7 +436,7 @@ dd($lonely);
     
     public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors) {
         $default_markers = Map::markers();
-        $cluster_places = $markers =[];
+        $cluster_places = /*$markers =*/[];
         $count=0;
         $new_markers = sizeof($cl_colors) != sizeof($clusters) || sizeof(array_diff(array_keys($cl_colors), array_keys($clusters)));
         foreach ($clusters as $cl_num => $cluster) {
@@ -453,16 +453,16 @@ dd($lonely);
                            'longitude'=>$place->longitude,
                            'popup' => '<b>'.$place->name_ru.'</b>'.$anketa_link.$answers];
             }
-            $markers[$cur_color] 
+/*            $markers[$cur_color] 
                     = //'<b>'. $cl_num. '</b>: '.
-                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids));
+                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids));*/
             if ($new_markers) {
                 $cl_colors[$cl_num] = $cur_color;    
             }
             $count++;
         }
         
-        return [$markers, $cluster_places, $cl_colors];
+        return [/*$markers, */$cluster_places, $cl_colors];
     }
     
     public static function getRequestDataForView($request) {
