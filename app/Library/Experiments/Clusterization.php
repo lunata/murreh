@@ -69,6 +69,9 @@ class Clusterization
         return $this->total_limit;        
     }
     
+    /**
+     * Подбор нового максимального расстояния между кластерами
+     */
     public function selectDistanceLimit() {
         $old_total = $this->distance_limit;
         $more_distances = [];
@@ -115,16 +118,32 @@ class Clusterization
         }  
         return $distances;
     }
-    
+
+    /**
+     * Считается сумма "баллов" по каждому ответу
+     * Если у обоих пунктов есть ответы на вопрос, но нет ни одного совпадения
+     * ИЛИ
+     * у одного пункта есть ответы, а у другого отсутствуют, то +вес вопроса
+     * 
+     * Если у обоих пунктов есть хотя бы один правильный ответ 
+     * ИЛИ
+     * у обоих пунктов нет ответов на этот вопрос, то +0
+     * 
+     * see ClusterizationTest@testDistanceForAnswers2Code1TextDiff()
+     * 
+     * @param array $answers1 
+     * @param array $answers2
+     * @param boolean $normalize
+     * @param array $weights
+     * @return type
+     */
     public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[]) {
         $distance = 0;
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
             foreach ($questions as $question => $answer) {
-//                if (sizeof($answer) && sizeof($answers2[$qsection][$question]) 
-  //                  && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
-                if (/*!sizeof($answer) || sizeof($answers2[$qsection][$question])
-                    ||*/ !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
+                if ((sizeof($answer) || sizeof($answers2[$qsection][$question]))
+                    && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
                     $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
                 }
             }
