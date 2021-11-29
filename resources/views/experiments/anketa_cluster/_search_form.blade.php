@@ -2,6 +2,14 @@
                              'method' => 'get']) 
         !!}
 <div class="row">
+    @foreach ($place_values as $place_id => $place_name)
+    <div class="col-sm-3">
+        <input type="checkbox" name="place_ids[]" value="{{$place_id}}"{{in_array($place_id, $place_ids) ? ' checked' : ''}}>
+        {{$place_name}}               
+    </div>
+    @endforeach
+</div>
+<div class="row">
 {{--    <div class="col-sm-2">
     @include('widgets.form.formitem._select', 
             ['name' => 'section_id', 
@@ -24,14 +32,6 @@
              'value' => $question_ids,
              'title' => trans('ques.question'),   
              'class'=>'select-question form-control'])                                   
-    </div>
-    <div class="col-sm-4">
-    @include('widgets.form.formitem._select2', 
-            ['name' => 'place_ids', 
-             'values' => $place_values,
-             'value' => $place_ids,
-             'title' => trans('geo.place'),   
-             'class'=>'select-place form-control'])                                   
     </div>
 </div>
 <div class="row">

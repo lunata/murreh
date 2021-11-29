@@ -479,6 +479,10 @@ dd($lonely);
         
         $places = Place::getForClusterization($place_ids, $total_answers);  
         
+        if (!sizeof($place_ids)) {
+            $place_ids = $places->pluck('id')->toArray();
+        }
+        
         return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight];
     }
     
