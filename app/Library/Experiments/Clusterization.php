@@ -509,7 +509,7 @@ dd($lonely);
         $qsection_values = Qsection::getList();
         $question_values = Question::getList();
         $color_values = Map::markers(true);
-        $place_values = $places->pluck('name_ru', 'id')->toArray();
+        $place_values = Place::getForClusterization()->pluck('name_ru', 'id')->toArray();
         
         return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo];
     }

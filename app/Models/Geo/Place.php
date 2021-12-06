@@ -380,7 +380,7 @@ class Place extends Model
         return $place->name_ru;
     }
 
-    public static function getForClusterization($place_ids, $total_answers=null) {
+    public static function getForClusterization($place_ids=[], $total_answers=null) {
         if (sizeof($place_ids)) {
             $places = Place::whereIn('id', $place_ids);
         } else {
