@@ -139,6 +139,7 @@ class Clusterization
      */
     public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[]) {
         $distance = 0;
+        $questions_count =0;
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
             foreach ($questions as $question => $answer) {
@@ -147,10 +148,11 @@ class Clusterization
                     $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
                 }
             }
-            $distance += $normalize ? $difference/sizeof($questions) : $difference;
+            $distance += $difference;
+            $questions_count += sizeof($questions);
         }
         
-        return round($distance, 2);
+        return $normalize ? round($distance/$questions_count, 2) : $distance;
     }
     
     public function clusterization() {        
