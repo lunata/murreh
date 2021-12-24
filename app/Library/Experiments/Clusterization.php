@@ -6,7 +6,7 @@ use App\Library\Map;
 
 use App\Models\Geo\Place;
 
-use App\Models\Ques\AnketaQuestion;
+//use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
@@ -29,7 +29,7 @@ class Clusterization
         $clusterization = new Clusterization;
         $clusterization->setClusters($clusters, 1);  
         $clusterization->distances = $distances;
-        $clusterization->method_id = $method_id;
+        $clusterization->method_id = $method_id==3 ? 1 : $method_id;
         $clusterization->with_geo = $with_geo;
         $clusterization->distance_limit = $distance_limit;
         $clusterization->total_limit = $total_limit;
@@ -55,6 +55,10 @@ class Clusterization
     
     public function getMethod() {
         return $this->method_id;
+    }
+    
+    public function setMethod($method_id) {
+        return $this->method_id = $method_id;
     }
     
     public function getWithGeo() {
@@ -155,7 +159,28 @@ class Clusterization
         return $normalize ? round($distance/$questions_count, 2) : $distance;
     }
     
-    public function clusterization() {        
+    public function clusterization($method_id) {   
+        $this->aggrigate_clusterization();
+        if ($method_id==3) {            
+            $this->setMethod($method_id);
+            $this->recomputeCentroids($this->getLastStep());
+/*
+$clusters = $this->getLastClusters();   
+$tmp = $clusters[118];
+$clusters[118]=$clusters[115];
+$clusters[115]=$tmp;
+$clusters[118][]=118;
+$clusters[115][]=115;
+unset($clusters[118][array_search(115, $clusters[118])]);
+unset($clusters[115][array_search(118, $clusters[115])]);
+//dd($clusters);
+$this->setClusters($clusters, $this->getLastStep());
+ */
+            $this->byKMeans();
+        }
+    }
+    
+    public function aggrigate_clusterization() {        
         if ($this->getMethod() == 2) {
             $new_clusters = $this->bySollin();
         } else {
@@ -164,7 +189,119 @@ class Clusterization
         if (!$new_clusters || sizeof($new_clusters)<2) {
             return;
         }        
-        $this->clusterization();
+        $this->aggrigate_clusterization();
+    }
+    
+    public function recomputeCentroids($step) {
+        $clusters = $this->getLastClusters();
+        $new_clusters = [];
+        $centroids_are_changed = false;
+        foreach ($clusters as $centroid=>$cluster) {
+            $new_centroid = self::recomputeCentroid($centroid, $cluster, $this->getDistances());
+            if (!$centroids_are_changed && $new_centroid != $centroid) {
+//dd($centroid, $new_centroid, join(', ',$cluster));                
+                $centroids_are_changed = true;
+            }
+            $new_clusters[$new_centroid] = $cluster;
+        }
+        
+        $this->setClusters($new_clusters, $step);
+        
+        return $centroids_are_changed;
+    }
+    
+    /**
+     * 
+     * @param int $centroid
+     * @param array $cluster
+     * @param array $distances
+     */
+    public static function recomputeCentroid($centroid, $cluster, $distances) {
+/*print "<pre>";
+        foreach ($distances as $p1 => $p1_dist) {
+            print $p1." => [";
+            foreach ($p1_dist as $p2=>$d) {
+                print "$p2 => $d, ";
+            }
+            print "],\n";
+        }
+dd($centroid, $cluster); */   
+        $new_centroid = $centroid;
+        $min = self::starDistance($centroid, $cluster, $distances[$centroid]);
+        foreach ($cluster as $c) {
+            if ($c==$centroid) { continue; }
+            $sum = self::starDistance($c, $cluster, $distances[$c]);
+//print "$c: $sum\n";            
+            if ($sum < $min) {
+                $min = $sum;
+                $new_centroid = $c;
+            }
+            if ($min == 0) {return $new_centroid; }
+        }
+        return $new_centroid;
+    }
+    
+    public static function chooseCluster($p, $centroid, $centroids, $distances) {
+        $min = $distances[$centroid];
+        $new_cluster = $centroid;
+        foreach ($centroids as $c) {
+            if ($c==$centroid) { continue; }
+            if ($distances[$c] < $min) {
+                $min = $distances[$c];
+                $new_cluster = $c;
+            }
+        }
+        return $new_cluster;
+    }
+
+    public static function starDistance($centroid, $cluster, $distances) {
+        $total = 0;
+        foreach ($cluster as $p) {
+            if ($p==$centroid) {
+                continue;
+            }
+            $total += $distances[$p];
+        }
+        return $total;
+    }
+    /**
+     * Метод K-means
+     * 1. Все объекты-нецентроиды сравниваются с центроидами (проверяется расстояние) и относятся к кластеру ближайшего центроида.
+     * 2. Вычисляется в каждом кластере новый центроид: высчитывается сумма расстояний от любого объекта до всех остальных объектов в кластере. 
+     *    Центроид - объект, имеющий наименьшую сумму расстояний.
+     * 3. Если был изменен хоть один центроид, повторяем шаг 1.
+
+     * 4. Соединяем их
+     * 5. Записываем новые кластеры
+     * 
+     * @return array
+     */
+    public function byKMeans() {
+        $step = 1+$this->getLastStep();
+        $clusters = $this->getLastClusters();
+        $distances = $this->getDistances();
+        $centroids = array_keys($clusters);
+
+        foreach ($clusters as $centroid => $cluster) {
+            foreach ($cluster as $p) {
+                if ($p == $centroid) { continue;}
+                $new_cluster = self::chooseCluster($p, $centroid, $centroids, $distances[$p]);
+//print "<p>$p, $centroid, $new_cluster</p>";                
+                if ($new_cluster != $centroid) {
+/*print "<pre>";
+var_dump($cluster);
+var_dump($clusters[$new_cluster]);*/
+                    unset($clusters[$centroid][array_search($p, $clusters[$centroid])]);
+                    $clusters[$new_cluster][]=$p;
+//dd($clusters[$centroid], $clusters[$new_cluster]);                    
+                }
+            }
+        }
+        $this->setClusters($clusters, $step);
+        
+        if ($this->recomputeCentroids($step)) {
+            $this->byKMeans();
+        }
     }
     
     /**
@@ -502,7 +639,8 @@ dd($lonely);
         }
         
         $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
-                          2=>'Соллина'
+                          2=>'Соллина',
+                          3=>'полной связи + K-средних'
                          ];
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;

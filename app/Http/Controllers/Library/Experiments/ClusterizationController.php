@@ -27,10 +27,10 @@ class ClusterizationController extends Controller
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
 
         $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit);
-        $clusterization->clusterization();
+        $clusterization->clusterization($method_id);
         $clusters = $clusterization->getClusters();
-//dd($clusters);        
         $last_step = array_key_last($clusters);
+//dd($clusters[$last_step]);        
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
         list(/*$markers, */$cluster_places, $cl_colors) 

@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Library/Experiments/ClusterizationController.php</file>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/_search_form.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Library/Experiments/Clusterization.php</file>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/index.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Geo/Place.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
