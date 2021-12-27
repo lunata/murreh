@@ -16,6 +16,7 @@ class ClusterizationController extends Controller
     }
     
     public function index(Request $request) {
+//print "<pre>";        
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight)
                 = Clusterization::getRequestDataForView($request);
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 

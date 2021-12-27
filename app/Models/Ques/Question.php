@@ -61,6 +61,7 @@ class Question extends Model
         
         $answers = AnketaQuestion::whereQuestionId($this->id)->get();
         foreach ($answers as $answer) {            
+//dd($answer);        
             $out[Answer::getCodeById($answer->answer_id)][$answer->answer_text][$answer->anketa_id]
                     = Anketa::find($answer->anketa_id);
         }

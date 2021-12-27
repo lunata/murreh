@@ -318,15 +318,18 @@ var_dump($clusters[$new_cluster]);*/
     public function byCompleteLinkage() {
         $clusters = $this->getLastClusters();
         $cluster_dist = $this->clusterDistances(); // 0
-//dd($cluster_dist);        
         $min = min(array_values($cluster_dist));   // 1     
-
+/*print "<P><B>$min</B></P>";        
+var_dump($clusters);
+var_dump($cluster_dist);
+*/
         if ($min>$this->getDistanceLimit() && sizeof($clusters) <= $this->getTotalLimit()) { // 2
             return; 
         }
         
         list($cluster_num1, $cluster_num2) 
                 = $this->search2NearestClusters($cluster_dist, $min); // 3
+//if (!$cluster_num1) {dd($min, array_search($min, $cluster_dist), $cluster_dist, $clusters);}        
         
         $new_clusters = $this->mergeClusters($cluster_num1, $cluster_num2); // 4
         
@@ -343,11 +346,14 @@ var_dump($clusters[$new_cluster]);*/
     public function search2NearestClusters($cluster_dist, $min) {
         if ($this->getWithGeo()) {
             $cl_pair_nums = array_keys(array_filter($cluster_dist, function ($v) use ($min) {return $v==$min;}));
-            return $this->geoClusterDistances($cl_pair_nums);
+            $clusters = $this->getLastClusters();
+            return self::geoClusterDistances($clusters, $cl_pair_nums);
         }
-        
-        preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums);
-        return [$nearest_cluster_nums[1], $nearest_cluster_nums[2]];        
+        if (preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums)) {
+            return [$nearest_cluster_nums[1], $nearest_cluster_nums[2]];        
+/*        } else {
+            dd($min, array_search($min, $cluster_dist), $cluster_dist);*/
+        }
     }
 
     /**
@@ -356,8 +362,7 @@ var_dump($clusters[$new_cluster]);*/
      * @param array $cl_pair_nums
      * @return array
      */
-    public function geoClusterDistances($cl_pair_nums) {
-        $clusters = $this->getLastClusters();
+    public static function geoClusterDistances($clusters, $cl_pair_nums) {
         $min=1000;
         $num1=$num2=null;
         foreach ($cl_pair_nums as $pair) {
@@ -375,7 +380,7 @@ var_dump($clusters[$new_cluster]);*/
     public static function geoClusterDistance($cluster1, $cluster2) {
         list($x1, $y1) = Place::geoCenter($cluster1);
         list($x2, $y2) = Place::geoCenter($cluster2);
-        return sqrt(($x1-$x2)^2+($y1-$y2)^2);        
+        return sqrt(($x1-$x2)**2+($y1-$y2)**2);        
     }
     
     // вычисляем все расстояния между всеми кластерами
@@ -436,6 +441,8 @@ var_dump($clusters[$new_cluster]);*/
     
     public function mergeClusters($merge_num, $unset_num) {
         $clusters = $this->getLastClusters();
+//if (!isset($clusters[$merge_num])) { dd('нет merge_num ',$merge_num, $clusters);}        
+//if (!isset($clusters[$unset_num])) { dd('нет unset_num ',$unset_num, $clusters);}        
         $clusters[$merge_num] = array_merge($clusters[$merge_num], $clusters[$unset_num]);
         unset($clusters[$unset_num]);
         return $clusters;
