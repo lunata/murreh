@@ -38,17 +38,24 @@
             </tr>
         </thead>
         <tbody>
-        @foreach ($question->getAnswerTexts() as $answer_code =>$answer_texts)
-            @foreach ($answer_texts as $answer_text =>$anketas)
+        @foreach ($question->getAnswerTexts() as $answer =>$answer_texts)
             <tr>
-                <td style="vertical-align: top ">{{$answer_code}}. <b>{{$answer_text}}</b> ({{sizeof($anketas)}})</td>
+                <th style="vertical-align: top" rowspan="{{sizeof($answer_texts) ? sizeof($answer_texts) : 1}}">{{$answer}}</th>
+                <?php ksort($answer_texts); ?>
+            @foreach ($answer_texts as $answer_text =>$anketas)
+                <td style="vertical-align: top"><b>{{$answer_text}}</b> ({{sizeof($anketas)}})</td>
                 <td>
                 @foreach ($anketas as $anketa_id =>$anketa)
-                    <a href="/ques/anketas/{{$anketa_id}}">{{$anketa->fond_number}}</a> - {{$anketa->place->toStringWithDistrict()}}<br>
+                    <a href="/ques/anketas/{{$anketa_id}}">{{$anketa->fond_number}}</a> - {{$anketa->place->toStringWithDistrict()}}
+                    <a href="/ques/question/{{$question->id}}/edit_answer/{{$anketa->id}}"><i class="fa fa-pencil-alt fa-lg"></i></a><br>
                 @endforeach                    
                 </td>
+                @if ($answer_text != array_key_last($answer_texts))
             </tr>
+            <tr>
+                @endif
             @endforeach
+            </tr>
         @endforeach
         </tbody>
         </table>

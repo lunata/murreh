@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Ques\Anketa;
-//use App\Models\Ques\AnketaQuestion;
+use App\Models\Ques\AnketaQuestion;
 use App\Models\Geo\Place;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
@@ -44,9 +44,9 @@ class AnketaQuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $anketa_id)
     {
-        $anketa=Anketa::findOrFail($id);
+        $anketa=Anketa::findOrFail($anketa_id);
         $qsection_id = (int)$request->qsection_id;
         $answers = $request->answers;
         

@@ -59,11 +59,17 @@ class Question extends Model
     public function getAnswerTexts() {
         $out = [];
         
-        $answers = AnketaQuestion::whereQuestionId($this->id)->get();
+        $answers = Answer::whereQuestionId($this->id)->get();
         foreach ($answers as $answer) {            
 //dd($answer);        
-            $out[Answer::getCodeById($answer->answer_id)][$answer->answer_text][$answer->anketa_id]
-                    = Anketa::find($answer->anketa_id);
+            $a = $answer->code.'. '.$answer->answer;
+            $out[$a] = [];
+            $anketa_answers = AnketaQuestion::whereQuestionId($this->id)
+                    ->whereAnswerId($answer->id)->get();
+            foreach ($anketa_answers as $anketa_answer) {
+                $out[$a][$anketa_answer->answer_text][$anketa_answer->anketa_id]
+                    = Anketa::find($anketa_answer->anketa_id);
+            }
         }
         ksort($out);
         return $out;

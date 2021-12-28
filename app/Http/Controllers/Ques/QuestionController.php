@@ -12,6 +12,7 @@ use App\Library\Str;
 
 use App\Models\Geo\Place;
 
+use App\Models\Ques\Anketa;
 use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
@@ -146,6 +147,18 @@ class QuestionController extends Controller
                         'args_by_get', 'url_args'));
     }
 
+    public function editAnswer(int $id, int $anketa_id)
+    {
+        $args_by_get = $this->args_by_get;
+        $url_args = $this->url_args;
+
+//        $anketa_question = AnketaQuestion::whereAnketa($anketa_id)->whereQuestion($question_id); , 'anketa_question'
+        $question = Question::findOrfail($id);
+        $anketa = Anketa::findOrfail($anketa_id);
+        return view('ques.question.edit_answer', 
+                compact('anketa', 'question', 'args_by_get', 'url_args'));
+    }
+    
     /**
      * Update the specified resource in storage.
      *
@@ -168,6 +181,22 @@ class QuestionController extends Controller
             ->withSuccess(\Lang::get('messages.updated_success'));        
     }
 
+    public function updateAnswer(Request $request, $anketa_id)
+    {
+        $anketa=Anketa::findOrFail($anketa_id);
+        $answers = $request->answers;
+        
+        $question_id = array_key_first($answers);
+        $answer = $answers[$question_id];
+        $anketa->questions()->detach($question_id);
+        if ($answer['id']) {
+            $anketa->questions()->attach($question_id,['answer_id'=>$answer['id'], 'answer_text'=>$answer['text']]);
+        }
+        
+        return Redirect::to('/ques/question/'.$question_id.'/'.$this->args_by_get)
+            ->withSuccess(\Lang::get('messages.updated_success'));        
+    }
+    
     /**
      * Remove the specified resource from storage.
      *

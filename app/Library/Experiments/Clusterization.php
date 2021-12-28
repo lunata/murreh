@@ -350,6 +350,7 @@ var_dump($cluster_dist);
             return self::geoClusterDistances($clusters, $cl_pair_nums);
         }
         if (preg_match('/^(.+)\_(.+)$/', array_search($min, $cluster_dist), $nearest_cluster_nums)) {
+//print "<p>min: ".$min;            
             return [$nearest_cluster_nums[1], $nearest_cluster_nums[2]];        
 /*        } else {
             dd($min, array_search($min, $cluster_dist), $cluster_dist);*/
@@ -374,6 +375,7 @@ var_dump($cluster_dist);
                 $num2 = $cl_nums[2];
             }
         }
+//print "<p>geo-min: ".$min;            
         return [$num1, $num2];
     }
 

@@ -22,7 +22,7 @@ class ClusterizationController extends Controller
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
                 $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
                 = Clusterization::getRequestDataForCluster($request, $places);
-//dd($place_values);        
+//dd($with_geo);        
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);

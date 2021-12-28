@@ -11,12 +11,8 @@ return [
     */
 
     'add-answer' => 'Добавить вариант ответа',
-    'anketa_exists' => 'Существует анкета, связанная с этой записью',
-    
-    'of_anketa' => 'анкеты',
-    'of_qsection' => 'раздела',
-    'of_question' => 'вопроса',
-    
+    'anketa_exists' => 'Существует анкета, связанная с этой записью',   
+    'anketa' => 'Анкета',
     'anketa_removed' => 'Анкета :name удалена',
     'answers' => 'ответы',
     'answer_variant' => 'вариант ответа',
@@ -29,6 +25,12 @@ return [
     'question_ru' => 'перевод',
     'question_removed' => 'Вопрос удален',
     'qsection_removed' => 'Раздел вопросов удален',
+    
+    'of_anketa' => 'анкеты',
+    'of_answer' => 'ответа',
+    'of_qsection' => 'раздела',
+    'of_question' => 'вопроса',
+    
     'section' => 'раздел',
     'title' => 'название',
     'speech_sample' => 'образец речи',

@@ -52,6 +52,14 @@ class Answer extends Model
         return $answer->code;
     }
     
+    public static function getCodeDotAnswerById($id) {
+        $answer = self::find($id);
+        if (!$answer) {
+            return;
+        }
+        return $answer->code.'. '.$answer->answer;
+    }
+    
     public static function getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight=false) {
         $weights = [];
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();

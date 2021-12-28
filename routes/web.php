@@ -91,18 +91,24 @@ Route::get('import/concepts', [ImportController::class, 'concepts']);
 Route::get('import/concept_categories', [ImportController::class, 'conceptСategories']);
 */
 Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
+
 Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa/map', [AnketaController::class, 'onMap']);
+
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
 Route::get('ques/anketa_question/copy/{from_anketa}_{to_anketa}_{qsection_id}', [AnketaQuestionController::class, 'copyAnswers']);
 Route::get('ques/anketa_question/list_for_copy/{anketa_id}_{qsection_id}', [AnketaQuestionController::class, 'listForCopy']);
-Route::put('ques/anketa_question/{id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
+Route::put('ques/anketa_question/{anketa_id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
 Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
-Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
-Route::get('ques/question/list', [QuestionController::class, 'questionList']);
+
 Route::get('ques/qsection/{id}/map/{map_number}', [QsectionController::class, 'map']);
-Route::get('ques/question/{id}/map', [QuestionController::class, 'onMap']);
 Route::get('ques/qsection/{id}/visible/{status}', [QsectionController::class, 'changeVisible']);
+Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
+
+Route::get('ques/question/{id}/edit_answer/{anketa_id}', [QuestionController::class, 'editAnswer']);
+Route::get('ques/question/{id}/map', [QuestionController::class, 'onMap']);
+Route::get('ques/question/list', [QuestionController::class, 'questionList']);
+Route::put('ques/question/update_answer/{anketa_id}', [QuestionController::class, 'updateAnswer'])->name('question.update_answer');
 
 Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);
@@ -112,6 +118,7 @@ Route::get('service/merge_answers', [ServiceController::class, 'mergeAnswers']);
 
 Route::get('sosd/concept/list', [ConceptController::class, 'conceptList']);
 Route::get('sosd/concept/{id}/map', [ConceptController::class, 'onMap']);
+
 Route::get('sosd/concept_category/list', [ConceptCategoryController::class, 'categoryList']);
 Route::get('sosd/concept_category/{id}/map/{map_number}', [ConceptCategoryController::class, 'map']);
 
