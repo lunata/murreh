@@ -11,6 +11,8 @@ return [
     */
 
     'add-answer' => 'Добавить вариант ответа',
+    'answer' => 'Вариант ответа',
+    'answer_text' => 'Текст ответа',
     'anketa_exists' => 'Существует анкета, связанная с этой записью',   
     'anketa' => 'Анкета',
     'anketa_removed' => 'Анкета :name удалена',
@@ -24,6 +26,7 @@ return [
     'question' => 'вопрос',
     'question_ru' => 'перевод',
     'question_removed' => 'Вопрос удален',
+    'qsection' => 'Подраздел',
     'qsection_removed' => 'Раздел вопросов удален',
     
     'of_anketa' => 'анкеты',

@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 use App\Models\Ques\Question;
 
-// ./vendor/bin/phpunit tests/Ques/QuestionTest
+// ./vendor/bin/phpunit tests/Models/Ques/QuestionTest.php
 
 class QuestionTest extends TestCase
 {
@@ -15,7 +15,16 @@ class QuestionTest extends TestCase
         $question = Question::find(20);
         $result = $question->newCode();
         
-        $expected = 'e';
+        $expected = 'd';
+        $this->assertEquals( $expected, $result);        
+    }
+    
+    public function testNewCodeForNewQuestion()
+    {
+        $question = new Question;
+        $result = $question->newCode();
+        
+        $expected = 'a';
         $this->assertEquals( $expected, $result);        
     }
 }

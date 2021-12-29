@@ -5,7 +5,13 @@
 @stop
 
 @section('body')
-    @include('ques.anketa._modal_for_answer')
+        @if (User::checkAccess('corpus.edit'))
+            @include('widgets.modal',['name'=>'modalAddAnswer',
+                                  'title'=>trans('ques.add-answer'),
+                                  'submit_onClick' => 'saveAnswer()',
+                                  'submit_title' => trans('messages.save'),
+                                  'modal_view'=>'ques.answer._form_create'])
+        @endif         
         
     <h2>{{ trans('messages.editing')}} {{ trans('ques.of_answer')}}</h2>
 

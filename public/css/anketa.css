@@ -56,3 +56,6 @@ h3 .btn-link {
     padding-bottom: 20px;
 }
 
+.answer-copy {
+    cursor: pointer;
+}

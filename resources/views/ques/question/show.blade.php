@@ -7,9 +7,18 @@
 @section('headExtra')
     {!!Html::style('css/select2.min.css')!!}
     {!!Html::style('css/table.css')!!}
+    {!!Html::style('css/anketa.css')!!}
 @stop
 
 @section('body')
+        @if (User::checkAccess('corpus.edit'))
+            @include('widgets.modal',['name'=>'modalCopyAnswerText',
+                                  'title'=>trans('ques.copy_answers'),
+                                  'submit_title' => trans('messages.copy'),
+                                  'submit_onClick' => "copyAnswerText($question->id)",
+                                  'modal_view'=>'ques.question._copy_answer_text'])
+        @endif     
+        
         <p><a href="{{route('question.index', $url_args)}}">{{ trans('messages.back_to_list') }}</a>
                     
         @if (User::checkAccess('edit'))
@@ -43,11 +52,15 @@
                 <th style="vertical-align: top" rowspan="{{sizeof($answer_texts) ? sizeof($answer_texts) : 1}}">{{$answer}}</th>
                 <?php ksort($answer_texts); ?>
             @foreach ($answer_texts as $answer_text =>$anketas)
-                <td style="vertical-align: top"><b>{{$answer_text}}</b> ({{sizeof($anketas)}})</td>
+                <td style="vertical-align: top">
+                    <b>{{$answer_text}}</b> ({{sizeof($anketas)}})
+                    <i class="answer-copy fa fa-copy fa-lg" title="скопировать ответы в другой вопрос" onClick="callCopyAnswerText('{{$answer_text}}')"></i>                
+                </td>
                 <td>
                 @foreach ($anketas as $anketa_id =>$anketa)
                     <a href="/ques/anketas/{{$anketa_id}}">{{$anketa->fond_number}}</a> - {{$anketa->place->toStringWithDistrict()}}
-                    <a href="/ques/question/{{$question->id}}/edit_answer/{{$anketa->id}}"><i class="fa fa-pencil-alt fa-lg"></i></a><br>
+                    <a href="/ques/question/{{$question->id}}/edit_answer/{{$anketa->id}}"><i class="fa fa-pencil-alt fa-lg" title='редактировать ответ'></i></a>
+                    <br>
                 @endforeach                    
                 </td>
                 @if ($answer_text != array_key_last($answer_texts))
@@ -59,4 +72,39 @@
         @endforeach
         </tbody>
         </table>
+@stop
+
+@section('footScriptExtra')
+    {!!Html::script('js/select2.min.js')!!}
+    {!!Html::script('js/list_change.js')!!}
+    {!!Html::script('js/ques.js')!!}
+@stop
+
+@section('jqueryFunc')
+    selectQsection('section_id');   
+    selectQuestion('qsection_id');
+    
+    $(".select-answer").select2({
+        allowClear: true,
+        placeholder: '',
+        width: '100%',
+        ajax: {
+          url: "/ques/answer/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              'question_id': $( "#question_id option:selected" ).val(),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+    
 @stop

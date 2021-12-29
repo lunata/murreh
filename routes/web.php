@@ -101,12 +101,15 @@ Route::get('ques/anketa_question/list_for_copy/{anketa_id}_{qsection_id}', [Anke
 Route::put('ques/anketa_question/{anketa_id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
 Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
 
+Route::get('ques/answer/list', [AnswerController::class, 'answerList']);
+
 Route::get('ques/qsection/{id}/map/{map_number}', [QsectionController::class, 'map']);
 Route::get('ques/qsection/{id}/visible/{status}', [QsectionController::class, 'changeVisible']);
 Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
 
 Route::get('ques/question/{id}/edit_answer/{anketa_id}', [QuestionController::class, 'editAnswer']);
 Route::get('ques/question/{id}/map', [QuestionController::class, 'onMap']);
+Route::get('ques/question/copy/{from_question_id}_{to_qsection}', [QuestionController::class, 'copy']);
 Route::get('ques/question/list', [QuestionController::class, 'questionList']);
 Route::put('ques/question/update_answer/{anketa_id}', [QuestionController::class, 'updateAnswer'])->name('question.update_answer');
 

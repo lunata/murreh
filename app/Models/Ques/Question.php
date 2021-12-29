@@ -56,6 +56,15 @@ class Question extends Model
                     ->orderBy('code');
     }
     
+    public function setSequenceNumber() {
+        if ($this->sequence_number) {
+            return;
+        }
+        $next_sequence_number = $this->qsection->nextQuestionNumber();
+        Question::renumerateOthers($next_sequence_number);
+        $this->sequence_number = $next_sequence_number;
+        $this->save();
+    }
     public function getAnswerTexts() {
         $out = [];
         
@@ -153,13 +162,22 @@ class Question extends Model
     }
 
     public function newCode() {
-        $last_answer = $this->answers->last();
+        $last_answer = $this->answers->sortBy('code')->last();
 //dd($last_answer->code);        
         if (!$last_answer) {
             return 'a';
         } else {
             return ++$last_answer->code;
         }        
+    }
+    
+    public static function renumerateOthers($sequence_number) {
+        $questions = Question::where('sequence_number', '>=', $sequence_number)->latest('sequence_number')->get();
+        foreach ($questions as $ques) {
+            $ques->sequence_number += 1;
+            $ques->save();
+        }
+        
     }
     
     public function updateAnswers($answers) {

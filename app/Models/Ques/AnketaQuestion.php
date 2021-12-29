@@ -11,6 +11,7 @@ class AnketaQuestion extends Model
     
     protected $table = 'anketa_question';    
     public $timestamps = false;
+    protected $fillable = ['anketa_id', 'question_id', 'answer_id', 'answer_text'];
     
     /**
      * Get list of unique answers for given places and a question section

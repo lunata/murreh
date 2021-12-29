@@ -42,6 +42,16 @@ class Qsection extends Model
                     ->orderBy('id');
     }
     
+    public function nextQuestionNumber() {
+        $last_question = $this->questions->sortBy('sequence_number')->last();
+//dd($last_answer->code);        
+        if (!$last_question) {
+            return 1;
+        } else {
+            return 1 + $last_question->sequence_number;
+        }        
+    }
+    
     public static function mapDir() {
         return '/cluster_maps/qsection/';
     }

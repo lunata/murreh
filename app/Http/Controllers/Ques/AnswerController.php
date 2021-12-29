@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Ques;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Response;
 
 use App\Models\Ques\Answer;
-use App\Models\Ques\Question;
+//use App\Models\Ques\Question;
 
 class AnswerController extends Controller
 {
@@ -86,5 +87,31 @@ class AnswerController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    /**
+     * Gets list of answers for drop down list in JSON format
+     * Test url: /ques/answer/list?question_id=1
+     * 
+     * @return JSON response
+     */
+    public function answerList(Request $request)
+    {
+        $answer = '%'.$request->input('q').'%';
+        $question_id = (int)$request->input('question_id');
+
+        $list = [];
+        $answers = Answer::where('answer','like', $answer);
+        if ($question_id) {                 
+            $answers -> whereQuestionId($question_id);
+        }
+        
+        $answers = $answers->orderBy('code')->get();
+                         
+        foreach ($answers as $answer) {
+            $list[]=['id'  => $answer->id, 
+                     'text'=> $answer->code.'. '.$answer->answer];
+        }  
+        return Response::json($list);
     }
 }

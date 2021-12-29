@@ -13,6 +13,7 @@ use App\Library\Str;
 use App\Models\Geo\Place;
 
 use App\Models\Ques\Anketa;
+use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
@@ -98,11 +99,8 @@ class QuestionController extends Controller
         if (!$data['sequence_number']) {
             $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
         }
-        $questions = Question::where('sequence_number', '>=', $data['sequence_number'])->latest('sequence_number')->get();
-        foreach ($questions as $ques) {
-            $ques->sequence_number += 1;
-            $ques->save();
-        }
+        Question::renumerateOthers($data['sequence_number']);
+
         $question = Question::create($data);
         
         $question->updateAnswers($request->answers);
@@ -121,9 +119,10 @@ class QuestionController extends Controller
     {
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
+        $section_values = Qsection::getSectionList();
 
         return view('ques.question.show', 
-                compact('question', 'args_by_get', 'url_args'));
+                compact('question', 'section_values', 'args_by_get', 'url_args'));
     }
 
     /**
@@ -295,5 +294,56 @@ class QuestionController extends Controller
         return Response::json($list);
     }
     
-    
+    public function copy(Request $request, int $from_question_id) {
+        $answer_text = $request->input('answer_text');
+        if (!$answer_text) {
+            return "Не задан ответ";
+        }
+        
+        $from_question = Question::findOrFail($from_question_id);
+        if (!$from_question) {
+            return "Не задан вопрос, из которого копируется.";
+        }
+        
+        $to_qsection = (int)$request->input('to_qsection');
+        $qsection = Qsection::findOrFail($to_qsection);
+        if (!$qsection) {
+            return "Не задан подраздел, куда копировать.";
+        }
+        
+        $to_question = (int)$request->input('to_question');
+        if (!$to_question) {
+            $question = Question::firstOrCreate(['section_id'=>$qsection->section_id, 
+                'qsection_id'=>$to_qsection, 'question'=>$answer_text]);
+            $question->setSequenceNumber();
+        } else {
+            $question = Question::findOrFail($to_question);            
+        }
+        
+        $to_answer = (int)$request->input('to_answer');
+        if (!$to_answer) {
+            $answer = Answer::firstOrCreate(['question_id'=>$question->id, 
+                        'answer'=>$answer_text]);
+            if (!$answer->code) {
+                $answer->code = $question->newCode();
+                $answer->save();
+            }
+        } else {
+            $answer = Question::findOrFail($to_answer);            
+        }
+        
+        $anketas = Anketa::whereIn('id', function ($query) use ($from_question_id, $answer_text) {
+                    $query ->select('anketa_id')->from('anketa_question')
+                           ->whereQuestionId($from_question_id)
+                           ->where('answer_text', 'like', $answer_text);
+                    })->get();
+//dd($question);                    
+        foreach ($anketas as $anketa) {
+            if (!$anketa->questions()->whereQuestionId($question->id)->count()) {
+                $anketa->questions()->attach($question->id,['answer_id'=>$answer->id, 'answer_text'=>$answer_text]);
+            }
+        }
+//        $question->updateAnswers($request->answers);
+        return 'Данные скопированы!';
+    }    
 }

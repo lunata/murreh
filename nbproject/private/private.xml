@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QuestionController.php</file>
             <file>file:/E:/projects/murreh/app/Models/Ques/Question.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Library/Experiments/ClusterizationController.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/QuestionController.php</file>
             <file>file:/E:/projects/murreh/resources/views/ques/question/show.blade.php</file>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/_search_form.blade.php</file>
+            <file>file:/E:/projects/murreh/app/Models/Ques/Qsection.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Ques/AnswerController.php</file>
+            <file>file:/E:/projects/murreh/routes/web.php</file>
             <file>file:/E:/projects/murreh/app/Library/Experiments/Clusterization.php</file>
-            <file>file:/E:/projects/murreh/tests/Feature/Library/Experiments/ClusterizationTest.php</file>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/index.blade.php</file>
+            <file>file:/E:/projects/murreh/app/Models/Ques/Answer.php</file>
+            <file>file:/E:/projects/murreh/public/js/ques.js</file>
+            <file>file:/E:/projects/murreh/resources/views/ques/question/_copy_answer_text.blade.php</file>
         </group>
     </open-files>
 </project-private>

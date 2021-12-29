@@ -14,7 +14,6 @@
     }
 
     $format .= '><i class="fa fa-trash fa-lg '. ($class ?? ''). '"></i> %s</a>';
-
 //    $link = URL::route($route, $obj);
     $link = URL::route($route, $obj, $args);
     $token = csrf_token();
