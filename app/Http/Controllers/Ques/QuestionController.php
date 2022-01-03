@@ -294,7 +294,7 @@ class QuestionController extends Controller
         return Response::json($list);
     }
     
-    public function copy(Request $request, int $from_question_id) {
+    public function copy(Request $request, int $from_question_id, int $to_qsection) {
         $answer_text = $request->input('answer_text');
         if (!$answer_text) {
             return "Не задан ответ";
@@ -305,7 +305,6 @@ class QuestionController extends Controller
             return "Не задан вопрос, из которого копируется.";
         }
         
-        $to_qsection = (int)$request->input('to_qsection');
         $qsection = Qsection::findOrFail($to_qsection);
         if (!$qsection) {
             return "Не задан подраздел, куда копировать.";
@@ -322,14 +321,19 @@ class QuestionController extends Controller
         
         $to_answer = (int)$request->input('to_answer');
         if (!$to_answer) {
+            $code=$question->newCode();
             $answer = Answer::firstOrCreate(['question_id'=>$question->id, 
                         'answer'=>$answer_text]);
             if (!$answer->code) {
-                $answer->code = $question->newCode();
+                $answer->code = $code;
                 $answer->save();
             }
         } else {
-            $answer = Question::findOrFail($to_answer);            
+            try {
+                $answer = Answer::findOrFail($to_answer);   
+            } catch (Exception $e) {
+                dd('Ответ не найден');   
+            }
         }
         
         $anketas = Anketa::whereIn('id', function ($query) use ($from_question_id, $answer_text) {

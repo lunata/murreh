@@ -120,7 +120,7 @@
 
 @section('jqueryFunc')
     recDelete('{{ trans('messages.confirm_delete') }}');
-    selectQsection('search_section', '{{trans('ques.subsection') }}');    
+    selectQsection('search_section', '{{trans('ques.subsection') }}', true);    
 @stop
 
 

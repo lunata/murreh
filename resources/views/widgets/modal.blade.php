@@ -12,7 +12,7 @@
             </div>
             <div class="modal-footer">
                 @if ($submit_title) 
-                <button type="submit" class="btn btn-success" onClick="{{ $submit_onClick }}">{{ $submit_title }}</button>
+                <button id="{{ $name }}-submit" type="submit" class="btn btn-success" onClick="{{ $submit_onClick }}">{{ $submit_title }}</button>
                 @endif
                 <button type="button" class="btn btn-default cancel" data-dismiss="modal">{{trans('messages.close')}}</button>
             </div>

@@ -54,7 +54,9 @@
             @foreach ($answer_texts as $answer_text =>$anketas)
                 <td style="vertical-align: top">
                     <b>{{$answer_text}}</b> ({{sizeof($anketas)}})
-                    <i class="answer-copy fa fa-copy fa-lg" title="скопировать ответы в другой вопрос" onClick="callCopyAnswerText('{{$answer_text}}')"></i>                
+                    <?php $answer_text_ch = preg_replace("/['’]/","_",$answer_text); ?>
+                    <i class="answer-copy fa fa-copy fa-lg" title="скопировать ответы в другой вопрос" onClick="callCopyAnswerText('{{$answer_text_ch}}')"></i>                
+                    <p id="copy-info-{{$answer_text_ch}}" class="copy-info"></p>
                 </td>
                 <td>
                 @foreach ($anketas as $anketa_id =>$anketa)

@@ -144,9 +144,10 @@ function addAnswer(qid) {
         
     }
     
-    function callCopyAnswerText($answer_text) {
+    function callCopyAnswerText(answer_text) {
         $("#modalCopyAnswerText").modal('show');
-        $("#answer_text_for_copy").val($answer_text);
+        $("#answer_text_for_copy").val(answer_text.replace(/\_/g, "’"));
+        $("#answer_text_for_copy").attr('data-info',answer_text);
     }
     
     function copyAnswerText(from_question) {
@@ -154,18 +155,22 @@ function addAnswer(qid) {
         var to_question=$("#question_id option:selected").val();
         var to_answer=$("#answer_id option:selected").val();
         var answer_text=$("#answer_text_for_copy").val();
+        var copy_info_id=$("#answer_text_for_copy").attr('data-info');
         var url='/ques/question/copy/' + from_question + '_' + to_qsection 
                 + '?to_question=' + (to_question ? to_question : 0) 
                 + '&to_answer=' + (to_answer ? to_answer : 0) 
                 + '&answer_text=' + (answer_text ? answer_text : '');
         if (to_qsection) {
-//            alert(url);
+//            alert(copy_info_id);
+            $("#modalCopyAnswerText-submit").attr("disabled", true);    
             $.ajax({
                 url: url, 
                 type: 'GET',
                 success: function(result){
-                    alert(result);
+//                    alert(result);
                     $("#modalCopyAnswerText").modal('hide');
+                    $("#modalCopyAnswerText-submit").attr("disabled", false); 
+                    $("#copy-info-"+copy_info_id).html(result);
                 },
                 error: function() {
                 }

@@ -480,6 +480,10 @@ h1:before {
     margin: 0 10px 0 0;
 }
 
+.copy-info {
+    color: #972d1a;
+}
+
 @media screen and (min-width: 768px) {   
     .comment {
         margin-top: -50px;
