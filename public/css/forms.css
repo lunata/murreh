@@ -104,12 +104,12 @@ input[type="radio"]:checked+span:before{
 }
 
 .search-button-b input[type=text]{
-    margin: 0 10px;
+    margin: 0 5px;
     width: 60px;
 }
 
 .search-button-b input[type=submit]{
-    margin-left: 20px;
+    margin-left: 5px;
 }
 
 .search-linked-field label {

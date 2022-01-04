@@ -51,10 +51,11 @@ class QuestionController extends Controller
         
         $section_values = Qsection::getSectionListWithQuantity();
         $qsection_values = [NULL=>'']+Qsection::getListWithQuantity();
+        $place_values = [NULL=>''] + Place::getListWithQuantity('anketas', true);
         
         return view('ques.question.index',
-                    compact('numAll', 'questions', 'section_values', 
-                            'qsection_values', 'args_by_get', 'url_args'));
+                    compact('numAll', 'questions', 'section_values', 'place_values', 
+                            'qsection_values','args_by_get', 'url_args'));
     }
 
     /**
@@ -112,7 +113,7 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Question $question
      * @return \Illuminate\Http\Response
      */
     public function show(Question $question)
@@ -120,9 +121,11 @@ class QuestionController extends Controller
         $args_by_get = $this->args_by_get;
         $url_args = $this->url_args;
         $section_values = Qsection::getSectionList();
+        $anketas_without_answers = $question->getAnketasWithoutAnswers();
 
         return view('ques.question.show', 
-                compact('question', 'section_values', 'args_by_get', 'url_args'));
+                compact('question', 'section_values', 'anketas_without_answers', 
+                        'args_by_get', 'url_args'));
     }
 
     /**

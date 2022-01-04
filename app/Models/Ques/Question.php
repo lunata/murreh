@@ -65,6 +65,22 @@ class Question extends Model
         $this->sequence_number = $next_sequence_number;
         $this->save();
     }
+    
+    public function getAnswerInPlace($place_id) {
+        $anketa_question = AnketaQuestion::whereQuestionId($this->id)
+                ->whereIn('anketa_id', function($q) use ($place_id) {
+                    $q->select('id')->from('anketas')
+                      ->wherePlaceId($place_id);
+                })->first();
+        $answer=Answer::find($anketa_question->answer_id);
+        return $answer->code. ', '. $anketa_question->answer_text;
+    }
+    
+    /**
+     * get all answers for this question
+     * 
+     * @return array : <code. answer><answer_text><anketa_id><anketa_obj> 
+     */
     public function getAnswerTexts() {
         $out = [];
         
@@ -84,6 +100,15 @@ class Question extends Model
         return $out;
     }
 
+    public function getAnketasWithoutAnswers() {
+        $question_id = $this->id;
+        $anketas = Anketa::whereNotIn('id', function($q) use ($question_id) {
+                                $q->select('anketa_id')->from('anketa_question')
+                                  ->whereQuestionId($question_id);
+                           })->get();
+        return $anketas;
+    }
+    
     public static function getSectionIDBySubsectionID(Int $subsection_id) {
         $subsection = Qsection::find($subsection_id);
         if (!$subsection) { return NULL; }
@@ -211,15 +236,42 @@ class Question extends Model
         $objs = self::searchIntField($objs, 'section_id', $url_args['search_section']);
         $objs = self::searchIntField($objs, 'qsection_id', $url_args['search_qsection']);
         $objs = self::searchStrField($objs, 'question', $url_args['search_question']);
+        $objs = self::searchByAnswer($objs, $url_args['search_answer']);
+        $objs = self::searchByPlace($objs, $url_args['search_place']);
         
         return $objs;
     }
+
+    public static function searchByAnswer($objs, $search_value) {
+        if (!$search_value) {
+            return $objs;
+        }
+        return $objs->whereIn('id', function($query) use ($search_value) {
+                    $query->select('question_id')->from('anketa_question')
+                          ->where('answer_text', 'like', $search_value);
+        });
+    }
     
+    public static function searchByPlace($objs, $search_value) {
+        if (!$search_value) {
+            return $objs;
+        }
+        return $objs->whereIn('id', function($query) use ($search_value) {
+                    $query->select('question_id')->from('anketa_question')
+                          ->whereIn('anketa_id', function($q) use ($search_value) {
+                              $q->select('id')->from('anketas')
+                                ->wherePlaceId($search_value);
+                          });
+        });
+    }
+        
     public static function urlArgs($request) {
         $url_args = Str::urlArgs($request) + [
+                    'search_answer' => $request->input('search_answer'),
                     'search_id'   => (int)$request->input('search_id') ? (int)$request->input('search_id') : null,
                     'search_sequence_number'   => (int)$request->input('search_sequence_number') ? (int)$request->input('search_sequence_number') : null,
                     'search_question' => $request->input('search_question'),
+                    'search_place'   => (int)$request->input('search_place') ? (int)$request->input('search_place') : null,
                     'search_section'   => (int)$request->input('search_section') ? (int)$request->input('search_section') : null,
                     'search_qsection'   => (int)$request->input('search_qsection') ? (int)$request->input('search_qsection') : null,
                 ];

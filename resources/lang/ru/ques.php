@@ -40,4 +40,5 @@ return [
     'subsection' => 'подраздел',
     'year' => 'Год записи',
     'weight' => 'Вес',
+    'without_answers' => 'без ответов'
 ];

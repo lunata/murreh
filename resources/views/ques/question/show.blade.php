@@ -54,14 +54,13 @@
             @foreach ($answer_texts as $answer_text =>$anketas)
                 <td style="vertical-align: top">
                     <b>{{$answer_text}}</b> ({{sizeof($anketas)}})
-                    <?php $answer_text_ch = preg_replace("/['’]/","_",$answer_text); ?>
+                    <?php $answer_text_ch = preg_replace("/’/","_",$answer_text); ?>
                     <i class="answer-copy fa fa-copy fa-lg" title="скопировать ответы в другой вопрос" onClick="callCopyAnswerText('{{$answer_text_ch}}')"></i>                
                     <p id="copy-info-{{$answer_text_ch}}" class="copy-info"></p>
                 </td>
                 <td>
                 @foreach ($anketas as $anketa_id =>$anketa)
-                    <a href="/ques/anketas/{{$anketa_id}}">{{$anketa->fond_number}}</a> - {{$anketa->place->toStringWithDistrict()}}
-                    <a href="/ques/question/{{$question->id}}/edit_answer/{{$anketa->id}}"><i class="fa fa-pencil-alt fa-lg" title='редактировать ответ'></i></a>
+                    @include('ques.question._anketa_link_to_answer_edit')
                     <br>
                 @endforeach                    
                 </td>
@@ -72,6 +71,18 @@
             @endforeach
             </tr>
         @endforeach
+        
+        @if(User::checkAccess('edit') && count($anketas_without_answers)) 
+            <tr>
+                <th style="vertical-align: top" colspan="2">{{trans('ques.without_answers')}}</th>
+                <td>
+                @foreach ($anketas_without_answers as $anketa)
+                    @include('ques.question._anketa_link_to_answer_edit')
+                    <br>
+                @endforeach                    
+                </td>
+            </tr>
+        @endif
         </tbody>
         </table>
 @stop

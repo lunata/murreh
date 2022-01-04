@@ -38,6 +38,11 @@
                 <th>{{ trans('ques.answers') }}</th>
                 <th>{{ trans('navigation.anketas') }}</th>
                 <th></th>
+                
+                @if($url_args['search_place'])
+                <th>{{\App\Models\Geo\Place::find($url_args['search_place'])->name_ru}}</th>
+                @endif
+                
                 @if (User::checkAccess('ques.edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -52,6 +57,7 @@
                 <td data-th="{{ trans('ques.subsection') }}">{{$question->qsection->title}}</td>
                 <td data-th="{{ trans('ques.question') }}"><a href="/ques/question/{{$question->id}}{{$args_by_get}}">{{$question->question}}</a></td>
                 <td data-th="{{ trans('ques.question_ru') }}">{{$question->question_ru}}</td>
+                
                 <td data-th="{{ trans('ques.answers') }}">
                 @if (User::checkAccess('edit') || $question->visible)
                     @foreach ($question->answers as $answer)
@@ -61,6 +67,7 @@
                     <i class="fa fa-eye-slash fa-lg"></i>
                 @endif
                 </td>
+                
                 <td data-th="{{ trans('navigation.anketas') }}">
                 @if (User::checkAccess('edit') || $question->visible)
                     @if($question->anketas()->count())
@@ -75,9 +82,6 @@
                             @endif
                             <br>
                         @endforeach                    
-    {{--                    <a href="/ques/anketas?search_question={{$question->id}}">
-                        {{ $question->anketas()->count() }}
-                    </a> --}}
                     @else 
                         0
                     @endif
@@ -85,11 +89,19 @@
                     <i class="fa fa-eye-slash fa-lg"></i>
                 @endif
                 </td>
+                
                 <td>
                 @if (User::checkAccess('edit') || $question->visible)
                     <a href="/ques/question/{{$question->id}}/map">{{ trans('messages.on_map') }}</a>
                 @endif
                 </td>
+                
+                @if($url_args['search_place'])
+                <td>
+                    {{$question->getAnswerInPlace($url_args['search_place'])}}
+                </td>
+                @endif
+                
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
                     @include('widgets.form.button._edit', 
@@ -120,7 +132,30 @@
 
 @section('jqueryFunc')
     recDelete('{{ trans('messages.confirm_delete') }}');
-    selectQsection('search_section', '{{trans('ques.subsection') }}', true);    
+    selectQsection('search_section', '{{trans('ques.subsection') }}', true);  
+    
+    $(".select-place").select2({
+        allowClear: true,
+        placeholder: '{{trans('geo.place')}}',
+        width: '100%',
+        ajax: {
+          url: "/geo/place/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+    
 @stop
 
 
