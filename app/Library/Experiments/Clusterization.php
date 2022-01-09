@@ -183,6 +183,8 @@ $this->setClusters($clusters, $this->getLastStep());
     public function aggrigate_clusterization() {        
         if ($this->getMethod() == 2) {
             $new_clusters = $this->bySollin();
+//        } elseif ($this->getMethod() == 4) {
+  //          $new_clusters = $this->byCentroids();
         } else {
             $new_clusters = $this->byCompleteLinkage();
         }
@@ -305,12 +307,16 @@ var_dump($clusters[$new_cluster]);*/
     }
     
     /**
-     * Метод точных связей
-     * 0. Считаем все расстояния между кластерами
-     * 1. Ищем минимальное расстояние между кластерами - min
+     * Метод точных связей и метод центроидов
+     * 0. Считаем все расстояния между кластерами 
+     *    (расстояние м/у кластерами = 
+     *      (метод точных связей) расстояние между самыми дальними элементами)
+     *      (метод центроидов) расстояние между центроидами
+     * 1. Ищем минимальное расстояние между кластерами - min 
      * 2. Если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита, то выход.
      * 3. Ищем два самых близких кластера с расстоянием min
      * 4. Соединяем их
+     *    + для метода центроидов перевычисляем центроид в новом кластере
      * 5. Записываем новые кластеры
      * 
      * @return array
@@ -385,8 +391,15 @@ var_dump($cluster_dist);
         return sqrt(($x1-$x2)**2+($y1-$y2)**2);        
     }
     
-    // вычисляем все расстояния между всеми кластерами
+    /** Вычисляем все расстояния между всеми кластерами
+     * 
+     * Метод центроидов (4): расстояние между центроидами
+     * 
+     * @return array
+     */
     public function clusterDistances() {
+        $method_id = $this->getMethod();
+        $distances = $this->getDistances();
         $clusters = $this->getLastClusters();
         $cluster_dist = [];
 //dd($this->getDistances(), $clusters);
@@ -394,14 +407,24 @@ var_dump($cluster_dist);
         foreach ($clusters as $cluster1_num => $cluster1) {
             foreach ($clusters as $cluster2_num => $cluster2) {
                 if ($cluster1_num != $cluster2_num) {
-                   $cluster_dist[$cluster1_num.'_'.$cluster2_num] = $this->clusterDistance($cluster1, $cluster2);
+                   $cluster_dist[$cluster1_num.'_'.$cluster2_num] 
+                        = $method_id==4 ? $distances[$cluster1_num][$cluster2_num] 
+                           : $this->clusterDistance($cluster1, $cluster2);
                 }
             }
         }
         return $cluster_dist;
     }
     
-    // вычисляем расстояние между двумя кластерами
+    /** Вычисляем расстояние между двумя кластерами
+     * 
+     * Метод точных связей: расстояние между самыми дальними элементами
+     * Метод Соллина: расстояние между самыми ближними элементами
+     * 
+     * @param array $cluster1
+     * @param array $cluster2
+     * @return int
+     */
     public function clusterDistance($cluster1, $cluster2) {
         $method_id = $this->getMethod();
         
@@ -441,12 +464,29 @@ var_dump($cluster_dist);
         return $min;
     }
     
+    /**
+     * Слияние двух кластеров.
+     * Для метода центроидов после слияния перерасчет центроида.
+     * 
+     * @param type $merge_num
+     * @param type $unset_num
+     * @return type
+     */
     public function mergeClusters($merge_num, $unset_num) {
+        $method_id = $this->getMethod();
+        $distances = $this->getDistances();
         $clusters = $this->getLastClusters();
-//if (!isset($clusters[$merge_num])) { dd('нет merge_num ',$merge_num, $clusters);}        
-//if (!isset($clusters[$unset_num])) { dd('нет unset_num ',$unset_num, $clusters);}        
+
         $clusters[$merge_num] = array_merge($clusters[$merge_num], $clusters[$unset_num]);
         unset($clusters[$unset_num]);
+        
+        if ($method_id == 4 && sizeof($clusters[$merge_num])>2) {
+            $new_centroid = self::recomputeCentroid($merge_num, $clusters[$merge_num], $distances);
+            if ($new_centroid != $merge_num) {
+                $clusters[$new_centroid] = $clusters[$merge_num];
+                unset($clusters[$merge_num]);
+            }
+        }
         return $clusters;
     }
     
@@ -649,7 +689,8 @@ dd($lonely);
         
         $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
                           2=>'Соллина',
-                          3=>'полной связи + K-средних'
+                          3=>'полной связи + K-средних',
+                          4=>'центроидов'
                          ];
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
