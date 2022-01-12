@@ -49,6 +49,7 @@
         @include('widgets.form.formitem._select2',
                 ['name' => 'dialect_id', 
                  'values' =>$dialect_values,
+                 'value' =>$dialect_value,
                  'is_multiple' => false,
                  'title' => trans('dict.dialect'),
                  'class'=>'select-dialect form-control'])

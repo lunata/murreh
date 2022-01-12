@@ -142,9 +142,11 @@ class PlaceController extends Controller
         $district_value = $place->districtValue();
         $lang_values = [NULL => ''] + Lang::getList();
         $dialect_values = [NULL => ''] + Dialect::getList();
-        
+        $dialect_value = !$place->dialect ? []
+                                    : [$place->dialect->id];
+//dd($place->dialect);        
         return view('geo.place.edit',
-                  compact(['district_value', 'dialect_values', 'district_values', //'region_values',
+                  compact(['dialect_value', 'district_value', 'dialect_values', 'district_values', //'region_values',
                            'lang_values', 'place', 'args_by_get', 'url_args']));
     }
 
