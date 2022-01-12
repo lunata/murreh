@@ -124,14 +124,10 @@ class Clusterization
     }
 
     /**
-     * Считается сумма "баллов" по каждому ответу
-     * Если у обоих пунктов есть ответы на вопрос, но нет ни одного совпадения
-     * ИЛИ
-     * у одного пункта есть ответы, а у другого отсутствуют, то +вес вопроса
-     * 
-     * Если у обоих пунктов есть хотя бы один правильный ответ 
-     * ИЛИ
-     * у обоих пунктов нет ответов на этот вопрос, то +0
+     * Считается сумма "баллов" по каждому ответу:
+       1)Если у обоих пунктов есть ответы на вопрос, но они не совпадают, то +вес вопроса
+       2) Если хотя бы одного пункта нет ответов, то +вес вопроса*0.5
+       3) Если у обоих пунктов есть хотя бы один одинаковый ответ, то +0
      * 
      * see ClusterizationTest@testDistanceForAnswers2Code1TextDiff()
      * 
@@ -147,9 +143,11 @@ class Clusterization
         foreach ($answers1 as $qsection => $questions) {
             $difference = 0;
             foreach ($questions as $question => $answer) {
-                if ((sizeof($answer) || sizeof($answers2[$qsection][$question]))
+                if (sizeof($answer) && sizeof($answers2[$qsection][$question])
                     && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
                     $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
+                } elseif (!sizeof($answer) || !sizeof($answers2[$qsection][$question])) {
+                    $difference += isset($weights[$qsection][$question]) ? 0.5 * $weights[$qsection][$question] : 0.5;
                 }
             }
             $distance += $difference;
@@ -183,10 +181,8 @@ $this->setClusters($clusters, $this->getLastStep());
     public function aggrigate_clusterization() {        
         if ($this->getMethod() == 2) {
             $new_clusters = $this->bySollin();
-//        } elseif ($this->getMethod() == 4) {
-  //          $new_clusters = $this->byCentroids();
         } else {
-            $new_clusters = $this->byCompleteLinkage();
+            $new_clusters = $this->byHierarMethods();
         }
         if (!$new_clusters || sizeof($new_clusters)<2) {
             return;
@@ -310,8 +306,9 @@ var_dump($clusters[$new_cluster]);*/
      * Метод точных связей и метод центроидов
      * 0. Считаем все расстояния между кластерами 
      *    (расстояние м/у кластерами = 
-     *      (метод точных связей) расстояние между самыми дальними элементами)
+     *      (метод точных связей) расстояние между самыми дальними элементами
      *      (метод центроидов) расстояние между центроидами
+     *      (метод ближних соседей) расстояние между ближайшими элементами
      * 1. Ищем минимальное расстояние между кластерами - min 
      * 2. Если минимальное расстояние между кластерами превысило предел и количество кластеров не больше лимита, то выход.
      * 3. Ищем два самых близких кластера с расстоянием min
@@ -321,7 +318,7 @@ var_dump($clusters[$new_cluster]);*/
      * 
      * @return array
      */
-    public function byCompleteLinkage() {
+    public function byHierarMethods() {
         $clusters = $this->getLastClusters();
         $cluster_dist = $this->clusterDistances(); // 0
         $min = min(array_values($cluster_dist));   // 1     
@@ -419,7 +416,7 @@ var_dump($cluster_dist);
     /** Вычисляем расстояние между двумя кластерами
      * 
      * Метод точных связей: расстояние между самыми дальними элементами
-     * Метод Соллина: расстояние между самыми ближними элементами
+     * Метод Соллина и метод ближайших соседей: расстояние между самыми ближними элементами
      * 
      * @param array $cluster1
      * @param array $cluster2
@@ -428,7 +425,7 @@ var_dump($cluster_dist);
     public function clusterDistance($cluster1, $cluster2) {
         $method_id = $this->getMethod();
         
-        if ($method_id==2) {
+        if ($method_id==2 || $method_id==5) {
             $distance = $this->clusterDistanceMin($cluster1, $cluster2);
         } else {
             $distance = $this->clusterDistanceMax($cluster1, $cluster2);
@@ -690,7 +687,8 @@ dd($lonely);
         $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
                           2=>'Соллина',
                           3=>'полной связи + K-средних',
-                          4=>'центроидов'
+                          4=>'центроидов',
+                          5=>'ближних соседей',
                          ];
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
