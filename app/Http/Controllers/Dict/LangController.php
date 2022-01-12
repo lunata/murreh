@@ -21,10 +21,12 @@ class LangController extends Controller
 
         $dialect_name = '%'.$request->input('q').'%';
         $lang_ids = (array)$request->input('lang_id');
+        $lang_ids = array_diff($lang_ids, array('', NULL, false));
 //        $lemma_id = (int)$request->input('lemma_id');
 
         $list = [];
         $dialects = Dialect::where('name_ru','like', $dialect_name);
+
         if (sizeof($lang_ids)) {                 
             $dialects = $dialects ->whereIn('lang_id',$lang_ids);
         }
