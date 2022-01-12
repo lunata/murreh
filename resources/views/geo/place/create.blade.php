@@ -21,6 +21,7 @@
 @section('footScriptExtra')
     {!!Html::script('js/select2.min.js')!!}
     {!!Html::script('js/special_symbols.js')!!}
+    {!!Html::script('js/list_change.js')!!}
 @stop
 
 @section('jqueryFunc')
@@ -30,4 +31,5 @@
         placeholder: '{{trans('geo.select_district')}}',
         width: '100%'
     });      
+    selectDialect('lang_id', '{{ trans('dict.select_dialect') }}', true);    
 @stop

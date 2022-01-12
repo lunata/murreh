@@ -34,7 +34,8 @@
                 <th>{{ trans('geo.name') }} {{ trans('messages.in_karelian') }}</th>
                 <th>{{ trans('geo.latitude') }}</th>
                 <th>{{ trans('geo.longitude') }}</th>
-                <th>{{ trans('geo.population') }}</th>
+{{--                <th>{{ trans('geo.population') }}</th> --}}
+                <th>{{trans('dict.dialect')}}</th>
                 <th>{{ trans('navigation.informants') }}</th>
                 <th>{{ trans('navigation.anketas') }}</th>
                 @if (User::checkAccess('edit'))
@@ -69,8 +70,12 @@
                 <td data-th="{{ trans('geo.longitude') }}">
                     {{ $place->longitude ? sprintf("%.05f\n", $place->longitude) : '' }}
                 </td>
-                <td data-th="{{ trans('geo.population') }}" style="text-align: right">
+{{--                <td data-th="{{ trans('geo.population') }}" style="text-align: right">
                     {{ $place->population }}
+                </td> --}}
+                <td data-th="{{trans('dict.dialect')}}">
+                    {{ $place->dialect ? $place->dialect->name : '' }}
+                    {{ $place->lang ? '('.$place->lang->code.')' : ''}}
                 </td>
                 <td data-th="{{ trans('navigation.informants') }}">
                     @if($place->informants()->count())

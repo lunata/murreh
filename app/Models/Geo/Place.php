@@ -20,13 +20,15 @@ use App\Models\SOSD\ConceptPlace;
 
 use App\Models\User;
 
+use App\Models\Dict\Lang;
+
 class Place extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     protected $fillable = ['name_ru', 'name_old_ru', 'name_krl', 'name_old_krl', 
-                           'latitude', 'longitude', 'population'];
+                           'latitude', 'longitude', 'population', 'dialect_id'];
     
     use \App\Traits\Methods\getNameAttribute;
     use \App\Traits\Methods\getList;
@@ -40,10 +42,24 @@ class Place extends Model
         return $this->placeString();//name;
     }    
 
+    // Belongs To Relations
+    use \App\Traits\Relations\BelongsTo\Dialect;
+    
     // Belongs To Many Relations
     use \App\Traits\Relations\BelongsToMany\Concepts;
     use \App\Traits\Relations\BelongsToMany\Districts;
     
+    /** Gets name of this lang, takes into account locale.
+     * 
+     * @return Lang
+     */
+    public function getLangAttribute()
+    {
+        $dialect = $this->dialect;
+        if (!$dialect) { return null; }
+        $lang_id = $dialect->lang_id;
+        return Lang::find($lang_id) ?? null;
+    }
 /*    
     public function region()
     {

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\Dict\LangController;
+
 use App\Http\Controllers\Geo\DistrictController;
 use App\Http\Controllers\Geo\RegionController;
 use App\Http\Controllers\Geo\PlaceController;
@@ -69,6 +71,8 @@ Route::post('reset/{id}/{code}', [AuthController::class, 'resetCompleteProcess']
 // Сервисная страничка, показываем после заполнения рег формы, формы сброса и т.
 // о том, что письмо отправлено и надо заглянуть в почтовый ящик.
 Route::get('wait', [AuthController::class, 'wait']);
+
+Route::get('dict/dialect/list', [LangController::class, 'dialectList']);
 
 Route::get('experiments', function () {
     return view('experiments.index');

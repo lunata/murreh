@@ -40,6 +40,18 @@
         @include('widgets.form.formitem._text', 
                 ['name' => 'population', 
                  'title'=>trans('geo.population')])
+                 
+        @include('widgets.form.formitem._select', 
+                ['name' => 'lang_id', 
+                 'values' =>$lang_values,
+                 'title' => trans('dict.lang')]) 
+                 
+        @include('widgets.form.formitem._select2',
+                ['name' => 'dialect_id', 
+                 'values' =>$dialect_values,
+                 'is_multiple' => false,
+                 'title' => trans('dict.dialect'),
+                 'class'=>'select-dialect form-control'])
     </div>
 </div>                 
 

@@ -214,4 +214,28 @@ function selectPlace(district_var='', placeholder='', allow_clear=false){
     });   
 }
 
+function selectDialect(lang_var, placeholder='', allow_clear=false){
+    $('.select-dialect').select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/dict/dialect/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              lang_id: selectedValuesToURL("#"+lang_var)
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
 

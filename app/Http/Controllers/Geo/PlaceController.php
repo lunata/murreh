@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Redirect;
 
 use App\Library\Str;
 
+use App\Models\Dict\Dialect;
+use App\Models\Dict\Lang;
+
 use App\Models\Geo\District;
 use App\Models\Geo\Place;
 //use App\Models\Geo\Region;
@@ -65,10 +68,12 @@ class PlaceController extends Controller
         $url_args = $this->url_args;
 //        $region_values = Region::getList();
         $district_values = [NULL => ''] + District::getList();
+        $lang_values = [NULL => ''] + Lang::getList();
+        $dialect_values = [NULL => ''] + Dialect::getList();
         
         return view('geo.place.create',
-                  compact(['district_values', //'region_values',  
-                           'args_by_get', 'url_args']));
+                  compact(['dialect_values', 'district_values', //'region_values',  
+                           'lang_values', 'args_by_get', 'url_args']));
     }
 
     public function validateRequest(Request $request) {
@@ -77,6 +82,7 @@ class PlaceController extends Controller
             'name_old_ru'  => 'max:150',
             'name_krl'     => 'max:150',
             'name_old_krl' => 'max:150',
+            'dialect_id' => 'numeric',
 //            'district_id' => 'required|numeric',
 //            'region_id' => 'required|numeric',
         ]);
@@ -134,10 +140,12 @@ class PlaceController extends Controller
 //        $region_values = Region::getList();
         $district_values = [NULL => ''] + District::getList();
         $district_value = $place->districtValue();
+        $lang_values = [NULL => ''] + Lang::getList();
+        $dialect_values = [NULL => ''] + Dialect::getList();
         
         return view('geo.place.edit',
-                  compact(['district_value', 'district_values', 'place', //'region_values',
-                           'args_by_get', 'url_args']));
+                  compact(['district_value', 'dialect_values', 'district_values', //'region_values',
+                           'lang_values', 'place', 'args_by_get', 'url_args']));
     }
 
     /**
@@ -150,7 +158,7 @@ class PlaceController extends Controller
     public function update(Request $request, Place $place)
     {
         $data=$this->validateRequest($request);
-        
+//dd($data);        
 /*        $place->fill($request->except('districts'))->save();
         $place->saveDistricts($request->districts);*/
         $place->fill($data)->save();
