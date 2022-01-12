@@ -82,7 +82,7 @@ class PlaceController extends Controller
             'name_old_ru'  => 'max:150',
             'name_krl'     => 'max:150',
             'name_old_krl' => 'max:150',
-            'dialect_id' => 'numeric',
+//            'dialect_id' => 'numeric',
 //            'district_id' => 'required|numeric',
 //            'region_id' => 'required|numeric',
         ]);
