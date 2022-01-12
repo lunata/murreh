@@ -685,10 +685,10 @@ dd($lonely);
         }
         
         $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
+                          5=>'одиночной связи',
+                          4=>'центроидный',
                           2=>'Соллина',
                           3=>'полной связи + K-средних',
-                          4=>'центроидов',
-                          5=>'ближних соседей',
                          ];
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
