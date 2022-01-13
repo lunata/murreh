@@ -653,8 +653,7 @@ dd($lonely);
     }
     
     public static function getRequestDataForView($request) {
-        $total_answers = 1000;
-        $place_ids = (array)$request->input('place_ids');
+/*        $total_answers = 1000;*/
         $question_ids = (array)$request->input('question_ids');
         $normalize = (int)$request->input('normalize');
         $with_weight = (int)$request->input('with_weight');
@@ -663,14 +662,18 @@ dd($lonely);
         if (!sizeof($qsection_ids)) {
             $qsection_ids = [2];
         }
-        
-        $places = Place::getForClusterization($place_ids, $total_answers);  
-        
+
+        $place_ids = (array)$request->input('place_ids');
+//dd($place_ids, $qsection_ids, $question_ids);        
+//$place_ids_old=$place_ids;        
+        $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids/*, $total_answers*/);  
+        $place_ids = $places->pluck('id')->toArray();
+//dd($place_ids_old, $place_ids);        
         if (!sizeof($place_ids)) {
             $place_ids = $places->pluck('id')->toArray();
         }
         
-        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight];
+        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight];
     }
     
     public static function getRequestDataForCluster($request, $places) {

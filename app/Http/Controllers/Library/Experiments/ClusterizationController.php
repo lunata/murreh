@@ -17,12 +17,12 @@ class ClusterizationController extends Controller
     
     public function index(Request $request) {
 //print "<pre>";        
-        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight)
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers,*/ $with_weight)
                 = Clusterization::getRequestDataForView($request);
+//dd($place_ids);        
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
                 $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
                 = Clusterization::getRequestDataForCluster($request, $places);
-//dd($with_geo);        
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
@@ -48,7 +48,7 @@ class ClusterizationController extends Controller
     }
     
     public function viewData(Request $request) {
-        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, $total_answers, $with_weight)
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight)
                 = Clusterization::getRequestDataForView($request);
         
         $place_names = $places->pluck('name_ru', 'id')->toArray();

@@ -396,20 +396,31 @@ class Place extends Model
         return $place->name_ru;
     }
 
-    public static function getForClusterization($place_ids=[], $total_answers=null) {
+    public static function getForClusterization($place_ids=[], $qsection_ids=[], $question_ids=[]/*, $total_answers=null*/) {
+        $places = Place::whereIn('id', function ($q) use ($qsection_ids, $question_ids/*,$total_answers*/){
+                    $q->select('place_id')->from('anketas');
+                    if (sizeof($qsection_ids)) {
+                        $q->whereIn('id', function ($q2) use ($qsection_ids, $question_ids/*,$total_answers*/) {
+                            $q2->select('anketa_id')->from('anketa_question')
+                               ->whereIn('question_id', function ($q3) use ($qsection_ids, $question_ids/*,$total_answers*/) {
+                                    $q3->select('id')->from('questions')
+                                      ->whereIn('qsection_id',$qsection_ids);
+                                    if ($question_ids) {            
+                                        $q3->whereIn('id', $qsection_ids);
+                                    }
+                               });
+                            });
+                        }
+                });
         if (sizeof($place_ids)) {
-            $places = Place::whereIn('id', $place_ids);
-        } else {
-            $places = Place::whereIn('id', function ($q) use ($total_answers){
-                        $q->select('place_id')->from('anketas');
-                        if ($total_answers) {
+            $places -> whereIn('id', $place_ids);
+        }
+/*                        if ($total_answers) {
                             $q->whereIn('id', function ($q2) use ($total_answers){
                                 $q2->select('anketa_id')->from('anketa_question')
                                    ->groupBy('anketa_id')->havingRaw('count(*)>'.$total_answers);
                             });
-                        }
-                    });
-        }
+                        }*/
         return $places->orderBy('name_ru')->get();
     }
 
