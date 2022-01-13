@@ -47,7 +47,7 @@
                      'value' => $cl_colors[$cl_num]])                                              
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
         </div>
-       {{\App\Models\Geo\Place::namesByIdsToString($cluster)}}
+       {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
        <br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\Ques\AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids))}}</span>
     </div>
         @endforeach

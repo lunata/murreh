@@ -636,7 +636,9 @@ dd($lonely);
                 $cluster_places[$cur_color][] 
                         = ['latitude'=>$place->latitude,
                            'longitude'=>$place->longitude,
-                           'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'.$anketa_link.$answers];
+                           'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
+                                     . ($place->dialect ? '<br>'.$place->dialect->name : '')
+                                     . $anketa_link.$answers];
             }
 /*            $markers[$cur_color] 
                     = //'<b>'. $cl_num. '</b>: '.

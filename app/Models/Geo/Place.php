@@ -421,6 +421,15 @@ class Place extends Model
         return join(', ', $names);
     }
     
+    public static function namesWithDialectsByIdsToString($ids) {
+        $names = [];
+        foreach ($ids as $id) {
+            $place = self::find($id);
+            $names[] = $place->name_ru . ($place->dialect ? ' ('.$place->dialect->bcode.')' : '');
+        }
+        return join(', ', $names);
+    }
+    
     public function getAnswersForQsections($qsection_ids, $question_ids) {
         $place_id = $this->id;
         $answers = AnketaQuestion::whereIn('anketa_id', function ($q) use ($place_id) {

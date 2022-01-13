@@ -3,8 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/projects/murreh/resources/views/geo/place/create.blade.php</file>
+            <file>file:/E:/projects/murreh/config/database.php</file>
+            <file>file:/E:/projects/murreh/resources/views/geo/place/index.blade.php</file>
             <file>file:/E:/projects/murreh/app/Http/Controllers/Library/Experiments/ClusterizationController.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Geo/PlaceController.php</file>
+            <file>file:/E:/projects/murreh/app/Http/Controllers/Dict/LangController.php</file>
+            <file>file:/E:/projects/murreh/resources/views/geo/place/edit.blade.php</file>
             <file>file:/E:/projects/murreh/app/Library/Experiments/Clusterization.php</file>
+            <file>file:/E:/projects/murreh/public/js/list_change.js</file>
+            <file>file:/E:/projects/murreh/app/Models/Geo/Place.php</file>
+            <file>file:/E:/projects/murreh/app/Models/Dict/Dialect.php</file>
+            <file>file:/E:/projects/murreh/.env</file>
+            <file>file:/E:/projects/murreh/resources/views/geo/place/_form_create_edit.blade.php</file>
         </group>
     </open-files>
 </project-private>

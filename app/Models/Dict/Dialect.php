@@ -25,6 +25,14 @@ class Dialect extends Model
         return $this->name_ru;
     }
 
+    public function getBcodeAttribute() : String
+    {
+        if (preg_match ("/-(.+)$/", $this->code, $regs)) {
+           return $regs[1]; 
+        }
+        return $this->code;
+    }
+
     /** Gets ID of this dialect by code.
      * 
      * @return int
