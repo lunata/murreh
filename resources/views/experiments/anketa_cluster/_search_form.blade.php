@@ -1,7 +1,7 @@
         {!! Form::open(['url' => '/experiments/anketa_cluster', 
                              'method' => 'get']) 
         !!}
-<input id="select-all-place" type="checkbox"> Выделить все населенные пункты
+        <input id="select-all-place" type="checkbox"> <b>Выделить все населенные пункты</b>
 
 <div class="row place-values">
     @foreach ($place_values as $place_id => $place_name)
