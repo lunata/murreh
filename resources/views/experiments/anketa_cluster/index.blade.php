@@ -61,10 +61,12 @@
     @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors)])
     {!!Html::script('js/select2.min.js')!!}
     {!!Html::script('js/list_change.js')!!}
+    {!!Html::script('js/experiment.js')!!}
 @endsection
 
 @section('jqueryFunc')
     selectQsection();    
     selectQuestion('qsection_ids');    
     selectPlace();    
+    selectAllFields('select-all-place', '.place-values input');
 @stop
