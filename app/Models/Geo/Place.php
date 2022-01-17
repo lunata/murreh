@@ -397,6 +397,7 @@ class Place extends Model
     }
 
     public static function getForClusterization($place_ids=[], $qsection_ids=[], $question_ids=[]/*, $total_answers=null*/) {
+//dd($qsection_ids, $question_ids);        
         $places = Place::whereIn('id', function ($q) use ($qsection_ids, $question_ids/*,$total_answers*/){
                     $q->select('place_id')->from('anketas');
                     if (sizeof($qsection_ids)) {
@@ -406,12 +407,14 @@ class Place extends Model
                                     $q3->select('id')->from('questions')
                                       ->whereIn('qsection_id',$qsection_ids);
                                     if ($question_ids) {            
-                                        $q3->whereIn('id', $qsection_ids);
+                                        $q3->whereIn('id', $question_ids);
                                     }
                                });
                             });
                         }
                 });
+//dd(vsprintf(str_replace(array('?'), array('\'%s\''), $places->toSql()), $places->getBindings()));            
+
         if (sizeof($place_ids)) {
             $places -> whereIn('id', $place_ids);
         }

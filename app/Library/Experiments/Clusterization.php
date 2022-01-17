@@ -669,6 +669,7 @@ dd($lonely);
         $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids/*, $total_answers*/);  
         $place_ids = $places->pluck('id')->toArray();
 //dd($place_ids_old, $place_ids);        
+//dd($place_ids);                
         if (!sizeof($place_ids)) {
             $place_ids = $places->pluck('id')->toArray();
         }
