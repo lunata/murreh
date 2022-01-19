@@ -1,12 +1,18 @@
         {!! Form::open(['url' => '/experiments/anketa_cluster', 
                              'method' => 'get']) 
         !!}
-        <input id="select-all-place" type="checkbox"> <b>Выделить все населенные пункты</b>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold">
+            <span>Выделить</span>
+            <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>
+            <span><input id="select-places-4" type="checkbox"> собственно карельские</span>
+            <span><input id="select-places-5" type="checkbox"> ливвиковские</span>
+            <span><input id="select-places-6" type="checkbox"> людиковские</span>
+        </div>
 
 <div class="row place-values">
     @foreach ($place_values as $place_id => $place_name)
     <div class="col-sm-3">
-        <input type="checkbox" name="place_ids[]" value="{{$place_id}}"{{in_array($place_id, $place_ids) ? ' checked' : ''}}>
+        <input type="checkbox" class="places-{{\App\Models\Geo\Place::getLangById($place_id)}}" name="place_ids[]" value="{{$place_id}}"{{in_array($place_id, $place_ids) ? ' checked' : ''}}>
         {{$place_name}}               
     </div>
     @endforeach

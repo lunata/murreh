@@ -140,8 +140,16 @@ class Place extends Model
         return join ('; ', $out);
     }
 
-    public static function getListWithDistricts()
-    {     
+    public static function getLangById($id) {
+        $place = self::find($id);
+        if (!$place) { return; }
+        
+        if (!$place->dialect) { return; }
+
+        return $place->dialect->lang_id;
+    }
+
+    public static function getListWithDistricts() {     
         $places = self::orderBy('name_ru')->get();
         
         $list = array();
