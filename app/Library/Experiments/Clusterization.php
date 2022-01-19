@@ -112,12 +112,12 @@ class Clusterization
      * @param array $answers
      * @return array
      */
-    public static function distanceForPlaces($places, $answers, $normalize=true, $weights=[]) {
+    public static function distanceForPlaces($places, $answers, $normalize=true, $weights=[], $empty_is_not_diff=1) {
         $distances = [];
         foreach ($places as $place1) {
             foreach ($places as $place2) {
                $distances[$place1->id][$place2->id] 
-                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize, $weights);
+                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize, $weights, $empty_is_not_diff);
             }
         }  
         return $distances;
@@ -137,7 +137,7 @@ class Clusterization
      * @param array $weights
      * @return type
      */
-    public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[]) {
+    public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[], $empty_is_not_diff=1) {
         $distance = 0;
         $questions_count =0;
         foreach ($answers1 as $qsection => $questions) {
@@ -146,7 +146,7 @@ class Clusterization
                 if (sizeof($answer) && sizeof($answers2[$qsection][$question])
                     && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
                     $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
-                } elseif (!sizeof($answer) || !sizeof($answers2[$qsection][$question])) {
+                } elseif (!$empty_is_not_diff && (!sizeof($answer) || !sizeof($answers2[$qsection][$question]))) {
                     $difference += isset($weights[$qsection][$question]) ? 0.5 * $weights[$qsection][$question] : 0.5;
                 }
             }
@@ -656,8 +656,9 @@ dd($lonely);
 /*        $total_answers = 1000;*/
         $question_ids = (array)$request->input('question_ids');
         $normalize = (int)$request->input('normalize');
-        $with_weight = (int)$request->input('with_weight');
-        
+        $with_weight = (int)$request->input('with_weight');        
+        $empty_is_not_diff = (int)$request->input('empty_is_not_diff');   
+                
         $qsection_ids = (array)$request->input('qsection_ids');
         if (!sizeof($qsection_ids)) {
             $qsection_ids = [2];
@@ -674,7 +675,7 @@ dd($lonely);
             $place_ids = $places->pluck('id')->toArray();
         }
         
-        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight];
+        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight, $empty_is_not_diff];
     }
     
     public static function getRequestDataForCluster($request, $places) {

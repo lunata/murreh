@@ -17,7 +17,7 @@ class ClusterizationController extends Controller
     
     public function index(Request $request) {
 //print "<pre>";        
-        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers,*/ $with_weight)
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers,*/ $with_weight, $empty_is_not_diff)
                 = Clusterization::getRequestDataForView($request);
 //dd($place_ids);        
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
@@ -25,7 +25,7 @@ class ClusterizationController extends Controller
                 = Clusterization::getRequestDataForCluster($request, $places);
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
-        $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
+        $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights, $empty_is_not_diff);
 
         $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit);
         $clusterization->clusterization($method_id);
@@ -44,18 +44,18 @@ class ClusterizationController extends Controller
                         'method_values', 'min_cl_distance', 'normalize', 
                         'place_ids', 'place_values', 'qsection_ids', 
                         'qsection_values', 'question_ids', 'question_values', // 'section_values', 
-                        'total_limit', 'with_geo', 'with_weight'));
+                        'total_limit', 'with_geo', 'with_weight', 'empty_is_not_diff'));
     }
     
     public function viewData(Request $request) {
-        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight)
+        list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight, $empty_is_not_diff)
                 = Clusterization::getRequestDataForView($request);
         
         $place_names = $places->pluck('name_ru', 'id')->toArray();
         
         list($answers, $weights) 
                 = Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
-        $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights);
+        $distances = Clusterization::distanceForPlaces($places, $answers, $normalize, $weights, $empty_is_not_diff);
 //dd($answers, $differences);        
         return view('experiments/anketa_cluster/view_data', 
                 compact('answers', 'distances', 'place_names'));

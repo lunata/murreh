@@ -63,10 +63,14 @@
     @include('widgets.form.formitem._checkbox', ['name' => 'normalize', 'value' => 1, 'checked'=>$normalize==1] )                 
     
     <label for="with_geo" style="padding: 0 10px 0 20px">Учитывать географическое положение</label>
-    @include('widgets.form.formitem._checkbox', ['name' => 'with_geo', 'value' => 1, 'checked'=>$with_geo==1] )                 
+    @include('widgets.form.formitem._checkbox', ['name' => 'with_geo', 'value' => 1, 'checked'=>$with_geo==1] )                     
+</div>
+<div class='compact-search-form'>
+    <label for="empty_is_not_diff" style="padding-right: 10px">НЕ считать отсутствие ответа как отличие</label>
+    @include('widgets.form.formitem._checkbox', ['name' => 'empty_is_not_diff', 'value' => 1, 'checked'=>$empty_is_not_diff==1] )                 
     
     <label for="with_geo" style="padding: 0 10px 0 20px">Учитывать веса</label>
-    @include('widgets.form.formitem._checkbox', ['name' => 'with_weight', 'value' => 1, 'checked'=>$with_weight==1] )                 
+    @include('widgets.form.formitem._checkbox', ['name' => 'with_weight', 'value' => 1, 'checked'=>$with_weight==1] )                     
     
     @include('widgets.form.formitem._submit', ['title' => 'запустить'])
 </div>
