@@ -1,5 +1,5 @@
                 @foreach ($questions as $question_id => $question_info)
-                    @if ($question_id == $active_question->id)
+                    @if ($active_question && $question_id == $active_question->id)
                     <a name="question{{$question_id}}"></a>
                     @endif
                     <p> 
