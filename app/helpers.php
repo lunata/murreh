@@ -66,3 +66,11 @@ if (! function_exists('output_array_for_script')) {
     }
 }
         
+if (! function_exists('to_sql')) {
+    function to_sql($query)
+    {
+        return vsprintf(str_replace(array('?'), array('\'%s\''), $query->toSql()), $query->getBindings());            
+
+    }
+}
+

@@ -214,15 +214,16 @@ class QuestionController extends Controller
             try{
                 $question_name = $question->question;
                 if ($question->anketas()->count() >0) {
-                    $error = true;
-                    $result['error_message'] = \Lang::get('ques.anketa_exists');
-                } else {
+                    $question->anketas()->detach();
+/*                    $error = true;
+                    $result['error_message'] = \Lang::get('ques.anketa_exists');*/
+                } //else {
                     foreach ($question->answers as $answer) {
                         $answer->delete();
                     }
                     $question->delete();
                     $result['message'] = \Lang::get('ques.question_removed', ['name'=>$question_name]);
-                }
+                //}
             }catch(\Exception $ex){
                 $error = true;
                 $status_code = $ex->getCode();
@@ -344,6 +345,7 @@ class QuestionController extends Controller
                            ->whereQuestionId($from_question_id)
                            ->where('answer_text', 'like', $answer_text);
                     })->get();
+//dd(to_sql($anketas));                    
 //dd($question);                    
         foreach ($anketas as $anketa) {
             if (!$anketa->questions()->whereQuestionId($question->id)->count()) {
