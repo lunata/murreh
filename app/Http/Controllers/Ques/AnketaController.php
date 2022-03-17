@@ -132,10 +132,21 @@ class AnketaController extends Controller
         $section_values = Qsection::getSectionListWithQuantity($anketa, !User::checkAccess('edit'));
         $qsection_values = Qsection::getListWithSections(!User::checkAccess('edit'));
         $question_values = Question::getListWithQsections();
+        
+        if ($url_args['search_question']) {
+            $active_question = Question::find($url_args['search_question']);
+        } else {
+            $active_question = null;
+        }
+        
+        $active_section = $active_question && isset($active_question->section_id) 
+                            ? $active_question->section_id 
+                            : array_key_first($section_values);
 //dd($question_values);        
         return view('ques.anketa.show', 
-                compact('anketa', 'section_values', 'qsection_values', 
-                        'question_values','args_by_get', 'url_args'));
+                compact('active_question', 'active_section', 'anketa', 
+                        'section_values', 'qsection_values', 'question_values',
+                        'args_by_get', 'url_args'));
     }
 
     /**

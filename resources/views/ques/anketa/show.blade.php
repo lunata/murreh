@@ -51,7 +51,7 @@
 <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">           
         @foreach($section_values as $section_id => $section_title)
-            <li role="presentation"{!!$section_id === array_key_first($section_values) ? ' class="active"' : ''!!}>
+            <li role="presentation"{!! $section_id === $active_section ? ' class="active"' : '' !!}>
                 <a href="#section{{$section_id}}" role="tab" data-toggle="tab">{{$section_title}}</a>
             </li>
         @endforeach
@@ -60,7 +60,7 @@
 <!-- Tab panes -->
         <div class="tab-content">
         @foreach($section_values as $section_id => $section_title)
-            <div role="tabpanel" class="tab-pane{{$section_id === array_key_first($section_values) ? ' active' : ''}}" id="section{{$section_id}}">
+            <div role="tabpanel" class="tab-pane{{$section_id === $active_section ? ' active' : ''}}" id="section{{$section_id}}">
             @foreach($qsection_values[$section_id] as $qsection_id=>$qsection_title)
                 <h3>{{$qsection_title}}
                     <i id="anketa-ques-edit-{{$qsection_id}}" class="anketa-ques-edit fa fa-pencil-alt fa-lg" data-qid="{{$qsection_id}}"></i>                
