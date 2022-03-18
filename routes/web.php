@@ -79,6 +79,7 @@ Route::get('experiments', function () {
 });
 Route::get('experiments/anketa_cluster/', [ClusterizationController::class, 'index']);
 Route::get('experiments/anketa_cluster/view_data', [ClusterizationController::class, 'viewData']);
+Route::get('experiments/anketa_cluster/export_data', [ClusterizationController::class, 'exportData']);
         
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);
@@ -120,6 +121,7 @@ Route::put('ques/question/update_answer/{anketa_id}', [QuestionController::class
 Route::get('service', [ServiceController::class, 'index']);
 Route::get('service/add_sequence_number_to_qsections', [ServiceController::class, 'addSequenceNumberToQsections']);
 Route::get('service/add_sequence_number_to_questions', [ServiceController::class, 'addSequenceNumberToQuestions']);
+Route::get('service/replace_apostroph', [ServiceController::class, 'replaceApostroph']);
 Route::get('service/split_qsections', [ServiceController::class, 'splitQsections']);
 Route::get('service/merge_answers', [ServiceController::class, 'mergeAnswers']);
 

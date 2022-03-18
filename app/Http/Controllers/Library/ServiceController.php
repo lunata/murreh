@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 
 //use App\Library\Service;
 
+use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
@@ -115,4 +116,31 @@ print '<li><a href="http://murreh.krc.karelia.ru/ques/question?search_id='.$dubl
         }
     }
     
+    /**
+     select * from answers where answer like '%\'%' limit 30;
+     select count(*) from answers where answer like '%\'%';
+     select count(*) from answers where answer like '%’%';
+     select count(*) from anketa_question where answer_text like '%\'%';
+     select count(*) from anketa_question where answer_text like '%’%';
+     */
+    public function replaceApostroph() {
+//        $answers = Answer::where('answer', 'like', '%’%')->first();
+//dd($answers);        
+        $answers = Answer::where('answer', 'like', '%\'%')->get();
+        foreach ($answers as $answer) {
+//dd($answer->answer, preg_replace('/\'/', '’', $answer->answer));            
+            $answer->answer = preg_replace('/\'/', '’', $answer->answer);
+            $answer->save();
+        }
+        print "<p>Заменено ".count($answers). ' вариантов ответов</p>';
+//exit(0);        
+        $answers = AnketaQuestion::where('answer_text', 'like', '%\'%')->get();
+        foreach ($answers as $answer) {
+            DB::statement("UPDATE anketa_question SET answer_text ='" 
+                    . preg_replace('/\'/', '’', $answer->answer_text)."' WHERE"
+                    . " anketa_id=".$answer->anketa_id. " AND question_id="
+                    . $answer->question_id. " AND answer_id=".$answer->answer_id);
+        }
+        print "<p>Заменено ".count($answers). ' текстов ответов</p>';
+    }
 }
