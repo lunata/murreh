@@ -31,6 +31,7 @@
     var {{$code}}Icon = new L.Icon({
       iconUrl: '/images/markers/marker-icon-{{$color}}.png',
       iconAnchor: [12, 41],
+      html: ''
     });
 @endforeach    
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -49,7 +50,7 @@
         $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
                 trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a>" : '';
     ?>
-    L.marker([{{$place->latitude}}, {{$place->longitude}}], {icon: {{$answer_code}}Icon}).addTo(mymap)
+    L.marker([{{$place->latitude}}, {{$place->longitude}}], {icon: {{$answer_code}}Icon, html: '1'}).addTo(mymap)
             .bindPopup("<b>{{$place->name_ru}}</b>{!!$anketa_link!!}").openPopup();
     @endforeach
 @endforeach

@@ -14,6 +14,7 @@ class Clusterization
 {
     protected $clusters=[];
     protected $distances=[]; 
+    protected $hierarchy=[];
     protected $min_cl_distance = 0; // минимальное расстояние между кластерами на последнем шаге
     protected $method_id=1;
     protected $with_geo=false;
@@ -43,6 +44,10 @@ class Clusterization
     
     public function getClusters() {
         return $this->clusters;
+    }
+    
+    public function getHierarchy() {
+        return $this->hierarchy;
     }
     
     public function getDistances() {
@@ -117,7 +122,9 @@ class Clusterization
         foreach ($places as $place1) {
             foreach ($places as $place2) {
                $distances[$place1->id][$place2->id] 
-                       = Clusterization::distanceForAnswers($answers[$place1->id], $answers[$place2->id], $normalize, $weights, $empty_is_not_diff);
+                    = $place1->id == $place2->id ? 0
+                      : Clusterization::distanceForAnswers($answers[$place1->id], 
+                              $answers[$place2->id], $normalize, $weights, $empty_is_not_diff);
             }
         }  
         return $distances;
@@ -156,7 +163,7 @@ class Clusterization
         
         return $normalize ? round($distance/$questions_count, 2) : $distance;
     }
-    
+
     public function clusterization($method_id) {   
         $this->aggrigate_clusterization();
         if ($method_id==3) {            
@@ -303,7 +310,7 @@ var_dump($clusters[$new_cluster]);*/
     }
     
     /**
-     * Метод точных связей и метод центроидов
+     * Иерархичные методы
      * 0. Считаем все расстояния между кластерами 
      *    (расстояние м/у кластерами = 
      *      (метод точных связей) расстояние между самыми дальними элементами
@@ -707,5 +714,74 @@ dd($lonely);
         $place_values = Place::getForClusterization()->pluck('name_ru', 'id')->toArray();
         
         return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo];
+    }
+    
+    public static function placeToCsv($place) {
+        $name = $place->name. "_".$place->dialect->bcode."_".$place->id;
+        return mb_convert_encoding(preg_replace("/\s+/", "_", $name), "windows-1251", "utf-8");
+    }
+    
+    public static function distancesToCsv($places, $distances) {
+        $place_line = [];
+        foreach ($places as $place) {
+            $place_line[] = self::placeToCsv($place);
+        }
+        
+        $lines = [join("\t", $place_line)];
+        foreach($distances as $place1_id=>$place_dist) {
+            $lines[] = join("\t",array_values($place_dist));
+        }        
+        return join("\n", $lines);
+    }
+    
+    public static function placesToCsv($places) {
+        $lines = [];
+        $count=1;
+        foreach ($places as $place) {
+            $lines[] = self::placeToCsv($place)."\t".$count++;
+        }
+        return join("\n", $lines);
+    }
+    
+    public static function colorsToCsv($places) {
+        $colors = [
+            19 => '#aa00ff',
+            7  => '#bc2bd9',
+            20 => '#ff00ff',
+            6  => '#80006a',
+            16 => '#ff00aa',
+            21 => '#800040',
+            17 => '#ff0055',
+            48 => '#ff002a',
+            10 => '#be0404',
+            18 => '#ff2a00',
+            14 => '#ff5500',
+            9  => '#ff7f00',
+            11 => '#ffaa00',
+            50 => '#ffd400',
+            13 => '#ffff00',
+            15 => '#b33c00',
+            8  => '#b35900',
+            49 => '#b37700',
+            12 => '#b39500',
+            30 => '#59b300',
+            32 => '#55ff00',
+            33 => '#1eb300',
+            31 => '#00b359',
+            34 => '#00b395',
+            36 => '#00ff80',
+            35 => '#00ff00',
+            39 => '#00ffff',
+            42 => '#0000ff',
+            38 => '#000080',
+            41 => '#005580'      
+        ];
+        $lines = [];
+        $count=1;
+        foreach ($places as $place) {
+//            $lines[] = $colors[$place->dialect_id]."\t".$count++;
+            $lines[] = $place->dialect_id."\t".$count++;
+        }
+        return join("\n", $lines);
     }
 }

@@ -113,3 +113,5 @@ class Dialect extends Model
         return $dialect->lang_id;
     }
 }
+//select lang_id, dialect_id, code, count(*) as count from places, vepkar.dialects where vepkar.dialects.id=dialect_id and places.id in (select place_id from anketas) group by dialect_id order by lang_id, count DESC;
+//select name_ru, dialect_id from places where dialect_id=19 and places.id in (select place_id from anketas);

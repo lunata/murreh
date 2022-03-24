@@ -79,7 +79,8 @@ Route::get('experiments', function () {
 });
 Route::get('experiments/anketa_cluster/', [ClusterizationController::class, 'index']);
 Route::get('experiments/anketa_cluster/view_data', [ClusterizationController::class, 'viewData']);
-Route::get('experiments/anketa_cluster/export_data', [ClusterizationController::class, 'exportData']);
+Route::get('experiments/anketa_cluster/export_data_for_dendrogram', [ClusterizationController::class, 'exportDataForDendrogram']);
+Route::get('experiments/anketa_cluster/export_labels_for_dendrogram', [ClusterizationController::class, 'exportLablesForDendrogram']);
         
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);

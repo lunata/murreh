@@ -15,6 +15,9 @@
     @include('experiments.anketa_cluster._search_form') 
 
     <p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p>
+    @if (User::checkAccess('admin'))
+        <p><a href="/experiments/anketa_cluster/export_data_for_dendrogram?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Выгрузить матрицу расстояний</a></p>
+    @endif
 {{----}}    
 @if ($method_id==2)
     @foreach ($clusters as $step => $step_clusters) 

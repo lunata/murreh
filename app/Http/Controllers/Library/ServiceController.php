@@ -128,7 +128,7 @@ print '<li><a href="http://murreh.krc.karelia.ru/ques/question?search_id='.$dubl
 //dd($answers);        
         $answers = Answer::where('answer', 'like', '%\'%')->get();
         foreach ($answers as $answer) {
-//dd($answer->answer, preg_replace('/\'/', '’', $answer->answer));            
+//print "<p>".$answer->answer. '='. preg_replace('/\'/', '’', $answer->answer).'</p>';            
             $answer->answer = preg_replace('/\'/', '’', $answer->answer);
             $answer->save();
         }
@@ -136,6 +136,10 @@ print '<li><a href="http://murreh.krc.karelia.ru/ques/question?search_id='.$dubl
 //exit(0);        
         $answers = AnketaQuestion::where('answer_text', 'like', '%\'%')->get();
         foreach ($answers as $answer) {
+/*print "<P>UPDATE anketa_question SET answer_text ='" 
+                    . preg_replace('/\'/', '’', $answer->answer_text)."' WHERE"
+                    . " anketa_id=".$answer->anketa_id. " AND question_id="
+                    . $answer->question_id. " AND answer_id=".$answer->answer_id.'</p>';*/
             DB::statement("UPDATE anketa_question SET answer_text ='" 
                     . preg_replace('/\'/', '’', $answer->answer_text)."' WHERE"
                     . " anketa_id=".$answer->anketa_id. " AND question_id="
