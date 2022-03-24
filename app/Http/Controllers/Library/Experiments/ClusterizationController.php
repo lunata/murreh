@@ -78,6 +78,16 @@ class ClusterizationController extends Controller
 
         $filename = 'export/cluster/cluster.csv';        
         Storage::disk('public')->put($filename, Clusterization::distancesToCsv($places, $distances));
+        
+        $filename = 'export/cluster/places.csv';        
+        Storage::disk('public')->put($filename, 
+                "place\tobj_number\n".
+                Clusterization::placesToCsv($places));
+        $filename = 'export/cluster/colors.csv';        
+        Storage::disk('public')->put($filename, 
+                "color\tobj_number\n".
+                Clusterization::colorsToCsv($places));
+        
         print '<p>done.</p>';
     }
     
