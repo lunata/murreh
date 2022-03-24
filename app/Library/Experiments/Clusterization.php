@@ -779,8 +779,8 @@ dd($lonely);
         $lines = [];
         $count=1;
         foreach ($places as $place) {
-//            $lines[] = $colors[$place->dialect_id]."\t".$count++;
-            $lines[] = $place->dialect_id."\t".$count++;
+            $lines[] = $colors[$place->dialect_id]."\t".$count++;
+//            $lines[] = $place->dialect_id."\t".$count++;
         }
         return join("\n", $lines);
     }
