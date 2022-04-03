@@ -100,7 +100,7 @@ class ClusterizationController extends Controller
                 "color\tobj_number\n".
                 Clusterization::colorClustersToCsv($places, $clusters[$last_step], $cl_colors));
         
-        print '<p>done.</p>';
+        print '<p>Данные для дендрограммы примера $example_id сохранены.</p>';
     }
     
     public function exportExample(Request $request) {
@@ -120,13 +120,14 @@ class ClusterizationController extends Controller
         $clusters = $clusterization->getClusters();
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
-        $filename = 'export/cluster/example_'.$method_id.'_'.join('-',$qsection_ids).'.json';  
+        $example_id = $method_id.'_'.join('-',$qsection_ids);
+        $filename = 'export/cluster/example_'.$example_id.'.json';  
         $data = compact('cl_colors', 'clusters', 'color_values', 'distance_limit', 
                         'method_id', 'min_cl_distance', 'normalize', 'place_ids',  
                         'qsection_ids','question_ids', 'total_limit', 'with_geo', 
                         'with_weight', 'empty_is_not_diff');
         Storage::disk('public')->put($filename,json_encode($data));
-        print "Пример сохранен.";
+        print "Пример $example_id сохранен.";
     }
     
     public function exampleFromFile(string $example_id) {

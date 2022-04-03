@@ -798,7 +798,7 @@ dd($lonely);
     public static function colorClustersToCsv($places, $clusters, $cl_colors) {
         $place_colors = [];
         foreach ($clusters as $cl_num => $cl_places) {
-            foreach ($cl_places as $place_id) {
+            foreach ($cl_places as $place_id) {               
                 $place_colors[$place_id] = Map::getHexColor($cl_colors[$cl_num]);
             }
         }
