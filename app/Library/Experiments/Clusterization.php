@@ -78,6 +78,21 @@ class Clusterization
         return $this->total_limit;        
     }
     
+    public static function availableMethods() {
+        return [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
+                5=>'одиночной связи',
+                4=>'центроидный',
+                2=>'Соллина',
+                3=>'полной связи + K-средних',
+            ];
+    }
+    
+    public static function methodTitle($method_id) {
+        $methods = self::availableMethods();
+        return $methods[$method_id] ?? null;
+    }
+    
+    
     /**
      * Подбор нового максимального расстояния между кластерами
      */
@@ -698,12 +713,7 @@ dd($lonely);
             $total_limit = 20;
         }
         
-        $method_values = [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
-                          5=>'одиночной связи',
-                          4=>'центроидный',
-                          2=>'Соллина',
-                          3=>'полной связи + K-средних',
-                         ];
+        $method_values = self::availableMethods();
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
         
@@ -743,7 +753,7 @@ dd($lonely);
         return join("\n", $lines);
     }
     
-    public static function colorsToCsv($places) {
+    public static function colorPlacesToCsv($places) {
         $colors = [
             19 => '#aa00ff',
             7  => '#bc2bd9',
@@ -782,6 +792,22 @@ dd($lonely);
             $lines[] = $colors[$place->dialect_id]."\t".$count++;
 //            $lines[] = $place->dialect_id."\t".$count++;
         }
+        return join("\n", $lines);
+    }
+    
+    public static function colorClustersToCsv($places, $clusters, $cl_colors) {
+        $place_colors = [];
+        foreach ($clusters as $cl_num => $cl_places) {
+            foreach ($cl_places as $place_id) {
+                $place_colors[$place_id] = Map::getHexColor($cl_colors[$cl_num]);
+            }
+        }
+        $lines = [];
+        $count=1;
+        foreach ($places as $place) {
+            $lines[] = $place_colors[$place->id]."\t".$count++;
+        }
+        
         return join("\n", $lines);
     }
 }

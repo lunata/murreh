@@ -1,5 +1,5 @@
         {!! Form::open(['url' => '/experiments/anketa_cluster', 
-                             'method' => 'get']) 
+                             'method' => 'get', 'id'=>'cluster_form']) 
         !!}
         <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold">
             <span>Выделить</span>
@@ -77,7 +77,24 @@
     
     <label for="with_geo" style="padding: 0 10px 0 20px">Учитывать веса</label>
     @include('widgets.form.formitem._checkbox', ['name' => 'with_weight', 'value' => 1, 'checked'=>$with_weight==1] )                     
-    
-    @include('widgets.form.formitem._submit', ['title' => 'запустить'])
+</div>
+<div class='compact-search-form'>    
+    <p class='form-group'>
+        <input class="btn btn-primary btn-default" type="button" value="запустить" onClick="submitByButton('cluster_form', '/experiments/anketa_cluster')">
+    </p>
+    <p class='form-group'>
+        <input class="btn btn-info btn-default" type="button" value="посмотреть данные" onClick="submitByButton('cluster_form', '/experiments/anketa_cluster/view_data')">
+    </p>
+    <p class='form-group'>
+        <input class="btn btn-warning btn-default" type="button" value="сохранить матрицу расстояний" onClick="submitByButton('cluster_form', '/experiments/anketa_cluster/export_data_for_dendrogram')">
+    </p>
+    <p class='form-group'>
+        <input class="btn btn-success btn-default" type="button" value="сохранить пример" onClick="submitByButton('cluster_form', '/experiments/anketa_cluster/export_example')">
+    </p>
 </div>
 
+    <!--p><a href="/experiments/anketa_cluster/view_data?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Посмотреть данные</a></p-->
+    @if (User::checkAccess('admin'))
+        <!--p><a href="/experiments/anketa_cluster/export_data_for_dendrogram?normalize={{$normalize}}&with_weight={{$with_weight}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Выгрузить матрицу расстояний</a></p>
+        <p><a href="/experiments/anketa_cluster/export_example?normalize={{$normalize}}&with_weight={{$with_weight}}&with_geo={{$with_geo}}&{{http_build_query(['qsection_ids'=>$qsection_ids])}}&{{http_build_query(['question_ids'=>$question_ids])}}&{{http_build_query(['place_ids'=>$place_ids])}}">Выгрузить матрицу расстояний</a></p-->
+    @endif

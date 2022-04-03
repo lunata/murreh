@@ -6,8 +6,8 @@
 
 @section('body')
     <p><a href="/experiments/anketa_cluster">{{trans('navigation.anketa_cluster')}}</a></p>
-
-    @if (User::checkAccess('admin'))
-    <!--p><a href="/experiments/anketa_cluster/export_labels_for_dendrogram">Выгрузить метки для дендрограммы</a></p-->
-    @endif
+    <p>Примеры:</p>
+    <ul>
+    <li><a href='/experiments/anketa_cluster/example/1_2'>Метод полной связи, раздел "Дифтонги"</a></li>
+    </ul>
 @endsection

@@ -8,11 +8,11 @@
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
-    {!!Html::style('css/select2.min.css')!!}
  @stop
 
 @section('body')
-    @include('experiments.anketa_cluster._search_form') 
+    <h2>Метод {{$method_title}}</h2>
+    <h3>Раздел{{sizeof($qsections)>1 ? 'ы' : ''}}: {{join(', ', $qsections)}}</h3>
 {{----}}    
 @if ($method_id==2)
     @foreach ($clusters as $step => $step_clusters) 
@@ -39,36 +39,21 @@
     <div class="cluster-info">
         <div class="cluster-marker">
             <img src="/images/markers/marker-icon-{{$cl_colors[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px">
-            @include('widgets.form.formitem._select', 
-                    ['name' => "cl_colors[$cl_num]", 
-                     'values' => $color_values,
-                     'value' => $cl_colors[$cl_num]])                                              
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
         </div>
        {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
-       <br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\Ques\AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids))}}</span>
+       <!--br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\Ques\AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids))}}</span-->
     </div>
         @endforeach
-
-    {!! Form::close() !!}
     
     @include('widgets.leaflet.map', ['markers'=>[]])
+    
+    @if ($dendrogram)
+    <img src="{{'/storage/'.$dendrogram_file}}">
+    @endif
 @endsection
 
 @section('footScriptExtra')
     @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors)])
-    {!!Html::script('js/select2.min.js')!!}
-    {!!Html::script('js/list_change.js')!!}
-    {!!Html::script('js/form.js')!!}
     {!!Html::script('js/experiment.js')!!}
 @endsection
-
-@section('jqueryFunc')
-    selectQsection();    
-    selectQuestion('qsection_ids');    
-    selectPlace();    
-    selectAllFields('select-all-place', '.place-values input');
-    for (i=4; i<7; i++) {
-        selectAllFields('select-places-'+i, '.places-'+i);
-    }
-@stop
