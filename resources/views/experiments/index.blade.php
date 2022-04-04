@@ -10,6 +10,6 @@
     <ul>
     <li><a href='/experiments/anketa_cluster/example/1_2'>Раздел "Дифтонги", метод полной связи</a></li>
     <li><a href='/experiments/anketa_cluster/example/5_2'>Раздел "Дифтонги", метод одиночной связи</a></li>
-    <li><a href='/experiments/anketa_cluster/example/1_3-119'>Раздел "Дифтонги", метод полной связи</a></li>
+    <li><a href='/experiments/anketa_cluster/example/1_3-119'>Разделы "Звонкий / глухой согласный", метод полной связи</a></li>
     </ul>
 @endsection
