@@ -5,8 +5,9 @@
     width: 28px;
     height: 28px;*/
     border-radius: 50%;
+    font-size: 14px;
     line-height: 12px;
-    padding: 5px 15px 15px 5px;
+    padding: 10px;
 }
 .marker-black {
     color: #fff;
