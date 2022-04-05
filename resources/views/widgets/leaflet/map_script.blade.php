@@ -21,7 +21,7 @@
 
 @foreach ($places as $color => $color_places)
     @foreach ($color_places as $place)
-    L.marker([{{$place['latitude']}}, {{$place['longitude']}}], {icon: L.divIcon({className: 'marker-icon marker-{{$color}}', html: '{{$place["place_id"]}}'})}).addTo(mymap)
+    L.marker([{{$place['latitude']}}, {{$place['longitude']}}], {icon: L.divIcon({className: 'marker-icon marker-{{$color}}{{$place["place_id"]>99 ? " marker-3num": ""}}', html: '{{$place["place_id"]}}'})}).addTo(mymap)
             .bindPopup("{!!$place['popup']!!}").openPopup();
     @endforeach
 @endforeach
