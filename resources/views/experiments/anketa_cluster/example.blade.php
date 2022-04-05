@@ -8,6 +8,7 @@
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
+     {!!Html::style('css/markers.css')!!}
  @stop
 
 @section('body')
@@ -38,7 +39,8 @@
         @foreach ($clusters[$last_step] as $cl_num => $cluster) 
     <div class="cluster-info">
         <div class="cluster-marker">
-            <img src="/images/markers/marker-icon-{{$cl_colors[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px">
+            <div class="marker-icon marker-legend marker-{{$cl_colors[$cl_num]}}">
+            <!--img src="/images/markers/marker-icon-{{$cl_colors[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px"-->
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
         </div>
        {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}

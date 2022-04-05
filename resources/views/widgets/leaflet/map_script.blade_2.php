@@ -7,7 +7,7 @@
 @foreach ($colors as $color)
     var {{$color}}Icon = new L.Icon({
       iconUrl: '/images/markers/marker-icon-{{$color}}.png',
-      iconAnchor: [12, 41]
+      iconAnchor: [12, 41],
     });
 @endforeach    
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -21,7 +21,8 @@
 
 @foreach ($places as $color => $color_places)
     @foreach ($color_places as $place)
-    L.marker([{{$place['latitude']}}, {{$place['longitude']}}], {icon: L.divIcon({className: 'marker-icon marker-{{$color}}', html: '{{$place["place_id"]}}'})}).addTo(mymap)
+    var icon = new L.NumberedDivIcon({number: '1'});
+    L.marker([{{$place['latitude']}}, {{$place['longitude']}}], {icon: icon}).addTo(mymap)
             .bindPopup("{!!$place['popup']!!}").openPopup();
     @endforeach
 @endforeach

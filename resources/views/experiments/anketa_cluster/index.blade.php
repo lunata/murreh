@@ -9,7 +9,8 @@
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
     {!!Html::style('css/select2.min.css')!!}
- @stop
+      {!!Html::style('css/markers.css')!!}
+@stop
 
 @section('body')
     @include('experiments.anketa_cluster._search_form') 

@@ -1,0 +1,80 @@
+.marker-icon {
+    box-sizing: content-box;
+/*    margin-left: -13px;
+    margin-top: -13px;
+    width: 28px;
+    height: 28px;*/
+    border-radius: 50%;
+    line-height: 12px;
+    padding: 5px 15px 15px 5px;
+}
+.marker-black {
+    color: #fff;
+    background: #2b2b2b;
+}
+.marker-blue {
+    color: #fff;
+    background: #0065a2;
+}
+.marker-brown {
+    color: #fff;
+    background: #b92e32;
+}
+.marker-coral {
+    background: #ff7e80;
+}
+.marker-cyan {
+    background: #49daff;
+}
+.marker-darkgrey {
+    color: #fff;
+    background: #565656;
+}
+.marker-green {
+    background: #45ad00;
+}
+.marker-grey {
+    background: #a5a5a5;
+}
+.marker-lime {
+    background: #9cf667;
+}
+.marker-magenta {
+    background: #f051bc;
+}
+.marker-olive {
+    background: #6b830e;
+}
+.marker-orange {
+    background: #ff961d;
+}
+.marker-pink {
+    background: #ff8e7e;
+}
+.marker-purple {
+    color: #fff;
+    background: #63356b;
+}
+.marker-red {
+    color: #fff;
+    background: #ee3922;
+}
+.marker-sandy {
+    background: #ffcb8e;
+}
+.marker-skyblue {
+    background: #00a9dd;
+}
+.marker-teal {
+    color: #fff;
+    background: #226878;
+}
+.marker-violet {
+    background: #ff91ed;
+}
+.marker-white {
+    background: #ede7e7;
+}
+.marker-legend {
+    margin-right: 20px;
+}
