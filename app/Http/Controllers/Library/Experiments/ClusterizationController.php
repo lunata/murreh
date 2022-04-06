@@ -100,7 +100,7 @@ class ClusterizationController extends Controller
                 "color\tobj_number\n".
                 Clusterization::colorClustersToCsv($places, $clusters[$last_step], $cl_colors));
         
-        print '<p>Данные для дендрограммы примера $example_id сохранены.</p>';
+        print "<p>Данные для дендрограммы примера $example_id сохранены.</p>";
     }
     
     public function exportExample(Request $request) {
