@@ -100,6 +100,9 @@ class QuestionController extends Controller
         if (!$data['sequence_number']) {
             $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
         }
+        if (!$data['weight']) {
+            $data['weight']=1;
+        }
         Question::renumerateOthers($data['sequence_number']);
 
         $question = Question::create($data);
