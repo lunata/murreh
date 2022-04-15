@@ -86,7 +86,7 @@ class ExportController extends Controller
                 ."<td>";
             foreach ($concept->allVariants() as $code => $words) {
                 foreach ($words as $word => $places) {
-                    $str .= "$code=$word; "; 
+                    $str .= "$code=$word: <i>".join(', ', $places)."</i><br> "; 
                 }                    
             }
             Storage::disk('public')->append($fname, $str."</td></tr>");
