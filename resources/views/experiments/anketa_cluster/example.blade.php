@@ -41,11 +41,12 @@
         <div class="cluster-marker">
             <div class="marker-icon marker-legend marker-{{$cl_colors[$cl_num]}}">
             <!--img src="/images/markers/marker-icon-{{$cl_colors[$cl_num]}}.png" style="padding-right: 5px; margin-top:-10px"-->
-            </div>
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
+            </div>
         </div>
+        <div>
        {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
-       <!--br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\Ques\AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids))}}</span-->
+        </div>
     </div>
         @endforeach
     
