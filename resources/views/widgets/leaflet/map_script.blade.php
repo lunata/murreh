@@ -3,7 +3,7 @@
    crossorigin=""></script>
     
 <script>
-    var mymap = L.map('mapid').setView([61.8, 33.9], 7);
+    var mymap = L.map('mapid').setView([64, 33.95], 7);
 @foreach ($colors as $color)
     var {{$color}}Icon = new L.Icon({
       iconUrl: '/images/markers/marker-icon-{{$color}}.png',
