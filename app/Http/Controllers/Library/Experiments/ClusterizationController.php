@@ -21,6 +21,9 @@ class ClusterizationController extends Controller
     
     public function index(Request $request) {
 //print "<pre>";        
+        ini_set('max_execution_time', 7200);
+        ini_set('memory_limit', '512M');
+        
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers,*/ $with_weight, $empty_is_not_diff)
                 = Clusterization::getRequestDataForView($request);
 //dd($place_ids);        
