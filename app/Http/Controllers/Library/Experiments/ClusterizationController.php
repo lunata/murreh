@@ -16,7 +16,8 @@ use App\Models\Ques\Qsection;
 class ClusterizationController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:dict.edit,/experiments/');
+        $this->middleware('auth:dict.edit,/experiments/',
+                ['except'=>['exampleFromFile']]);
     }
     
     public function index(Request $request) {
