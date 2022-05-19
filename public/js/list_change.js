@@ -65,6 +65,56 @@ function selectQuestion(qsection_var='', placeholder='', allow_clear=false){
     });   
 }
 
+function selectConceptCategory(section_var='', placeholder='', allow_clear=false){
+    $(".select-category").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/sosd/concept_category/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              section_id: section_var ? $( "#"+section_var+" option:selected" ).val() : '',
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
+function selectConcept(category_var='', placeholder='', allow_clear=false){
+    $(".select-concept").select2({
+        allowClear: allow_clear,
+        placeholder: placeholder,
+        width: '100%',
+        ajax: {
+          url: "/sosd/concept/list",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              q: params.term, // search term
+              'category_id[]': getMultiValues(category_var),
+            };
+          },
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },          
+          cache: true
+        }
+    });   
+}
+
 function getMultiValues(var_name) {
     if (var_name === '') {
         return '';

@@ -94,4 +94,38 @@ class Concept extends Model
                     $query->where('name', 'like', $search_value);
         });
     }
+    
+    public static function getForPlacesCategory($places, $category_ids, $concept_ids, $with_weight=false) {
+        $weights = [];
+        $categories = ConceptCategory::whereIn('id',$category_ids)->get();
+
+        $answers = [];
+        foreach ($places as $place) {
+            $answers[$place->id] = [];
+            foreach ($categories as $category) {
+                $concepts = Concept::whereConceptCategoryId($category->id);
+                if ($concept_ids) {
+                    $concepts->whereIn('id', $concept_ids);
+                }
+                foreach ($concepts->get() as $concept) {
+                    $pq_answers = self::where('id',$concept->id)
+                            ->join('concept_place', 'concepts.id', '=', 'concept_place.concept_id')
+                            ->wherePlaceId($place->id)
+                            ->get();
+                    $out = [];
+                    foreach ($pq_answers as $answer) {
+                        $code0 = substr($answer->code, 0, 1);
+                        $out[$code0] = isset($out[$code0]) 
+                                ? $out[$code0].', '. $answer->word
+                                : $answer->word;
+                    }
+                    $answers[$place->id][$category->name][$concept->name] = $out;
+                    if ($with_weight) {
+                        $weights[$category->name][$concept->name] = 1;
+                    }
+                }
+            }
+        }
+        return [$answers, $weights];
+    }    
 }

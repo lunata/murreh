@@ -1,7 +1,7 @@
 @extends('layouts.page')
 
 @section('page_title')
-{{ trans('navigation.anketa_cluster') }}
+{{ trans('navigation.sosd_cluster') }}
 @endsection
 
 @section('headExtra')
@@ -13,14 +13,14 @@
 @stop
 
 @section('body')
-    @include('experiments.anketa_cluster._search_form') 
+    @include('experiments.sosd_cluster._search_form') 
     
     @if ($method_id==2)
-        @include('experiments.anketa_cluster._show_previous_steps') 
+        @include('experiments.sosd_cluster._show_previous_steps') 
     @endif    
     
-    @include('experiments.anketa_cluster._show_last_step')     
-    
+    @include('experiments.sosd_cluster._show_last_step')     
+
     {!! Form::close() !!}
     
     @include('widgets.leaflet.map', ['markers'=>[]])
@@ -35,8 +35,8 @@
 @endsection
 
 @section('jqueryFunc')
-    selectQsection();    
-    selectQuestion('qsection_ids');    
+    selectConceptCategory();    
+    selectConcept('qsection_ids');    
     selectPlace();    
     selectAllFields('select-all-place', '.place-values input');
     for (i=4; i<7; i++) {

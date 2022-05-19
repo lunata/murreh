@@ -10,6 +10,9 @@ use App\Models\Geo\Place;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
 
+use App\Models\SOSD\Concept;
+use App\Models\SOSD\ConceptCategory;
+
 class Clusterization
 {
     protected $clusters=[];
@@ -20,8 +23,9 @@ class Clusterization
     protected $with_geo=false;
     protected $distance_limit=0;
     protected $total_limit=20;
+    protected $data = 'anketa';
     
-    public static function init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit) {
+    public static function init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data) {
         $clusters = [];
         foreach ($places as $place) {
             $clusters[$place->id] = [$place->id];
@@ -34,6 +38,7 @@ class Clusterization
         $clusterization->with_geo = $with_geo;
         $clusterization->distance_limit = $distance_limit;
         $clusterization->total_limit = $total_limit;
+        $clusterization->data = $data;
         return $clusterization;
     }
     
@@ -675,8 +680,7 @@ dd($lonely);
         return [/*$markers, */$cluster_places, $cl_colors];
     }
     
-    public static function getRequestDataForView($request) {
-/*        $total_answers = 1000;*/
+    public static function getRequestDataForView($request, $data_type='anketa') {
         $question_ids = (array)$request->input('question_ids');
         $normalize = (int)$request->input('normalize');
         $with_weight = (int)$request->input('with_weight');        
@@ -684,24 +688,28 @@ dd($lonely);
                 
         $qsection_ids = (array)$request->input('qsection_ids');
         if (!sizeof($qsection_ids)) {
-            $qsection_ids = [2];
+            $qsection_ids = $data_type=='sosd' ? ['A11'] : [2];
         }
 
         $place_ids = (array)$request->input('place_ids');
-//dd($place_ids, $qsection_ids, $question_ids);        
-//$place_ids_old=$place_ids;        
-        $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids/*, $total_answers*/);  
+        $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids, $data_type);  
+//dd($place_ids, $qsection_ids, $question_ids, $places);        
         $place_ids = $places->pluck('id')->toArray();
-//dd($place_ids_old, $place_ids);        
-//dd($place_ids);                
         if (!sizeof($place_ids)) {
             $place_ids = $places->pluck('id')->toArray();
         }
+
+        list($answers, $weights) = $data_type=='sosd'
+                ? Concept::getForPlacesCategory($places, $qsection_ids, $question_ids, $with_weight)       
+                : Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
         
-        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, /*$total_answers, */$with_weight, $empty_is_not_diff];
+        $distances = self::distanceForPlaces($places, $answers, $normalize, $weights, $empty_is_not_diff);
+        
+        return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, 
+                $with_weight, $empty_is_not_diff, $answers, $weights, $distances];
     }
     
-    public static function getRequestDataForCluster($request, $places) {
+    public static function getRequestDataForCluster($request, $places, $data_type='anketa') {
 //        $section_id = (int)$request->input('qsection_id');      
         $with_geo = (int)$request->input('with_geo');
         $cl_colors = (array)$request->input('cl_colors');        
@@ -719,10 +727,11 @@ dd($lonely);
                 ? $request->input('method_id') : 1;
         
 //        $section_values = [NULL=>'']+Qsection::getSectionListWithQuantity();
-        $qsection_values = Qsection::getList();
-        $question_values = Question::getList();
         $color_values = Map::markers(true);
-        $place_values = Place::getForClusterization()->pluck('name_ru', 'id')->toArray();
+        
+        $qsection_values = $data_type=='sosd' ? ConceptCategory::getList() : Qsection::getList();
+        $question_values = $data_type=='sosd' ? Concept::getList(): Question::getList();
+        $place_values = Place::getForClusterization([], [], [], $data_type)->pluck('name_ru', 'id')->toArray();
         
         return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo];
     }

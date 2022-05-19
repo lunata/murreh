@@ -77,12 +77,13 @@ Route::get('dict/dialect/list', [LangController::class, 'dialectList']);
 Route::get('experiments', function () {
     return view('experiments.index');
 });
-Route::get('experiments/anketa_cluster/', [ClusterizationController::class, 'index']);
-Route::get('experiments/anketa_cluster/view_data', [ClusterizationController::class, 'viewData']);
-Route::get('experiments/anketa_cluster/example/{example_id}', [ClusterizationController::class, 'exampleFromFile']);
-Route::get('experiments/anketa_cluster/export_data_for_dendrogram', [ClusterizationController::class, 'exportDataForDendrogram']);
-Route::get('experiments/anketa_cluster/export_example', [ClusterizationController::class, 'exportExample']);
-        
+Route::get('experiments/{data}_cluster/', [ClusterizationController::class, 'index']);
+Route::get('experiments/{data}_cluster/view_data', [ClusterizationController::class, 'viewData']);
+Route::get('experiments/{data}_cluster/example/{example_id}', [ClusterizationController::class, 'exampleFromFile']);
+Route::get('experiments/{data}_cluster/export_data_for_dendrogram', [ClusterizationController::class, 'exportDataForDendrogram']);
+Route::get('experiments/{data}_cluster/export_example', [ClusterizationController::class, 'exportExample']);
+
+
 Route::get('export/answers_by_questions', [ExportController::class, 'answersByQuestions']);
 Route::get('export/concepts', [ExportController::class, 'concepts']);
 Route::get('export/concepts_by_places', [ExportController::class, 'conceptsByPlaces']);

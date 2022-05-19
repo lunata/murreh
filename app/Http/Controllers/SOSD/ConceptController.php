@@ -150,12 +150,12 @@ class ConceptController extends Controller
     public function conceptList(Request $request)
     {
         $concept_name = '%'.$request->input('q').'%';
-        $category_id = $request->input('category_id');
+        $category_ids = (array)$request->input('category_id');
 //dd($section_id);
         $list = [];
         $concepts = Concept::where('name','like', $concept_name);
-        if ($category_id) {                 
-            $concepts = $concepts->where('concept_category_id', $category_id);
+        if (sizeof($category_ids)) {                 
+            $concepts = $concepts->whereIn('concept_category_id', $category_ids);
         }
         
         $concepts = $concepts->orderBy('id')->get();

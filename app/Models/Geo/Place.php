@@ -404,8 +404,14 @@ class Place extends Model
         return $place->name_ru;
     }
 
-    public static function getForClusterization($place_ids=[], $qsection_ids=[], $question_ids=[]/*, $total_answers=null*/) {
-//dd($qsection_ids, $question_ids);        
+    public static function getForClusterization($place_ids=[], $qsection_ids=[], $question_ids=[], $data_type='anketa') {
+        if ($data_type == 'sosd') {
+            return self::getForSOSDClusterization($place_ids, $qsection_ids, $question_ids);
+        } 
+        return self::getForAnketaClusterization($place_ids, $qsection_ids, $question_ids);
+    }
+    
+    public static function getForAnketaClusterization($place_ids=[], $qsection_ids=[], $question_ids=[]) {
         $places = Place::whereIn('id', function ($q) use ($qsection_ids, $question_ids/*,$total_answers*/){
                     $q->select('place_id')->from('anketas');
                     if (sizeof($qsection_ids)) {
@@ -414,24 +420,37 @@ class Place extends Model
                                ->whereIn('question_id', function ($q3) use ($qsection_ids, $question_ids/*,$total_answers*/) {
                                     $q3->select('id')->from('questions')
                                       ->whereIn('qsection_id',$qsection_ids);
-                                    if ($question_ids) {            
+                                    if (sizeof($question_ids)) {            
                                         $q3->whereIn('id', $question_ids);
                                     }
                                });
                             });
                         }
                 });
-//dd(vsprintf(str_replace(array('?'), array('\'%s\''), $places->toSql()), $places->getBindings()));            
 
         if (sizeof($place_ids)) {
             $places -> whereIn('id', $place_ids);
         }
-/*                        if ($total_answers) {
-                            $q->whereIn('id', function ($q2) use ($total_answers){
-                                $q2->select('anketa_id')->from('anketa_question')
-                                   ->groupBy('anketa_id')->havingRaw('count(*)>'.$total_answers);
+        return $places->orderBy('name_ru')->get();
+    }
+    
+    public static function getForSOSDClusterization($place_ids=[], $concept_categories=[], $concepts=[]) {
+        $places = Place::whereIn('id', function ($q) use ($concept_categories, $concepts){
+                    $q->select('place_id')->from('concept_place');
+                    if (sizeof($concepts)) {
+                        $q->whereIn('concept_id', $concepts);
+                    }
+                    if (sizeof($concept_categories)) {
+                        $q->whereIn('concept_id', function ($q2) use ($concept_categories) {
+                            $q2->select('id')->from('concepts')
+                               ->whereIn('concept_category_id', $concept_categories);
                             });
-                        }*/
+                    }
+                });
+
+        if (sizeof($place_ids)) {
+            $places -> whereIn('id', $place_ids);
+        }
         return $places->orderBy('name_ru')->get();
     }
 
