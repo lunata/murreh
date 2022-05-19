@@ -738,7 +738,8 @@ dd($lonely);
     }
     
     public static function placeToCsv($place) {
-        $name = $place->name. "_".$place->dialect->bcode."_".$place->id;
+        $name = $place->name. ($place->dialect ? "_".$place->dialect->bcode : '')
+                ."_".$place->id;
         return mb_convert_encoding(preg_replace("/\s+/", "_", $name), "windows-1251", "utf-8");
     }
     
