@@ -13,6 +13,6 @@
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
         </div>
        {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
-       <br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\Sosd\ConceptPlace::getAnswersForPlacesCategory($cluster, $qsection_ids, $question_ids))}}</span>
+       <br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\SOSD\ConceptPlace::getAnswersForPlacesCategory($cluster, $qsection_ids, $question_ids))}}</span>
     </div>
         @endforeach
