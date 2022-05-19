@@ -6,6 +6,7 @@ use App\Library\Map;
 
 use App\Models\Geo\Place;
 
+use App\Models\Ques\Answer;
 //use App\Models\Ques\AnketaQuestion;
 use App\Models\Ques\Qsection;
 use App\Models\Ques\Question;
