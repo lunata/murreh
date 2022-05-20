@@ -12,7 +12,24 @@
                      'value' => $cl_colors[$cl_num]])                                              
             <span><b>{{$cl_num}}</b> ({{sizeof($cluster)}}):</span>
         </div>
-       {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
-       <br><span style="font-style: italic; color:grey">{{join(', ', \App\Models\SOSD\ConceptPlace::getAnswersForPlacesCategory($cluster, $qsection_ids, $question_ids))}}</span>
+        {{\App\Models\Geo\Place::namesWithDialectsByIdsToString($cluster)}}
+        <div style="font-style: italic; color:grey">
+            @php
+                $limit=10;
+                $words = \App\Models\SOSD\ConceptPlace::getAnswersForPlacesCategory($cluster, $qsection_ids, $question_ids);
+            @endphp
+            @if (sizeof($words) > $limit)
+                <div id='brief-words-{{$cl_num}}' style="cursor: pointer">
+                    {{join(', ', array_slice($words,0,10))}} ...
+                    <a onclick="showFull('words-{{$cl_num}}')">развернуть &gt;&gt;&gt;</a>
+                </div>
+                <div id='full-words-{{$cl_num}}' style="cursor: pointer; display: none">
+            @endif    
+                    {{join(', ', $words)}}
+            @if (sizeof($words) > $limit)
+                    <a onclick="hideFull('words-{{$cl_num}}')">&lt;&lt;&lt; cвернуть</a>
+                </div>
+            @endif    
+       </div>
     </div>
         @endforeach

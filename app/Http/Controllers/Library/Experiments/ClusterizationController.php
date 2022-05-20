@@ -46,7 +46,7 @@ class ClusterizationController extends Controller
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
         list(/*$markers, */$cluster_places, $cl_colors) 
-                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors);
+                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
         return view('experiments/'.$data.'_cluster/index', 
                 compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 
                         'distance_limit', 'last_step', 'method_id', //'section_id', 'markers', 
@@ -91,7 +91,7 @@ class ClusterizationController extends Controller
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
 
-        $example_id = '_'.$method_id.'_'.join('-',$qsection_ids);
+        $example_id = '_'.$method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
         $filename = 'export/'.$data.'_cluster/cluster'.$example_id.'.csv';        
         Storage::disk('public')->put($filename, Clusterization::distancesToCsv($places, $distances));
         
@@ -130,7 +130,7 @@ class ClusterizationController extends Controller
         $clusters = $clusterization->getClusters();
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
-        $example_id = $method_id.'_'.join('-',$qsection_ids);
+        $example_id = $method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
         $filename = 'export/'.$data.'_cluster/example_'.$example_id.'.json';  
         $data = compact('cl_colors', 'clusters', 'color_values', 'distance_limit', 
                         'method_id', 'min_cl_distance', 'normalize', 'place_ids',  
@@ -150,7 +150,7 @@ class ClusterizationController extends Controller
 //dd($places);        
         $last_step = array_key_last($clusters);
         list($cluster_places, $cl_colors) 
-                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors);
+                = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
         $method_title = Clusterization::methodTitle($method_id);
         $qsections = Qsection::whereIn('id', $qsection_ids)->pluck('title')->toArray();
         $dendrogram_file = $data.'_cluster_examples/dend_'.$example_id.'.png';

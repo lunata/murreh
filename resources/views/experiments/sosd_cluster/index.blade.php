@@ -23,7 +23,7 @@
 
     {!! Form::close() !!}
     
-    @include('widgets.leaflet.map', ['markers'=>[]])
+    @include('widgets.leaflet.map', ['markers'=>[], 'height'=> 2000])
 @endsection
 
 @section('footScriptExtra')

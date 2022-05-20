@@ -23,7 +23,7 @@ class ConceptPlace extends Model
      * @return array
      */
     public static function getAnswersForPlacesCategory($place_ids, $category_ids=[], $concept_ids=[]) {
-        $answers = self::whereIn('place_id', $place_ids);
+        $answers = self::whereIn('place_id', $place_ids)->orderBy('word');
         if (sizeof($concept_ids)) {
             $answers->whereIn('concept_id', $concept_ids);
         } elseif (sizeof($category_ids)) {

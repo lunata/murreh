@@ -647,7 +647,7 @@ dd($lonely);
         return $new_clusters;
     }
     
-    public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors) {
+    public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors, $data_type='anketa') {
         $default_markers = Map::markers();
         $cluster_places = /*$markers =*/[];
         $count=0;
@@ -657,17 +657,13 @@ dd($lonely);
             $cluster_places[$cur_color] = [];
             foreach ($cluster as $place_id) {
                 $place = $places->where('id', $place_id)->first();
-                $anketa_count = $place->anketas()->count();
-                $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
-                        trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a><br>" : '';
-                $answers = join(', ', $place->getAnswersForQsections($qsection_ids, $question_ids));
                 $cluster_places[$cur_color][] 
                         = ['latitude'=>$place->latitude,
                            'longitude'=>$place->longitude,
                            'place_id' => $place_id,
                            'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
                                      . ($place->dialect ? '<br>'.$place->dialect->name : '')
-                                     . $anketa_link.$answers];
+                                     . $place->popupInfo($qsection_ids, $question_ids, $data_type)];
             }
 /*            $markers[$cur_color] 
                     = //'<b>'. $cl_num. '</b>: '.
@@ -801,7 +797,9 @@ dd($lonely);
         $lines = [];
         $count=1;
         foreach ($places as $place) {
-            $lines[] = $colors[$place->dialect_id]."\t".$count++;
+            $lines[] = (isset($colors[$place->dialect_id]) 
+                    ? $colors[$place->dialect_id] : '#000000')
+                    ."\t".$count++;
 //            $lines[] = $place->dialect_id."\t".$count++;
         }
         return join("\n", $lines);

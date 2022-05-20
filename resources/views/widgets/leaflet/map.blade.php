@@ -5,4 +5,4 @@
     </div>
     @endforeach
 </div>
-<div id="mapid" style="width: 100%; min-width: 750px; height: 1300px;"></div>
+<div id="mapid" style="width: 100%; min-width: 750px; height: {{$height ?? 1300}}px;"></div>

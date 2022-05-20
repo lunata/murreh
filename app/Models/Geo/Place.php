@@ -488,6 +488,19 @@ class Place extends Model
         return array_unique($answers->pluck('answer_text')->toArray());
     }
     
+    public function getConceptsForCategory($qsection_ids, $question_ids) {
+        $answers = $this->concepts();
+        if (sizeof($question_ids)) {
+            $answers->whereIn('concept_id', $question_ids);
+        } elseif (sizeof($qsection_ids)) {
+            $answers->whereIn('concept_id', function ($q) use ($qsection_ids) {
+                            $q->select('id')->from('concepts')
+                              ->whereIn('concept_category_id',$qsection_ids);
+                        });
+        }
+        return array_unique($answers->pluck('word')->toArray());
+    }
+    
     public static function geoCenter($place_ids) {
         $places = self::whereIn('id', $place_ids)->get();
         $X=0;
@@ -497,5 +510,23 @@ class Place extends Model
             $Y += $place->latitude; // широта
         }
         return [$X/sizeof($places), $Y/sizeof($places)];
+    }
+    
+    public function popupInfo ($qsection_ids, $question_ids, $data_type = 'anketa') {
+        if ($data_type == 'sosd') {
+            $concepts = $this->getConceptsForCategory($qsection_ids, $question_ids);
+            $answers = join(', ', $concepts);
+/*            $anketa_count = $this->concepts()->count();
+            $anketa_link = $anketa_count ? "<br><a href=/sosd/concept_place/".$this->id.">".$anketa_count." ".
+                    trans_choice('слово|слова|слов', $anketa_count, [], 'ru')."</a><br>" : '';*/
+            $anketa_link = sizeof($concepts) ? "<br><a href=/sosd/concept_place/".$this->id.">".sizeof($concepts)." ".
+                    trans_choice('слово|слова|слов', sizeof($concepts), [], 'ru')."</a><br>" : '';
+        } else {
+            $anketa_count = $this->anketas()->count();
+            $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$this->id.">".$anketa_count." ".
+                    trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a><br>" : '';
+            $answers = join(', ', $this->getAnswersForQsections($qsection_ids, $question_ids));
+        }
+        return $anketa_link.$answers;
     }
 }

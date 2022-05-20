@@ -9,3 +9,15 @@ function selectAllFields(button_id, select_fields) {
         }
     });
 }
+
+function showFull(varName) {
+console.log('brief-'+varName);    
+    $('#brief-'+varName).hide();
+    $('#full-'+varName).show();
+}
+
+function hideFull(varName) {
+console.log('full-'+varName);    
+    $('#full-'+varName).hide();
+    $('#brief-'+varName).show();
+}
