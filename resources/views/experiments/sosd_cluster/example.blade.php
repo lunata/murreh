@@ -50,7 +50,7 @@
     </div>
         @endforeach
     
-    @include('widgets.leaflet.map', ['markers'=>[]])
+    @include('widgets.leaflet.map', ['markers'=>[], 'height'=> 2200])
     
     @if ($dendrogram)
     <img src="{{'/storage/'.$dendrogram_file}}">
@@ -58,6 +58,6 @@
 @endsection
 
 @section('footScriptExtra')
-    @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors)])
+    @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors), 'latitude'=>62])
     {!!Html::script('js/experiment.js')!!}
 @endsection

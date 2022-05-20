@@ -27,7 +27,7 @@
 @endsection
 
 @section('footScriptExtra')
-    @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors)])
+    @include('widgets.leaflet.map_script', ['places'=>$cluster_places, 'colors'=>array_values($cl_colors), 'latitude'=>62])
     {!!Html::script('js/select2.min.js')!!}
     {!!Html::script('js/list_change.js')!!}
     {!!Html::script('js/form.js')!!}
