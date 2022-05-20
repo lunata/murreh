@@ -15,6 +15,6 @@
     <p><a href="/experiments/sosd_cluster">{{trans('navigation.sosd_cluster')}}</a></p>
     <p>Примеры:</p>
     <ul>
-    <li><a href='/experiments/sosd_cluster/example/1_swadesh'>Cписок Сводеша, метод полной связи</a></li>
+    <li><a href='/experiments/sosd_cluster/example/1_swadesh'>Слова из списка Сводеша, метод полной связи</a></li>
     </ul>
 @endsection

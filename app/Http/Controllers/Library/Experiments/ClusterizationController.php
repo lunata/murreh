@@ -14,6 +14,7 @@ use App\Models\Ques\Answer;
 use App\Models\Ques\Qsection;
 
 use App\Models\SOSD\Concept;
+use App\Models\SOSD\ConceptCategory;
 
 class ClusterizationController extends Controller
 {
@@ -152,7 +153,15 @@ class ClusterizationController extends Controller
         list($cluster_places, $cl_colors) 
                 = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
         $method_title = Clusterization::methodTitle($method_id);
-        $qsections = Qsection::whereIn('id', $qsection_ids)->pluck('title')->toArray();
+        if ($data == 'sosd') {
+            if (preg_match('/swadesh/', $example_id)) {        
+                $qsections = ['Слова из списка Сводеша'];
+            } else {
+                $qsections = ConceptCategory::whereIn('id', $qsection_ids)->pluck('title')->toArray();
+            }
+        } else {
+            $qsections = Qsection::whereIn('id', $qsection_ids)->pluck('title')->toArray();
+        }
         $dendrogram_file = $data.'_cluster_examples/dend_'.$example_id.'.png';
         $dendrogram = Storage::disk('public')->exists($dendrogram_file);
 //dd($dendrogram);        
