@@ -154,10 +154,14 @@ class ClusterizationController extends Controller
                 = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
         $method_title = Clusterization::methodTitle($method_id);
         if ($data == 'sosd') {
-            if (preg_match('/swadesh/', $example_id)) {        
-                $qsections = ['Слова из списка Сводеша'];
+            if (preg_match('/all$/', $example_id)) {        
+                $qsections = [trans('navigation.sosd_cluster_all')];
+            } elseif (preg_match('/207swadesh$/', $example_id)) {        
+                $qsections = [trans('navigation.sosd_cluster_207swadesh')];
+            } elseif (preg_match('/100swadesh$/', $example_id)) {        
+                $qsections = [trans('navigation.sosd_cluster_100swadesh')];
             } else {
-                $qsections = ConceptCategory::whereIn('id', $qsection_ids)->pluck('title')->toArray();
+                $qsections = ConceptCategory::whereIn('id', $qsection_ids)->pluck('name')->toArray();
             }
         } else {
             $qsections = Qsection::whereIn('id', $qsection_ids)->pluck('title')->toArray();

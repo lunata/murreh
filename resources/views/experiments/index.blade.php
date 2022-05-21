@@ -15,8 +15,8 @@
     <p><a href="/experiments/sosd_cluster">{{trans('navigation.sosd_cluster')}}</a></p>
     <p>Примеры:</p>
     <ul>
-    <li><a href='/experiments/sosd_cluster/example/1_all'>Все понятия из СОСД, метод полной связи</a></li>
-    <li><a href='/experiments/sosd_cluster/example/1_207swadesh'>Слова из 207-словного списка Сводеша, метод полной связи</a></li>
-    <li><a href='/experiments/sosd_cluster/example/1_100swadesh'>Слова из стословного списка Сводеша, метод полной связи</a></li>
+    <li><a href='/experiments/sosd_cluster/example/1_all'>{{__('navigation.sosd_cluster_all')}}</a></li>
+    <li><a href='/experiments/sosd_cluster/example/1_207swadesh'>{{__('navigation.sosd_cluster_207swadesh')}}</a></li>
+    <li><a href='/experiments/sosd_cluster/example/1_100swadesh'>{{__('navigation.sosd_cluster_100swadesh')}}</a></li>
     </ul>
 @endsection
