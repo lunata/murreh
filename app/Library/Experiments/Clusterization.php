@@ -685,7 +685,12 @@ dd($lonely);
                 
         $qsection_ids = (array)$request->input('qsection_ids');
         if (!sizeof($qsection_ids)) {
-            $qsection_ids = $data_type=='sosd' ? ['A11'] : [2];
+            if (sizeof($question_ids) && $data_type=='sosd') {
+                $qsection_ids=Concept::whereIn('id', $question_ids)
+                        ->pluck('concept_category_id')->toArray();
+            } elseif (!sizeof($question_ids)) {
+                $qsection_ids = $data_type=='sosd' ? ['A11'] : [2];
+            }
         }
 
         $place_ids = (array)$request->input('place_ids');
@@ -699,7 +704,7 @@ dd($lonely);
         list($answers, $weights) = $data_type=='sosd'
                 ? Concept::getForPlacesCategory($places, $qsection_ids, $question_ids, $with_weight)       
                 : Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
-        
+//dd($answers);        
         $distances = self::distanceForPlaces($places, $answers, $normalize, $weights, $empty_is_not_diff);
         
         return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, 

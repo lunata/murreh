@@ -36,10 +36,11 @@
 
 @section('jqueryFunc')
     selectConceptCategory();    
-    selectConcept('qsection_ids');    
+    selectConcept('.qsection_ids:checked');    
     selectPlace();    
     selectAllFields('select-all-place', '.place-values input');
     for (i=4; i<7; i++) {
         selectAllFields('select-places-'+i, '.places-'+i);
     }
+    selectAllFields('select-all-qsections', '.qsection-values input');
 @stop

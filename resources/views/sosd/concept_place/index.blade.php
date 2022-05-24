@@ -48,7 +48,7 @@
 
 @section('jqueryFunc')
     selectConceptCategory('search_section', '{{trans('sosd.category') }}');    
-    selectConcept('search_category', '{{trans('sosd.concept') }}');    
+    selectConcept('#search_category option:selected', '{{trans('sosd.concept') }}');    
 @stop
 
 

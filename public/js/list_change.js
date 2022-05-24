@@ -15,6 +15,14 @@ function selectedValuesToURL(varname) {
     return forURL;
 }
 
+function checkedValuesToURL(varname) {
+    var forURL = [];
+    $( varname + ":checked" ).each(function( index, element ){
+        forURL.push($(this).val());
+    });
+    return forURL;
+}
+
 function selectQsection(section_var='', placeholder='', allow_clear=false){
     $(".select-qsection").select2({
         allowClear: allow_clear,
@@ -90,7 +98,7 @@ function selectConceptCategory(section_var='', placeholder='', allow_clear=false
     });   
 }
 
-function selectConcept(category_var='', placeholder='', allow_clear=false){
+function selectConcept(category_selector='#search_category option:selected', placeholder='', allow_clear=false){
     $(".select-concept").select2({
         allowClear: allow_clear,
         placeholder: placeholder,
@@ -102,7 +110,7 @@ function selectConcept(category_var='', placeholder='', allow_clear=false){
           data: function (params) {
             return {
               q: params.term, // search term
-              'category_id[]': getMultiValues(category_var),
+              'category_id[]': getMultiValues(category_selector),
             };
           },
           processResults: function (data) {
@@ -115,19 +123,13 @@ function selectConcept(category_var='', placeholder='', allow_clear=false){
     });   
 }
 
-function getMultiValues(var_name) {
-    if (var_name === '') {
+function getMultiValues(selector) {
+    if (selector === '') {
         return '';
     }
-    return $("#"+var_name+" option:selected").map(function() {
+    return $(selector).map(function() {
                     return this.value;
                 }).get();
-/*    var values = [];
-    $( "#"+var_name+" option:selected" ).each(function (entry) {
-        values.push = entry.val();
-    });
-console.log(values);    
-    return values;*/
 }
 
 function selectConceptCategory(section_var, placeholder='', allow_clear=false){
@@ -154,7 +156,7 @@ function selectConceptCategory(section_var, placeholder='', allow_clear=false){
         }
     });   
 }
-
+/*
 function selectConcept(category_var, placeholder='', allow_clear=false){
     $(".select-concept").select2({
         allowClear: allow_clear,
@@ -168,6 +170,7 @@ function selectConcept(category_var, placeholder='', allow_clear=false){
             return {
               q: params.term, // search term
               category_id: $( "#"+category_var+" option:selected" ).val(),
+//              category_id: checkedValuesToURL("."+category_var),
             };
           },
           processResults: function (data) {
@@ -179,7 +182,7 @@ function selectConcept(category_var, placeholder='', allow_clear=false){
         }
     });   
 }
-
+*/
 /**
  * choose anketa for copy answers
  * 

@@ -9,24 +9,36 @@
             <span><input id="select-places-6" type="checkbox"> людиковские</span>
         </div>
 
-<div class="row place-values">
-    @foreach ($place_values as $place_id => $place_name)
-    <div class="col-sm-3">
-        <input type="checkbox" class="places-{{\App\Models\Geo\Place::getLangById($place_id)}}" name="place_ids[]" value="{{$place_id}}"{{in_array($place_id, $place_ids) ? ' checked' : ''}}>
-        {{$place_name}}               
+        <div class="row place-values">
+            @foreach ($place_values as $place_id => $place_name)
+            <div class="col-sm-3">
+                <input type="checkbox" class="places-{{\App\Models\Geo\Place::getLangById($place_id)}}" 
+                       name="place_ids[]" value="{{$place_id}}"{{in_array($place_id, $place_ids) ? ' checked' : ''}}>
+                {{$place_name}}               
+            </div>
+            @endforeach
+        </div>
+
+    <p style="font-weight: bold; margin-top: 20px"><input id="select-all-qsections" type="checkbox"> Выделить все категории понятий</p>
+    <div class="row qsection-values">
+        @foreach ($qsection_values as $qsection_id => $qsection_name)
+        <div class="col-sm-3">
+            <input class="qsection_ids" type="checkbox" name="qsection_ids[]" value="{{$qsection_id}}"{{in_array($qsection_id, $qsection_ids) ? ' checked' : ''}}>
+            {{$qsection_name}}               
+        </div>
+        @endforeach
     </div>
-    @endforeach
-</div>
+        
 <div class="row">
-    <div class="col-sm-4">
+{{--    <div class="col-sm-4">
     @include('widgets.form.formitem._select2', 
             ['name' => 'qsection_ids', 
              'values' => $qsection_values,
              'value' => $qsection_ids,
              'title' => trans('sosd.category'),   
              'class'=>'select-category form-control'])                                   
-    </div>
-    <div class="col-sm-4">
+    </div>--}}
+    <div class="col-sm-12">
     @include('widgets.form.formitem._select2', 
             ['name' => 'question_ids', 
              'values' => $question_values,
@@ -34,8 +46,8 @@
              'title' => trans('sosd.concept'),   
              'class'=>'select-concept form-control'])                                   
     </div>
-</div>
-<div class="row">
+{{--</div>
+<div class="row">--}}
     <div class="col-sm-4">
                 @include('widgets.form.formitem._select', 
                         ['name' => "method_id", 
