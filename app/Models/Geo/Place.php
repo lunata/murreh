@@ -412,21 +412,22 @@ class Place extends Model
     }
     
     public static function getForAnketaClusterization($place_ids=[], $qsection_ids=[], $question_ids=[]) {
-        $places = Place::whereIn('id', function ($q) use ($qsection_ids, $question_ids/*,$total_answers*/){
-                    $q->select('place_id')->from('anketas');
-                    if (sizeof($qsection_ids)) {
-                        $q->whereIn('id', function ($q2) use ($qsection_ids, $question_ids/*,$total_answers*/) {
-                            $q2->select('anketa_id')->from('anketa_question')
-                               ->whereIn('question_id', function ($q3) use ($qsection_ids, $question_ids/*,$total_answers*/) {
-                                    $q3->select('id')->from('questions')
-                                      ->whereIn('qsection_id',$qsection_ids);
-                                    if (sizeof($question_ids)) {            
-                                        $q3->whereIn('id', $question_ids);
-                                    }
-                               });
-                            });
-                        }
-                });
+        $places = Place::whereNotNull('latitude')->whereNotNull('longitude')
+                    ->whereIn('id', function ($q) use ($qsection_ids, $question_ids/*,$total_answers*/){
+                        $q->select('place_id')->from('anketas');
+                        if (sizeof($qsection_ids)) {
+                            $q->whereIn('id', function ($q2) use ($qsection_ids, $question_ids/*,$total_answers*/) {
+                                $q2->select('anketa_id')->from('anketa_question')
+                                   ->whereIn('question_id', function ($q3) use ($qsection_ids, $question_ids/*,$total_answers*/) {
+                                        $q3->select('id')->from('questions')
+                                          ->whereIn('qsection_id',$qsection_ids);
+                                        if (sizeof($question_ids)) {            
+                                            $q3->whereIn('id', $question_ids);
+                                        }
+                                   });
+                                });
+                            }
+                    });
 
         if (sizeof($place_ids)) {
             $places -> whereIn('id', $place_ids);
