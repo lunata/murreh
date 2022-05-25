@@ -38,6 +38,7 @@
                 <th>{{trans('dict.dialect')}}</th>
                 <th>{{ trans('navigation.informants') }}</th>
                 <th>{{ trans('navigation.anketas') }}</th>
+                <th>{{ trans('sosd.words') }}</th>
                 @if (User::checkAccess('edit'))
                 <th>{{ trans('messages.actions') }}</th>
                 @endif
@@ -93,6 +94,13 @@
                     </a>
                     @else 
                         0
+                    @endif
+                </td>
+                <td data-th="{{ trans('sosd.words') }}">
+                    @if ($place->concepts()->count())
+                    <a href="/sosd/concept_place/{{$place->id}}">{{$place->concepts()->count()}}</a>
+                    @else
+                    0
                     @endif
                 </td>
                 @if (User::checkAccess('geo.edit'))
