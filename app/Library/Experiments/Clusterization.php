@@ -728,7 +728,7 @@ dd($centroid, $cluster); */
         $normalize         = (int)$request->input('normalize');
         $with_weight       = (int)$request->input('with_weight');        
         $empty_is_not_diff = (int)$request->input('empty_is_not_diff');   
-        $metric            = (int)$request->input('metric') ?? 1;
+        $metric            = (int)$request->input('metric') ? (int)$request->input('metric') : 1;
                 
         $qsection_ids = self::initQsection($qsection_ids, $question_ids, $data_type);
         $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids, $data_type);  
@@ -746,7 +746,7 @@ dd($centroid, $cluster); */
                 $with_weight, $empty_is_not_diff, $answers, $distances, $metric];
     }
     
-    public static function getRequestDataForCluster($request, $places, $data_type='anketa') {
+    public static function getRequestDataForCluster($request, $places, $data_type='anketa', $metric=1) {
 //        $section_id = (int)$request->input('qsection_id');      
         $with_geo = (int)$request->input('with_geo');
         $cl_colors = (array)$request->input('cl_colors');        
@@ -772,7 +772,9 @@ dd($centroid, $cluster); */
         
         $metric_values = ['1'=>'Простая', '2'=>'Эвклидова'];
         
-        return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo, $metric_values];
+        $section_values = $metric == 1 ? Qsection::getSectionList() : [];
+        return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
+            $place_values, $qsection_values, $question_values, $total_limit, $with_geo, $metric_values, $section_values];
     }
     
     public static function placeToCsv($place) {

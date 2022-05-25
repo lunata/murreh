@@ -57,6 +57,11 @@ class Qsection extends Model
     }
 
     
+    public static function getSectionId($id) {
+        $qsection = self::find($id);
+        return $qsection->section_id;
+    }
+    
     /** Gets list of objects
      * 
      * @return Array [1=>'Вологодская обл.',..]

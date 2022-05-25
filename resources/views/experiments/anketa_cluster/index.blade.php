@@ -42,4 +42,8 @@
     for (i=4; i<7; i++) {
         selectAllFields('select-places-'+i, '.places-'+i);
     }
+    selectAllFields('select-all-qsections', '.qsection-values input');    
+    @foreach (array_keys($section_values) as $section_id) 
+        selectAllFields('select-qsections-{{$section_id}}', '.qsections-{{$section_id}}');
+    @endforeach
 @stop

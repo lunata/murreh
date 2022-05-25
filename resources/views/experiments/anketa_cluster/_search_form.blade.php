@@ -17,23 +17,33 @@
     </div>
     @endforeach
 </div>
+        
+    <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 20px; margin-bottom: 10px;">
+        <span>Выделить</span>
+        <span><input id="select-all-qsections" type="checkbox"> все разделы</span>
+        @foreach ($section_values as $section_id => $section_name)
+        <span><input id="select-qsections-{{$section_id}}" type="checkbox"> {{$section_name}}</span>
+        @endforeach
+    </div>
+    <div class="row qsection-values">
+        @foreach ($qsection_values as $qsection_id => $qsection_name)
+        <div class="col-sm-3">
+            <input class="qsection_ids qsections-{{\App\Models\Ques\Qsection::getSectionId($qsection_id)}}" type="checkbox" name="qsection_ids[]" value="{{$qsection_id}}"{{in_array($qsection_id, $qsection_ids) ? ' checked' : ''}}>
+            {{$qsection_name}}               
+        </div>
+        @endforeach
+    </div>
+        
 <div class="row">
-{{--    <div class="col-sm-2">
-    @include('widgets.form.formitem._select', 
-            ['name' => 'section_id', 
-             'values' => $section_values,
-             'value' => $section_id,
-             'title' => trans('ques.section')])                                  
-    </div> --}}
-    <div class="col-sm-4">
+{{--    <div class="col-sm-4">
     @include('widgets.form.formitem._select2', 
             ['name' => 'qsection_ids', 
              'values' => $qsection_values,
              'value' => $qsection_ids,
              'title' => trans('ques.subsection'),   
              'class'=>'select-qsection form-control'])                                   
-    </div>
-    <div class="col-sm-4">
+    </div>--}}
+    <div class="col-sm-12">
     @include('widgets.form.formitem._select2', 
             ['name' => 'question_ids', 
              'values' => $question_values,
@@ -44,24 +54,30 @@
 </div>
 <div class="row">
     <div class="col-sm-4">
-                @include('widgets.form.formitem._select', 
-                        ['name' => "method_id", 
-                         'values' => $method_values,
-                         'value' => $method_id,
-                         'title' => 'Метод'])                                                      
+        @include('widgets.form.formitem._select', 
+                ['name' => "method_id", 
+                 'values' => $method_values,
+                 'value' => $method_id,
+                 'title' => 'Метод'])                                                      
     </div>
-    <div class="col-sm-4">
-    @include('widgets.form.formitem._text', 
-            ['name' => 'distance_limit', 
-             'value' => $distance_limit,
-             'title' => 'Расстояние между кластерами не больше'])
+    <div class="col-sm-2">
+        @include('widgets.form.formitem._select', 
+                ['name' => "metric", 
+                 'values' => $metric_values,
+                 'value' => $metric,
+                 'title' => 'Метрика'])                                                      
     </div>
-    <div class="col-sm-4">
-    @include('widgets.form.formitem._text', 
-            ['name' => 'total_limit', 
-             'value' => $total_limit,
-             'title' => 'Количество кластеров не больше'])
-             
+    <div class="col-sm-3">
+        @include('widgets.form.formitem._text', 
+                ['name' => 'distance_limit', 
+                 'value' => $distance_limit,
+                 'title' => 'Расстояние между кластерами не больше'])
+    </div>
+    <div class="col-sm-3">
+        @include('widgets.form.formitem._text', 
+                ['name' => 'total_limit', 
+                 'value' => $total_limit,
+                 'title' => 'Количество кластеров не больше'])             
     </div>
 </div>
 <div class='compact-search-form'>

@@ -76,7 +76,7 @@ class Answer extends Model
                 if ($with_weight) {
                     $weights[$qsection->title][$question->question] = $question->weight;
                 }
-                $available_answers = $question->answers();
+                $available_answers = $question->answers()->pluck('code')->toArray();
                 foreach ($places as $place) {
                     $pq_answers = self::where('answers.question_id',$question->id)
                             ->join('anketa_question', 'answers.id', '=', 'anketa_question.answer_id')
@@ -85,7 +85,7 @@ class Answer extends Model
                             ->pluck('answer_text','code')->toArray();
                     if ($metric == 2) {
                         foreach ($available_answers as $answer) {
-                            $matrix[$place->id][$qsection->title][$question->question][$answer] = isset($pq_answers[$answer]) ? 1/sizeof($pq_answers) : 0;                        
+                            $answers[$place->id][$qsection->title][$question->question][$answer] = isset($pq_answers[$answer]) ? 1/sizeof($pq_answers) : 0;                        
                         }                        
                     } else {                    
                         $answers[$place->id][$qsection->title][$question->question] = $pq_answers;
