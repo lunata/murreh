@@ -55,13 +55,20 @@
                          'value' => $method_id,
                          'title' => 'Метод'])                                                      
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-2">
+                @include('widgets.form.formitem._select', 
+                        ['name' => "metric", 
+                         'values' => $metric_values,
+                         'value' => $metric,
+                         'title' => 'Метрика'])                                                      
+    </div>
+    <div class="col-sm-3">
     @include('widgets.form.formitem._text', 
             ['name' => 'distance_limit', 
              'value' => $distance_limit,
              'title' => 'Расстояние между кластерами не больше'])
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     @include('widgets.form.formitem._text', 
             ['name' => 'total_limit', 
              'value' => $total_limit,

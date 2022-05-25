@@ -63,28 +63,36 @@ class Answer extends Model
     public static function getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight=false) {
         $weights = [];
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();
+        $total_questions = 0;
 
         $answers = [];
-        foreach ($places as $place) {
-            $answers[$place->id] = [];
-            foreach ($qsections as $qsection) {
-                $questions = Question::whereQsectionId($qsection->id);
-                if ($question_ids) {
-                    $questions->whereIn('id', $question_ids);
+        foreach ($qsections as $qsection) {
+            $questions = Question::whereQsectionId($qsection->id);
+            if ($question_ids) {
+                $questions->whereIn('id', $question_ids);
+            }
+            foreach ($questions->get() as $question) {
+                $total_questions += $with_weight ? $question->weight : 1;
+                if ($with_weight) {
+                    $weights[$qsection->title][$question->question] = $question->weight;
                 }
-                foreach ($questions->get() as $question) {
+                $available_answers = $question->answers();
+                foreach ($places as $place) {
                     $pq_answers = self::where('answers.question_id',$question->id)
                             ->join('anketa_question', 'answers.id', '=', 'anketa_question.answer_id')
                             ->join('anketas', 'anketas.id', '=', 'anketa_question.anketa_id')
                             ->wherePlaceId($place->id)
                             ->pluck('answer_text','code')->toArray();
-                    $answers[$place->id][$qsection->title][$question->question] = (array)$pq_answers;
-                    if ($with_weight) {
-                        $weights[$qsection->title][$question->question] = $question->weight;
+                    if ($metric == 2) {
+                        foreach ($available_answers as $answer) {
+                            $matrix[$place->id][$qsection->title][$question->question][$answer] = isset($pq_answers[$answer]) ? 1/sizeof($pq_answers) : 0;                        
+                        }                        
+                    } else {                    
+                        $answers[$place->id][$qsection->title][$question->question] = $pq_answers;
                     }
                 }
             }
         }
-        return [$answers, $weights];
+        return [$answers, $weights, $total_questions];
     }    
 }

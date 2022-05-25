@@ -32,14 +32,14 @@ class ClusterizationController extends Controller
         ini_set('memory_limit', '512M');
         
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $weights, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances, $metric)
                 = Clusterization::getRequestDataForView($request, $data);
 //dd($place_ids);        
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
-                $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
+                $place_values, $qsection_values, $question_values, $total_limit, $with_geo, $metric_values) 
                 = Clusterization::getRequestDataForCluster($request, $places, $data);
         
-        $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data);
+        $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data, $metric);
         $clusterization->clusterization($method_id);
         $clusters = $clusterization->getClusters();
         $last_step = array_key_last($clusters);
@@ -51,7 +51,7 @@ class ClusterizationController extends Controller
         return view('experiments/'.$data.'_cluster/index', 
                 compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 
                         'distance_limit', 'last_step', 'method_id', //'section_id', 'markers', 
-                        'method_values', 'min_cl_distance', 'normalize', 
+                        'method_values', 'metric', 'metric_values', 'min_cl_distance', 'normalize', 
                         'place_ids', 'place_values', 'qsection_ids', 
                         'qsection_values', 'question_ids', 'question_values', // 'section_values', 
                         'total_limit', 'with_geo', 'with_weight', 'empty_is_not_diff'));
@@ -63,14 +63,14 @@ class ClusterizationController extends Controller
             $data = 'anketa';
         }
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $weights, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances, $metric)
                 = Clusterization::getRequestDataForView($request, $data);
         
         $place_names = $places->pluck('name_ru', 'id')->toArray();
         
-//dd($answers, $distances);        
+//dd($place_names, $answers, $distances);        
         return view('experiments/'.$data.'_cluster/view_data', 
-                compact('answers', 'distances', 'place_names'));
+                compact('answers', 'distances', 'place_names', 'metric'));
     }
     
     public function exportDataForDendrogram(string $data, Request $request) {
@@ -78,7 +78,7 @@ class ClusterizationController extends Controller
             $data = 'anketa';
         }
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $weights, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances)
                 = Clusterization::getRequestDataForView($request, $data);
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
                 $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
@@ -119,7 +119,7 @@ class ClusterizationController extends Controller
         }
 //print "<pre>";        
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $weights, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances)
                 = Clusterization::getRequestDataForView($request, $data);
 //dd($places);        
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 

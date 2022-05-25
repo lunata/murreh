@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Geo\Place;
 
+use App\Models\SOSD\ConceptPlace;
+
 class Concept extends Model
 {
     use HasFactory;
@@ -54,6 +56,13 @@ class Concept extends Model
         return $out;
     }
     
+    public function availableAnswers() {
+        return ConceptPlace::whereConceptId($this->id)
+                ->selectRaw('substring(code, 1, 1) as code1')
+                ->orderBy('code1')
+                ->distinct()->pluck('code1')->toArray();
+    }
+
     /** Gets list dropdown form
      * 
      * @return Array [<key> => <value>,..]
@@ -95,37 +104,45 @@ class Concept extends Model
         });
     }
     
-    public static function getForPlacesCategory($places, $category_ids, $concept_ids, $with_weight=false) {
-        $weights = [];
+    public static function getForPlacesCategory($places, $category_ids, $concept_ids, $metric=1) {
         $categories = ConceptCategory::whereIn('id',$category_ids)->get();
-
+        $total_concepts = 0;
         $answers = [];
-        foreach ($places as $place) {
-            $answers[$place->id] = [];
-            foreach ($categories as $category) {
-                $concepts = Concept::whereConceptCategoryId($category->id);
-                if ($concept_ids) {
-                    $concepts->whereIn('id', $concept_ids);
-                }
-                foreach ($concepts->get() as $concept) {
-                    $pq_answers = self::where('id',$concept->id)
-                            ->join('concept_place', 'concepts.id', '=', 'concept_place.concept_id')
-                            ->wherePlaceId($place->id)
-                            ->get();
-                    $out = [];
-                    foreach ($pq_answers as $answer) {
-                        $code0 = substr($answer->code, 0, 1);
-                        $out[$code0] = isset($out[$code0]) 
-                                ? $out[$code0].', '. $answer->word
-                                : $answer->word;
+        foreach ($categories as $category) {
+            $concepts = Concept::whereConceptCategoryId($category->id);
+            if ($concept_ids) {
+                $concepts->whereIn('id', $concept_ids);
+            }
+            $total_concepts += $concepts->count();
+            foreach ($concepts->get() as $concept) {
+                $available_answers = $concept->availableAnswers();
+                foreach ($places as $place) {
+                    $answers[$place->id][$category->name][$concept->name] = [];
+                    if ($metric == 2) {
+                        $pq_answers = ConceptPlace::where('concept_id',$concept->id)
+                                ->wherePlaceId($place->id)
+                                ->selectRaw('substring(code, 1, 1) as code1')
+                                ->groupBy('code1')->orderBy('code1')->pluck('code1')->toArray();
+                        foreach ($available_answers as $code) {
+                            $answers[$place->id][$category->name][$concept->name][$code] = in_array($code, $pq_answers) ? round(1/sizeof($pq_answers),2) : 0;                        
+                        }
+                    } else {
+                        $pq_answers = ConceptPlace::where('concept_id',$concept->id)
+                                ->wherePlaceId($place->id)
+                                ->selectRaw('substring(code, 1, 1) as code1, word');
+                        if ($pq_answers->count()) {
+                            foreach ($pq_answers->get() as $pq_answer) {
+                                $answers[$place->id][$category->name][$concept->name][$pq_answer->code1][] = $pq_answer->word;
+                            }
+                            foreach ($answers[$place->id][$category->name][$concept->name] as $code=>$words) {
+                                $answers[$place->id][$category->name][$concept->name][$code] = join('/', $words);
+                            }
+                        }
                     }
-                    $answers[$place->id][$category->name][$concept->name] = $out;
-                    if ($with_weight) {
-                        $weights[$category->name][$concept->name] = 1;
-                    }
+                    
                 }
             }
         }
-        return [$answers, $weights];
+        return [$answers, [], $total_concepts];
     }    
 }

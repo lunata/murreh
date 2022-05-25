@@ -25,8 +25,9 @@ class Clusterization
     protected $distance_limit=0;
     protected $total_limit=20;
     protected $data = 'anketa';
+    protected $metric=1;
     
-    public static function init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data) {
+    public static function init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data, $metric) {
         $clusters = [];
         foreach ($places as $place) {
             $clusters[$place->id] = [$place->id];
@@ -40,6 +41,7 @@ class Clusterization
         $clusterization->distance_limit = $distance_limit;
         $clusterization->total_limit = $total_limit;
         $clusterization->data = $data;
+        $clusterization->metric = $metric;
         return $clusterization;
     }
     
@@ -83,22 +85,7 @@ class Clusterization
     public function getTotalLimit() {
         return $this->total_limit;        
     }
-    
-    public static function availableMethods() {
-        return [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
-                5=>'одиночной связи',
-                4=>'центроидный',
-                2=>'Соллина',
-                3=>'полной связи + K-средних',
-            ];
-    }
-    
-    public static function methodTitle($method_id) {
-        $methods = self::availableMethods();
-        return $methods[$method_id] ?? null;
-    }
-    
-    
+        
     /**
      * Подбор нового максимального расстояния между кластерами
      */
@@ -131,60 +118,6 @@ class Clusterization
         return $clusters[$last_step];
     }
     
-    
-    /**
-     * Get distances for all places
-     * @param array $places
-     * @param array $answers
-     * @return array
-     */
-    public static function distanceForPlaces($places, $answers, $normalize=true, $weights=[], $empty_is_not_diff=1) {
-        $distances = [];
-        foreach ($places as $place1) {
-            foreach ($places as $place2) {
-               $distances[$place1->id][$place2->id] 
-                    = $place1->id == $place2->id ? 0
-                      : Clusterization::distanceForAnswers($answers[$place1->id], 
-                              $answers[$place2->id], $normalize, $weights, $empty_is_not_diff);
-            }
-        }  
-        return $distances;
-    }
-
-    /**
-     * Считается сумма "баллов" по каждому ответу:
-       1)Если у обоих пунктов есть ответы на вопрос, но они не совпадают, то +вес вопроса
-       2) Если хотя бы одного пункта нет ответов, то +вес вопроса*0.5
-       3) Если у обоих пунктов есть хотя бы один одинаковый ответ, то +0
-     * 
-     * see ClusterizationTest@testDistanceForAnswers2Code1TextDiff()
-     * 
-     * @param array $answers1 
-     * @param array $answers2
-     * @param boolean $normalize
-     * @param array $weights
-     * @return type
-     */
-    public static function distanceForAnswers($answers1, $answers2, $normalize=true, $weights=[], $empty_is_not_diff=1) {
-        $distance = 0;
-        $questions_count =0;
-        foreach ($answers1 as $qsection => $questions) {
-            $difference = 0;
-            foreach ($questions as $question => $answer) {
-                if (sizeof($answer) && sizeof($answers2[$qsection][$question])
-                    && !sizeof(array_intersect(array_keys($answer), array_keys($answers2[$qsection][$question])))) {
-                    $difference += isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1;
-                } elseif (!$empty_is_not_diff && (!sizeof($answer) || !sizeof($answers2[$qsection][$question]))) {
-                    $difference += isset($weights[$qsection][$question]) ? 0.5 * $weights[$qsection][$question] : 0.5;
-                }
-            }
-            $distance += $difference;
-            $questions_count += sizeof($questions);
-        }
-        
-        return $normalize ? round($distance/$questions_count, 2) : $distance;
-    }
-
     public function clusterization($method_id) {   
         $this->aggrigate_clusterization();
         if ($method_id==3) {            
@@ -235,61 +168,7 @@ $this->setClusters($clusters, $this->getLastStep());
         
         return $centroids_are_changed;
     }
-    
-    /**
-     * 
-     * @param int $centroid
-     * @param array $cluster
-     * @param array $distances
-     */
-    public static function recomputeCentroid($centroid, $cluster, $distances) {
-/*print "<pre>";
-        foreach ($distances as $p1 => $p1_dist) {
-            print $p1." => [";
-            foreach ($p1_dist as $p2=>$d) {
-                print "$p2 => $d, ";
-            }
-            print "],\n";
-        }
-dd($centroid, $cluster); */   
-        $new_centroid = $centroid;
-        $min = self::starDistance($centroid, $cluster, $distances[$centroid]);
-        foreach ($cluster as $c) {
-            if ($c==$centroid) { continue; }
-            $sum = self::starDistance($c, $cluster, $distances[$c]);
-//print "$c: $sum\n";            
-            if ($sum < $min) {
-                $min = $sum;
-                $new_centroid = $c;
-            }
-            if ($min == 0) {return $new_centroid; }
-        }
-        return $new_centroid;
-    }
-    
-    public static function chooseCluster($p, $centroid, $centroids, $distances) {
-        $min = $distances[$centroid];
-        $new_cluster = $centroid;
-        foreach ($centroids as $c) {
-            if ($c==$centroid) { continue; }
-            if ($distances[$c] < $min) {
-                $min = $distances[$c];
-                $new_cluster = $c;
-            }
-        }
-        return $new_cluster;
-    }
 
-    public static function starDistance($centroid, $cluster, $distances) {
-        $total = 0;
-        foreach ($cluster as $p) {
-            if ($p==$centroid) {
-                continue;
-            }
-            $total += $distances[$p];
-        }
-        return $total;
-    }
     /**
      * Метод K-means
      * 1. Все объекты-нецентроиды сравниваются с центроидами (проверяется расстояние) и относятся к кластеру ближайшего центроида.
@@ -388,34 +267,6 @@ var_dump($cluster_dist);
         }
     }
 
-    /**
-     * Из имеющихся пар кластеров на одинаковом расстоянии выбираем самые ближайшие географически
-     * 
-     * @param array $cl_pair_nums
-     * @return array
-     */
-    public static function geoClusterDistances($clusters, $cl_pair_nums) {
-        $min=1000;
-        $num1=$num2=null;
-        foreach ($cl_pair_nums as $pair) {
-            preg_match('/^(.+)\_(.+)$/', $pair, $cl_nums);
-            $cl_dist = self::geoClusterDistance($clusters[$cl_nums[1]], $clusters[$cl_nums[2]]);
-            if ($cl_dist < $min) {
-                $min=$cl_dist;
-                $num1 = $cl_nums[1];
-                $num2 = $cl_nums[2];
-            }
-        }
-//print "<p>geo-min: ".$min;            
-        return [$num1, $num2];
-    }
-
-    public static function geoClusterDistance($cluster1, $cluster2) {
-        list($x1, $y1) = Place::geoCenter($cluster1);
-        list($x2, $y2) = Place::geoCenter($cluster2);
-        return sqrt(($x1-$x2)**2+($y1-$y2)**2);        
-    }
-    
     /** Вычисляем все расстояния между всеми кластерами
      * 
      * Метод центроидов (4): расстояние между центроидами
@@ -647,6 +498,177 @@ dd($lonely);
         return $new_clusters;
     }
     
+    /*********************************************************************************/
+    
+    public static function availableMethods() {
+        return [1=>'полной связи', //https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B9_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8
+                5=>'одиночной связи',
+                4=>'центроидный',
+                2=>'Соллина',
+                3=>'полной связи + K-средних',
+            ];
+    }
+    
+    public static function methodTitle($method_id) {
+        $methods = self::availableMethods();
+        return $methods[$method_id] ?? null;
+    }
+        
+    /**
+     * Get distances for all places
+     * @param array $places
+     * @param array $answers
+     * @return array
+     */
+    public static function distanceForPlaces($places, $answers, $divisor=1, $weights=[], $empty_is_not_diff=1, $metric=1) {
+        $distances = [];
+        foreach ($places as $place1) {
+            foreach ($places as $place2) {
+               $distances[$place1->id][$place2->id] 
+                    = $place1->id == $place2->id ? 0
+                      : self::distanceForAnswers($answers[$place1->id], 
+                              $answers[$place2->id], $divisor, $weights, $empty_is_not_diff, $metric);
+            }
+        }  
+        return $distances;
+    }
+
+    /**
+     * Считается сумма "баллов" по каждому ответу:
+       1)Если у обоих пунктов есть ответы на вопрос, но они не совпадают, то +вес вопроса
+       2) Если хотя бы одного пункта нет ответов, то +вес вопроса*0.5
+       3) Если у обоих пунктов есть хотя бы один одинаковый ответ, то +0
+     * 
+     * see ClusterizationTest@testDistanceForAnswers2Code1TextDiff()
+     * 
+     * @param array $answers1 
+     * @param array $answers2
+     * @param boolean $normalize
+     * @param array $weights
+     * @return type
+     */
+    public static function distanceForAnswers($answers1, $answers2, $divisor=1, $weights=[], $is_empty_not_diff=1, $metric=1) {
+        $distance = 0;
+        foreach ($answers1 as $qsection => $questions) {
+            $difference = 0;
+            foreach ($questions as $question => $answers) {
+                $difference += $metric == 2 
+                        ? self::distanceForMetric2($answers, $answers2[$qsection][$question], 
+                                isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1)
+                        : self::distanceForMetric1($answers, $answers2[$qsection][$question], 
+                                isset($weights[$qsection][$question]) ? $weights[$qsection][$question] : 1, 
+                                $is_empty_not_diff);
+            }
+            $distance += $difference;
+        }
+
+        if ($metric == 2) {
+            $distance = sqrt($distance);
+        }
+        return round($distance/$divisor, 2);
+    }
+
+    public static function distanceForMetric1($answers1, $answers2, $weight, $empty_is_not_diff=1) {
+        if (sizeof($answers1) && sizeof($answers2)
+            && !sizeof(array_intersect(array_keys($answers1), array_keys($answers2)))) {
+            return $weight;
+        } elseif (!$empty_is_not_diff && (!sizeof($answers1) || !sizeof($answers2))) {
+            return 0.5 * $weight;
+        }
+        return 0;
+    }
+
+    public static function distanceForMetric2($answers1, $answers2, $weight) {
+        $sum = 0;
+        foreach ($answers1 as $code => $num) {
+            $sum += pow($num - $answers2[$code],2)*$weight;
+        }
+        return $sum;
+    }
+    
+    /**
+     * 
+     * @param int $centroid
+     * @param array $cluster
+     * @param array $distances
+     */
+    public static function recomputeCentroid($centroid, $cluster, $distances) {
+/*print "<pre>";
+        foreach ($distances as $p1 => $p1_dist) {
+            print $p1." => [";
+            foreach ($p1_dist as $p2=>$d) {
+                print "$p2 => $d, ";
+            }
+            print "],\n";
+        }
+dd($centroid, $cluster); */   
+        $new_centroid = $centroid;
+        $min = self::starDistance($centroid, $cluster, $distances[$centroid]);
+        foreach ($cluster as $c) {
+            if ($c==$centroid) { continue; }
+            $sum = self::starDistance($c, $cluster, $distances[$c]);
+//print "$c: $sum\n";            
+            if ($sum < $min) {
+                $min = $sum;
+                $new_centroid = $c;
+            }
+            if ($min == 0) {return $new_centroid; }
+        }
+        return $new_centroid;
+    }
+    
+    public static function chooseCluster($p, $centroid, $centroids, $distances) {
+        $min = $distances[$centroid];
+        $new_cluster = $centroid;
+        foreach ($centroids as $c) {
+            if ($c==$centroid) { continue; }
+            if ($distances[$c] < $min) {
+                $min = $distances[$c];
+                $new_cluster = $c;
+            }
+        }
+        return $new_cluster;
+    }
+
+    public static function starDistance($centroid, $cluster, $distances) {
+        $total = 0;
+        foreach ($cluster as $p) {
+            if ($p==$centroid) {
+                continue;
+            }
+            $total += $distances[$p];
+        }
+        return $total;
+    }
+    
+    /**
+     * Из имеющихся пар кластеров на одинаковом расстоянии выбираем самые ближайшие географически
+     * 
+     * @param array $cl_pair_nums
+     * @return array
+     */
+    public static function geoClusterDistances($clusters, $cl_pair_nums) {
+        $min=1000;
+        $num1=$num2=null;
+        foreach ($cl_pair_nums as $pair) {
+            preg_match('/^(.+)\_(.+)$/', $pair, $cl_nums);
+            $cl_dist = self::geoClusterDistance($clusters[$cl_nums[1]], $clusters[$cl_nums[2]]);
+            if ($cl_dist < $min) {
+                $min=$cl_dist;
+                $num1 = $cl_nums[1];
+                $num2 = $cl_nums[2];
+            }
+        }
+//print "<p>geo-min: ".$min;            
+        return [$num1, $num2];
+    }
+
+    public static function geoClusterDistance($cluster1, $cluster2) {
+        list($x1, $y1) = Place::geoCenter($cluster1);
+        list($x2, $y2) = Place::geoCenter($cluster2);
+        return sqrt(($x1-$x2)**2+($y1-$y2)**2);        
+    }
+    
     public static function dataForMap($clusters, $places, $qsection_ids, $question_ids, $cl_colors, $data_type='anketa') {
         $default_markers = Map::markers();
         $cluster_places = /*$markers =*/[];
@@ -677,38 +699,51 @@ dd($lonely);
         return [/*$markers, */$cluster_places, $cl_colors];
     }
     
-    public static function getRequestDataForView($request, $data_type='anketa') {
-        $question_ids = (array)$request->input('question_ids');
-        $normalize = (int)$request->input('normalize');
-        $with_weight = (int)$request->input('with_weight');        
-        $empty_is_not_diff = (int)$request->input('empty_is_not_diff');   
-                
-        $qsection_ids = (array)$request->input('qsection_ids');
+    public static function initQsection($qsection_ids, $question_ids, $data_type='anketa') {
         if (!sizeof($qsection_ids)) {
             if (sizeof($question_ids) && $data_type=='sosd') {
-                $qsection_ids=Concept::whereIn('id', $question_ids)
+                return Concept::whereIn('id', $question_ids)
                         ->pluck('concept_category_id')->toArray();
             } elseif (!sizeof($question_ids)) {
-                $qsection_ids = $data_type=='sosd' ? ['A11'] : [2];
+                return $data_type=='sosd' ? ['A11'] : [2];
             }
         }
+        return $qsection_ids;
+    }
 
-        $place_ids = (array)$request->input('place_ids');
+    public static function answersToVectors($places, $qsection_ids, $question_ids, $with_weight, $data_type='anketa') {
+        
+    }
+    public static function getAnswersForPlaces($places, $qsection_ids, $question_ids, $with_weight, $data_type='anketa', $metric=1) {
+        list($answers, $weights, $total_questions) = $data_type=='sosd'
+                ? Concept::getForPlacesCategory($places, $qsection_ids, $question_ids, $metric)       
+                : Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight, $metric);        
+        return [$answers, $weights, $total_questions];
+    }
+    
+    public static function getRequestDataForView($request, $data_type='anketa') {
+        $place_ids    = (array)$request->input('place_ids');
+        $qsection_ids = (array)$request->input('qsection_ids');
+        $question_ids = (array)$request->input('question_ids');
+        $normalize         = (int)$request->input('normalize');
+        $with_weight       = (int)$request->input('with_weight');        
+        $empty_is_not_diff = (int)$request->input('empty_is_not_diff');   
+        $metric            = (int)$request->input('metric') ?? 1;
+                
+        $qsection_ids = self::initQsection($qsection_ids, $question_ids, $data_type);
         $places = Place::getForClusterization($place_ids, $qsection_ids, $question_ids, $data_type);  
 //dd($place_ids, $qsection_ids, $question_ids, $places);        
         $place_ids = $places->pluck('id')->toArray();
-        if (!sizeof($place_ids)) {
+/*        if (!sizeof($place_ids)) {
             $place_ids = $places->pluck('id')->toArray();
-        }
+        }*/
 
-        list($answers, $weights) = $data_type=='sosd'
-                ? Concept::getForPlacesCategory($places, $qsection_ids, $question_ids, $with_weight)       
-                : Answer::getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight);        
-//dd($answers);        
-        $distances = self::distanceForPlaces($places, $answers, $normalize, $weights, $empty_is_not_diff);
+        list($answers, $weights, $total_questions) = self::getAnswersForPlaces($places, $qsection_ids, $question_ids, $with_weight, $data_type, $metric);        
+//dd($answers);      
+        $distances = self::distanceForPlaces($places, $answers, $normalize ? $total_questions : 1, $weights, $empty_is_not_diff, $metric);
         
         return [$normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-                $with_weight, $empty_is_not_diff, $answers, $weights, $distances];
+                $with_weight, $empty_is_not_diff, $answers, $distances, $metric];
     }
     
     public static function getRequestDataForCluster($request, $places, $data_type='anketa') {
@@ -735,7 +770,9 @@ dd($lonely);
         $question_values = $data_type=='sosd' ? Concept::getList(): Question::getList();
         $place_values = Place::getForClusterization([], [], [], $data_type)->pluck('name_ru', 'id')->toArray();
         
-        return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo];
+        $metric_values = ['1'=>'Простая', '2'=>'Эвклидова'];
+        
+        return [$color_values, $cl_colors, $distance_limit, $method_id, $method_values, $place_values, $qsection_values, $question_values, $total_limit, $with_geo, $metric_values];
     }
     
     public static function placeToCsv($place) {
