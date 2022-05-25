@@ -78,7 +78,7 @@ class ClusterizationController extends Controller
             $data = 'anketa';
         }
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances, $metric)
                 = Clusterization::getRequestDataForView($request, $data);
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
                 $place_values, $qsection_values, $question_values, $total_limit, $with_geo) 
@@ -92,7 +92,7 @@ class ClusterizationController extends Controller
         $method_id = isset($method_values[$request->input('method_id')]) 
                 ? $request->input('method_id') : 1;
 
-        $example_id = '_'.$method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
+        $example_id = '_'. $metric. '_'. $method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
         $filename = 'export/'.$data.'_cluster/cluster'.$example_id.'.csv';        
         Storage::disk('public')->put($filename, Clusterization::distancesToCsv($places, $distances));
         
@@ -119,7 +119,7 @@ class ClusterizationController extends Controller
         }
 //print "<pre>";        
         list($normalize, $place_ids, $places, $qsection_ids, $question_ids, 
-             $with_weight, $empty_is_not_diff, $answers, $distances)
+             $with_weight, $empty_is_not_diff, $answers, $distances, $metric)
                 = Clusterization::getRequestDataForView($request, $data);
 //dd($places);        
         list($color_values, $cl_colors, $distance_limit, $method_id, $method_values, 
@@ -131,7 +131,7 @@ class ClusterizationController extends Controller
         $clusters = $clusterization->getClusters();
         $min_cl_distance = $clusterization->getMinClusterDistance();
         
-        $example_id = $method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
+        $example_id = $metric. '_'. $method_id.'_'.join('-',array_slice($qsection_ids, 0, 10));
         $filename = 'export/'.$data.'_cluster/example_'.$example_id.'.json';  
         $data = compact('cl_colors', 'clusters', 'color_values', 'distance_limit', 
                         'method_id', 'min_cl_distance', 'normalize', 'place_ids',  

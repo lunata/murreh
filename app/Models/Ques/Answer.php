@@ -60,7 +60,7 @@ class Answer extends Model
         return $answer->code.'. '.$answer->answer;
     }
     
-    public static function getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight=false) {
+    public static function getForPlacesQsection($places, $qsection_ids, $question_ids, $with_weight=false, $metric=1) {
         $weights = [];
         $qsections = Qsection::whereIn('id',$qsection_ids)->get();
         $total_questions = 0;
