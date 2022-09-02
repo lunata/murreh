@@ -220,7 +220,7 @@ class Place extends Model
             $info[0] = $this->name
                      . ($this->name_old_ru ? " (".$this->name_old_ru.")" : '')
                      . ($this->name_krl ? ", ".$this->name_krl : '')
-                     . ($this->name_krl_ru ? " (".$this->name_krl_ru.")" : '');
+                     . ($this->name_old_krl ? " (".$this->name_old_krl.")" : '');
         }
         
         if ($this->district) {
