@@ -71,7 +71,7 @@
                              'without_text' => 1,
                              'route' => 'anketas.destroy', 
                              'obj' => $anketa,
-                             'args'=>['id' => $anketa->id]])
+                             'obj_name' => 'anketa'])
                 </td>
                 @endif
             </tr>

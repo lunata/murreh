@@ -73,6 +73,11 @@ class QsectionController extends Controller
             'title'  => 'required|max:150',
             'section_id' => 'numeric',
         ]);
+        $data = $request->all();
+        if (!($data['sequence_number'])) {
+            $data['sequence_number'] = Qsection::nextQuestionNumber();
+        }
+        return $data;
     }
     
     /**
@@ -83,9 +88,7 @@ class QsectionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateRequest($request);       
-//dd($request->all());        
-        $qsection = Qsection::create($request->all());
+        $qsection = Qsection::create($this->validateRequest($request));
         
         return Redirect::to('/ques/qsection/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.created_success'));        
@@ -131,8 +134,7 @@ class QsectionController extends Controller
      */
     public function update(Request $request, Qsection $qsection)
     {
-        $this->validateRequest($request);
-        $qsection->fill($request->all())->save();
+        $qsection->fill($this->validateRequest($request))->save();
         
         return Redirect::to('/ques/qsection/'.$this->args_by_get)
             ->withSuccess(\Lang::get('messages.updated_success'));        

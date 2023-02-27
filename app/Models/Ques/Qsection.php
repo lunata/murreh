@@ -62,17 +62,20 @@ class Qsection extends Model
         $qsection = self::find($id);
         return $qsection->section_id;
     }
-    
+
     /** Gets list of objects
      * 
      * @return Array [1=>'Вологодская обл.',..]
      */
-    public static function getList()
+    public static function getList($section_id = null)
     {     
-        $objs = self::orderBy('sequence_number')->get();
+        $objs = self::orderBy('sequence_number');
+        if ($section_id) {
+            $objs = $objs->whereSectionId($section_id);
+        }
         
         $list = array();
-        foreach ($objs as $row) {
+        foreach ($objs->get() as $row) {
             $list[$row->id] = $row->title;
         }
         

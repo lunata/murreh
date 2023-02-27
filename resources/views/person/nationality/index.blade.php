@@ -82,7 +82,7 @@
                              'without_text' => 1,
                              'route' => 'nationality.destroy', 
                              'obj' => $nationality,
-                             'args'=>['id' => $nationality->id]])
+                             'obj_name' => 'nationality'])
                 </td>
                 @endif
             </tr>

@@ -20,3 +20,14 @@
 .fa-btn {
     margin-right: 6px;
 }
+
+.btn-secondary,
+.btn-secondary:active,
+.btn-secondary:hover,
+.btn-secondary:active:hover,
+.btn-secondary:focus {
+    background-color: #d947ee;
+    border-color: #d947ee;
+    color: #fff;
+}
+

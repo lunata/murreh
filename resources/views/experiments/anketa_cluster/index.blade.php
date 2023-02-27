@@ -15,6 +15,13 @@
 @section('body')
     @include('experiments.anketa_cluster._search_form') 
     
+    @include('widgets.modal',['name'=>'qsectionCreation',
+                          'title'=>trans('messages.create_new_m'). ' '. trans('ques.question'),
+                          'submit_onClick' => 'saveQuestion()',
+                          'submit_title' => trans('messages.save'),
+                          'modal_view'=>'ques.question._form_create_from_cluster',
+                          'type_submit' => 'button'])
+    
     @if ($method_id==2)
         @include('experiments.anketa_cluster._show_previous_steps') 
     @endif    

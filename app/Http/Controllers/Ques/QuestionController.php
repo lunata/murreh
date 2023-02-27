@@ -27,7 +27,7 @@ class QuestionController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:edit,/ques/question/', ['only' => ['create','store','edit','update','destroy']]);
+        $this->middleware('auth:edit,/ques/question/', ['except' => ['index','onMap','questionList','show']]);
         
         $this->url_args = Question::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);
@@ -81,9 +81,20 @@ class QuestionController extends Controller
     public function validateRequest(Request $request) {
         $this->validate($request, [
             'question'  => 'required|max:150',
-            'section_id' => 'numeric',
             'qsection_id' => 'numeric',
         ]);
+        $data = $request->all();
+        if (!isset($data['sequence_number']) || !$data['sequence_number']) {
+            $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
+        }
+        if (!isset($data['weight']) || !$data['weight']) {
+            $data['weight']=1;
+        }
+        if (!isset($data['section_id']) || !$data['section_id']) {
+            $data['section_id']= Qsection::getSectionId($data['qsection_id']);
+        }
+        Question::renumerateOthers($data['sequence_number']);
+        return $data;
     }
     
     /**
@@ -94,22 +105,35 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateRequest($request);       
-//dd($request->all());        
-        $data = $request->all();
-        if (!$data['sequence_number']) {
-            $data['sequence_number']=Question::selectRaw('max(sequence_number) as max')->first()->max;
-        }
-        if (!$data['weight']) {
-            $data['weight']=1;
-        }
-        Question::renumerateOthers($data['sequence_number']);
-
-        $question = Question::create($data);
+        $question = Question::create($this->validateRequest($request));
         
         $question->updateAnswers($request->answers);
         
         return Redirect::to('/ques/question/'.$this->args_by_get)
+            ->withSuccess(\Lang::get('messages.created_success'));        
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeFromCluster(Request $request)
+    {
+        $question = Question::create($this->validateRequest($request));
+        
+        foreach ($request->answers as $answer_id => $info) {
+            $answer = Answer::findOrCreate($question->id, $info['answer'], $info['code']);
+            $anketas = Anketa::whereIn('place_id', $info['places'])->get();
+            foreach ($anketas as $anketa) {
+                $anketa->setNewAnswer($question->id, $answer->id, $info['answer']);
+
+            }
+        }
+        
+//dd($request->place_ids);        
+        return Redirect::to('/ques/question?search_id='.$question->id)
             ->withSuccess(\Lang::get('messages.created_success'));        
     }
 
@@ -173,8 +197,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        $this->validateRequest($request);
-        $question->fill($request->all())->save();
+        $question->fill($this->validateRequest($request))->save();
         
         $answer_name = $question->updateAnswers($request->answers);
 //dd($answer_name);        
@@ -216,11 +239,14 @@ class QuestionController extends Controller
         if($question) {
             try{
                 $question_name = $question->question;
-                if ($question->anketas()->count() >0) {
+                if ($question->anketas()->whereNotIn('question_id', function($q){
+                            $q->select('id')->from('questions')->whereSectionId(5);//вопросы кластеризации, их можно удалять
+                        })->count() >0) {
 //                    $question->anketas()->detach();
                     $error = true;
                     $result['error_message'] = \Lang::get('ques.anketa_exists');
                 } else {
+                    $question->anketas()->detach();
                     foreach ($question->answers as $answer) {
                         $answer->delete();
                     }

@@ -69,12 +69,6 @@
                     @include('widgets.form.button._status', 
                             ['route' => '/ques/qsection/'.$qsection->id.'/visible/',
                              'status' => $qsection->status])
-{{--                    @include('widgets.form.button._delete', 
-                            ['is_button'=>true, 
-                             'without_text' => 1,
-                             'route' => 'qsection.destroy', 
-                             'obj' => $qsection,
-                             'args'=>['id' => $qsection->id]])--}}
                 </td>
                 @endif
             </tr>

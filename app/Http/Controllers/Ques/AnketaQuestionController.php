@@ -51,10 +51,7 @@ class AnketaQuestionController extends Controller
         $answers = $request->answers;
         
         foreach ($answers as $question_id=>$answer) {
-            $anketa->questions()->detach($question_id);
-            if ($answer['id']) {
-                $anketa->questions()->attach($question_id,['answer_id'=>$answer['id'], 'answer_text'=>$answer['text']]);
-            }
+            $anketa->setNewAnswer($question_id, $answer['id'], $answer['text']);
         }
         
         $questions = Question::getListByQsection($qsection_id);

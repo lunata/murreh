@@ -44,13 +44,15 @@ class ClusterizationController extends Controller
         $clusterization->clusterization($method_id);
         $clusters = $clusterization->getClusters();
         $last_step = array_key_last($clusters);
-//dd($clusters[$last_step]);        
+//dd($clusters[$last_step], $qsection_ids, $question_ids);        
         $min_cl_distance = $clusterization->getMinClusterDistance();
+        $cluster_qsection_values = Qsection::getList(5);
         
         list(/*$markers, */$cluster_places, $cl_colors) 
                 = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
         return view('experiments/'.$data.'_cluster/index', 
-                compact('cl_colors', 'cluster_places', 'clusters', 'color_values', 
+                compact('cl_colors', 'cluster_places', 'cluster_qsection_values', 
+                        'clusters', 'color_values', 
                         'distance_limit', 'last_step', 'method_id', //'section_id', 'markers', 
                         'method_values', 'metric', 'metric_values', 'min_cl_distance', 'normalize', 
                         'place_ids', 'place_values', 'qsection_ids', 

@@ -75,7 +75,7 @@
                              'without_text' => 1,
                              'route' => 'region.destroy', 
                              'obj' => $region,
-                             'args'=>['id' => $region->id]])
+                             'obj_name' => 'region'])
                 </td>
                 @endif
             </tr>

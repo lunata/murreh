@@ -114,7 +114,7 @@
                              'without_text' => 1,
                              'route' => 'place.destroy', 
                              'obj' => $place,
-                             'args'=>['id' => $place->id]])
+                             'obj_name' => 'place'])
                 </td>
                 @endif
             </tr>

@@ -84,7 +84,8 @@
                             ['is_button'=>true, 
                              'without_text' => 1,
                              'route' => 'district.destroy', 
-                             'obj' => $district])
+                             'obj' => $district,
+                             'obj_name' => 'district'])
                 </td>
                 @endif
             </tr>

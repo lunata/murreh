@@ -1,13 +1,13 @@
-        {!! Form::open(['url' => '/experiments/anketa_cluster', 
-                             'method' => 'get', 'id'=>'cluster_form']) 
-        !!}
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold">
-            <span>Выделить</span>
-            <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>
-            <span><input id="select-places-4" type="checkbox"> собственно карельские</span>
-            <span><input id="select-places-5" type="checkbox"> ливвиковские</span>
-            <span><input id="select-places-6" type="checkbox"> людиковские</span>
-        </div>
+{!! Form::open(['url' => '/experiments/anketa_cluster', 
+                     'method' => 'get', 'id'=>'cluster_form']) 
+!!}
+<div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold">
+    <span>Выделить</span>
+    <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>
+    <span><input id="select-places-4" type="checkbox"> собственно карельские</span>
+    <span><input id="select-places-5" type="checkbox"> ливвиковские</span>
+    <span><input id="select-places-6" type="checkbox"> людиковские</span>
+</div>
 
 <div class="row place-values">
     @foreach ($place_values as $place_id => $place_name)
@@ -106,6 +106,9 @@
     </p>
     <p class='form-group'>
         <input class="btn btn-success btn-default" type="button" value="сохранить пример" onClick="submitByButton('cluster_form', '/experiments/anketa_cluster/export_example')">
+    </p>
+    <p class='form-group'>
+        <input class="btn btn-secondary btn-default" type="button" value="записать маркер" onClick="callQsectionCreateForm()">
     </p>
 </div>
 

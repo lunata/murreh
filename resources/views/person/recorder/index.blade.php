@@ -56,16 +56,9 @@
                 </td>
                 @if (User::checkAccess('edit'))
                 <td data-th="{{ trans('messages.actions') }}">
-                    @include('widgets.form.button._edit', 
-                            ['is_button'=>true, 
-                             'without_text' => 1,
-                             'route' => '/person/recorder/'.$recorder->id.'/edit'])
-                    @include('widgets.form.button._delete', 
-                            ['is_button'=>true, 
-                             'without_text' => 1,
-                             'route' => 'recorder.destroy', 
-                             'obj' => $recorder,
-                             'args'=>['id' => $recorder->id]])
+                    @include('widgets.form.button._edit_small_button', 
+                             ['route' => '/person/recorder/'.$recorder->id.'/edit'])
+                    @include('widgets.form.button._delete_small_button', ['obj_name' => 'recorder'])
                 </td>
                 @endif
             </tr>

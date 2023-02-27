@@ -27,6 +27,15 @@ class Anketa extends Model
     // Belongs To Many Relations
     use \App\Traits\Relations\BelongsToMany\Answers;
     use \App\Traits\Relations\BelongsToMany\Questions;
+    
+    public function setNewAnswer($question_id, $answer_id=null, $answer_text=null) {
+        $this->questions()->detach($question_id);
+        if ($answer_id) {
+            $this->questions()->attach($question_id,
+                                       ['answer_id'=>$answer_id, 
+                                        'answer_text'=>$answer_text]);
+        }        
+    }
 
     public static function search(Array $url_args) {
         $objs = self::orderBy('id');

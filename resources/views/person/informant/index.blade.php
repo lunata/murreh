@@ -81,7 +81,7 @@
                              'without_text' => 1,
                              'route' => 'informant.destroy', 
                              'obj' => $informant,
-                             'args'=>['id' => $informant->id]])
+                             'obj_name' => 'informant'])
                 </td>
                 @endif
             </tr>

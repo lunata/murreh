@@ -33,8 +33,7 @@
                               'route' => 'user.destroy',
                               'obj'=>$user,
                               'class' => '',
-                              'args'=>['id' => $user->id]
-                             ])
+                              'obj_name' => 'user'])
                 </td>
                 @endif
             </tr> 
