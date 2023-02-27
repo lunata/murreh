@@ -19,6 +19,7 @@ class Qsection extends Model
                 2 => "Фонетика",  
                 3 => "Морфология", 
                 4 => "Лексика",
+                5 => "Кластеризация"
               ];
     
     use \App\Traits\Methods\searchStrField;
