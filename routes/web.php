@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\Dict\DialectController;
 use App\Http\Controllers\Dict\LangController;
 
 use App\Http\Controllers\Geo\DistrictController;
@@ -143,6 +144,8 @@ Route::get('sosd/concept_place/{place_id}', [ConceptPlaceController::class, 'sho
 Route::get('sosd/concept_place/{place_id}_{category_id}/edit', [ConceptPlaceController::class, 'edit'])->name('concept_place.edit');
 
 Route::resources([
+    'dict/dialect' => DialectController::class,
+    
     'geo/district' => DistrictController::class,
     'geo/region'   => RegionController::class,
     'geo/place'    => PlaceController::class,

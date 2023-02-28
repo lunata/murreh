@@ -28,6 +28,7 @@
                             <li><a href="/geo/region">{{ trans('navigation.regions') }}</a></li>
                             <li><a href="/geo/district">{{ trans('navigation.districts') }}</a></li>
                             <li><a href="/geo/place">{{ trans('navigation.places') }}</a></li>
+                            <li><a href="/dict/dialect">{{ trans('navigation.dialects') }}</a></li>
                         </ul>
                     </li>
                     

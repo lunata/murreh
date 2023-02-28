@@ -88,13 +88,9 @@ class Lang extends Model
      * 
      * @return Array [1=>'Vepsian',..]
      */
-    public static function getListWithQuantity($method_name, $only_project_langs=false)
-    {     
-        $locale = LaravelLocalization::getCurrentLocale();
-        
-        $languages = $only_project_langs
-                ? self::projectLangs()
-                : self::orderBy('sequence_number')->get();
+    public static function getListWithQuantity($method_name)
+    {            
+        $languages = self::orderBy('sequence_number')->get();
         
         $list = array();
         foreach ($languages as $row) {

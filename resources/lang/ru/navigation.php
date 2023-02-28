@@ -21,6 +21,7 @@ return [
     'concept_categories' => 'Разделы понятий',
     'concept_place' => 'Словники',
     'concepts'=>'Понятия',
+    'dialects' => 'Диалекты',
     'districts' => 'Районы',
     'experiments' => 'Эксперименты',
     'geo' => 'География',

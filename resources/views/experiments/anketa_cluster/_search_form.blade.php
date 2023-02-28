@@ -5,8 +5,10 @@
     <span>Выделить</span>
     <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>
     <span><input id="select-places-4" type="checkbox"> собственно карельские</span>
+    <span><input id="select-places-7" type="checkbox"> собственно карельские  (Центральная Россия)</span>
     <span><input id="select-places-5" type="checkbox"> ливвиковские</span>
     <span><input id="select-places-6" type="checkbox"> людиковские</span>
+    <span><input id="select-places-1" type="checkbox"> вепсские</span>
 </div>
 
 <div class="row place-values">

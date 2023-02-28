@@ -4,11 +4,17 @@ namespace App\Models\Dict;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Library\Str;
+
 class Dialect extends Model
 {
-    protected $connection = 'vepkar';
-//    public $timestamps = false;
-//    protected $fillable = ['lang_id', 'name_ru', 'code', 'sequence_number'];
+    public $timestamps = false;
+    protected $fillable = ['lang_id', 'name_en', 'name_ru', 'code', 'sequence_number'];
+    
+    use \App\Traits\Methods\getNameAttribute;
+    use \App\Traits\Methods\getListWithQuantity;
+    use \App\Traits\Methods\searchStrField;
+    use \App\Traits\Methods\searchIntField;
     
     // Belongs To Relations
     use \App\Traits\Relations\BelongsTo\Lang;
@@ -16,15 +22,6 @@ class Dialect extends Model
     // Has Many Relations
     use \App\Traits\Relations\HasMany\Places;
     
-    /** Gets name of this dialect, takes into account locale.
-     * 
-     * @return String
-     */
-    public function getNameAttribute() : String
-    {
-        return $this->name_ru;
-    }
-
     public function getBcodeAttribute() : String
     {
         if (preg_match ("/-(.+)$/", $this->code, $regs)) {
@@ -112,6 +109,24 @@ class Dialect extends Model
         }
         return $dialect->lang_id;
     }
+    
+      
+    public static function search(Array $url_args) {
+        $objs = self::orderBy('name_ru');
+
+        $objs = self::searchStrField($objs, 'name_ru', $url_args['search_name']);
+        $objs = self::searchIntField($objs, 'lang_id', $url_args['search_lang']);
+        
+        return $objs;
+    }
+    public static function urlArgs($request) {
+        $url_args = Str::urlArgs($request) + [
+                    'search_lang'   => (int)$request->input('search_lang') ? (int)$request->input('search_lang') : null,
+                    'search_name' => $request->input('search_name'),
+                ];
+        
+        return $url_args;
+    }    
 }
 //select lang_id, dialect_id, code, count(*) as count from places, vepkar.dialects where vepkar.dialects.id=dialect_id and places.id in (select place_id from anketas) group by dialect_id order by lang_id, count DESC;
 //select name_ru, dialect_id from places where dialect_id=19 and places.id in (select place_id from anketas);
