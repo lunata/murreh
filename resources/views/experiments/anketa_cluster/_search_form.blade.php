@@ -1,7 +1,7 @@
 {!! Form::open(['url' => '/experiments/anketa_cluster', 
                      'method' => 'get', 'id'=>'cluster_form']) 
 !!}
-<div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold">
+<div class="lang-click-b">
     <span>Выделить</span>
     <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>
     <span><input id="select-places-4" type="checkbox"> собственно карельские</span>

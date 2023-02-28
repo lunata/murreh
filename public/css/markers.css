@@ -82,3 +82,16 @@
 .marker-legend {
     margin-right: 20px;
 }
+
+.lang-click-b {
+    display: flex; 
+    flex-wrap: wrap;
+    font-weight: bold; 
+    justify-content: flex-start; 
+    margin-bottom: 10px; 
+}
+
+.lang-click-b span{
+    display: block;
+    margin-right: 10px;
+}

@@ -46,7 +46,7 @@
     selectQuestion('qsection_ids');    
     selectPlace();    
     selectAllFields('select-all-place', '.place-values input');
-    for (i=4; i<7; i++) {
+    for (i=1; i<8; i++) {
         selectAllFields('select-places-'+i, '.places-'+i);
     }
     selectAllFields('select-all-qsections', '.qsection-values input');    
