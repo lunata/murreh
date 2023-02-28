@@ -97,7 +97,8 @@ class Lang extends Model
             $count=$row->$method_name()->count();
             $name = $row->name;
             if ($count) {
-                $name .= ' ('. number_with_space($count). ')';
+//                $name .= ' ('. number_with_space($count). ')';
+                $name .= ' ('.$count. ')';
             }
             $list[$row->id] = $name;
         }
