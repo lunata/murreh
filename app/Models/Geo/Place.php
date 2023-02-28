@@ -33,6 +33,8 @@ class Place extends Model
     use \App\Traits\Methods\getNameAttribute;
     use \App\Traits\Methods\getList;
     use \App\Traits\Methods\getListWithQuantity;
+    use \App\Traits\Methods\searchStrField;
+    use \App\Traits\Methods\searchIntField;
 
     // Has To Many Relations
     use \App\Traits\Relations\HasMany\Anketas;
@@ -236,6 +238,7 @@ class Place extends Model
     
     public static function urlArgs($request) {
         $url_args = Str::urlArgs($request) + [
+                    'search_dialect' => (int)$request->input('search_dialect') ? (int)$request->input('search_dialect') : null,
                     'search_district' => (int)$request->input('search_district') ? (int)$request->input('search_district') : null,
                     'search_id'       => (int)$request->input('search_id') ? (int)$request->input('search_id') : null,
                     'search_name'     => $request->input('search_name'),
@@ -248,8 +251,9 @@ class Place extends Model
     public static function search(Array $url_args) {
         $places = self::orderBy('id'); //name_ru
 
+        $places = self::searchIntField($places, 'id', $url_args['search_id']);
+        $places = self::searchIntField($places, 'dialect_id', $url_args['search_dialect']);
         $places = self::searchByDistrict($places, $url_args['search_district']);
-        $places = self::searchByID($places, $url_args['search_id']);
         $places = self::searchByName($places, $url_args['search_name']);
 //        $places = self::searchByRegion($places, $url_args['search_region']);
 //dd($places->toSql());                                
@@ -283,13 +287,6 @@ class Place extends Model
                             $q->select('place_id')->from('district_place')
                               ->where('district_id', $district_id);
                         });
-    }
-    
-    public static function searchByID($places, $search_id) {
-        if (!$search_id) {
-            return $places;
-        }
-        return $places->where('id',$search_id);
     }
     
     public function countAnketaPlace() {
