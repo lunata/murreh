@@ -43,7 +43,7 @@
 
 @section('jqueryFunc')
     selectQsection();    
-    selectQuestion('qsection_ids');    
+    selectQuestion('.qsection_ids:checked');    
     selectPlace();    
     selectAllFields('select-all-place', '.place-values input');
     for (i=1; i<8; i++) {

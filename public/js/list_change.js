@@ -49,6 +49,7 @@ function selectQsection(section_var='', placeholder='', allow_clear=false){
 }
 
 function selectQuestion(qsection_var='', placeholder='', allow_clear=false){
+//console.log(getMultiValues(qsection_var));    
     $(".select-question").select2({
         allowClear: allow_clear,
         placeholder: placeholder,
@@ -124,6 +125,8 @@ function selectConcept(category_selector='#search_category option:selected', pla
 }
 
 function getMultiValues(selector) {
+//console.log(selector);    
+//console.log($(selector));    
     if (selector === '') {
         return '';
     }
