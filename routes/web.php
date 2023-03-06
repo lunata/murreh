@@ -129,6 +129,7 @@ Route::get('service/add_sequence_number_to_questions', [ServiceController::class
 Route::get('service/replace_apostroph', [ServiceController::class, 'replaceApostroph']);
 Route::get('service/split_qsections', [ServiceController::class, 'splitQsections']);
 Route::get('service/merge_answers', [ServiceController::class, 'mergeAnswers']);
+Route::get('service/remove_empty_question_numbers', [ServiceController::class, 'removeEmptyQuestionNumbers']);
 
 Route::get('sosd/concept/list', [ConceptController::class, 'conceptList']);
 Route::get('sosd/concept/{id}/map', [ConceptController::class, 'onMap']);

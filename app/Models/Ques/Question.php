@@ -61,7 +61,7 @@ class Question extends Model
             return;
         }
         $next_sequence_number = $this->qsection->nextQuestionNumber();
-        Question::renumerateOthers($next_sequence_number);
+        Question::renumerateOthers($next_sequence_number, $this->id);
         $this->sequence_number = $next_sequence_number;
         $this->save();
     }
@@ -196,8 +196,19 @@ class Question extends Model
         }        
     }
     
-    public static function renumerateOthers($sequence_number) {
-        $questions = Question::where('sequence_number', '>=', $sequence_number)->latest('sequence_number')->get();
+    public static function renumerateOthers($sequence_number, $question_id) {
+        $questions = Question::where('sequence_number', $sequence_number);
+        if ($question_id) {
+            $questions = $questions->where('id', '<>', $question_id);
+        }
+        if (!$questions->count()) {
+            return;
+        }
+        $questions = Question::where('sequence_number', '>=', $sequence_number);
+        if ($question_id) {
+            $questions = $questions->where('id', '<>', $question_id);
+        }
+        $questions = $questions ->orderBy('sequence_number', 'desc')->get();
         foreach ($questions as $ques) {
             $ques->sequence_number += 1;
             $ques->save();

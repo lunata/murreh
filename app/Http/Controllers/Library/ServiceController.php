@@ -70,6 +70,17 @@ exit(0);
         print "done.";
     }
     
+    public function removeEmptyQuestionNumbers() {
+        $questions = Question::orderBy('sequence_number')->get();
+        
+        for ($i=0; $i<sizeof($questions); $i++) {
+            if ($questions[$i]->sequence_number != $i+1)
+            $questions[$i]->sequence_number =  $i+1;
+            $questions[$i]->save();
+        }
+        print "done.";
+    }
+    
     public function splitQsections() {
 exit(0);
         $breakdown = [43=>[632,678], 

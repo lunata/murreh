@@ -78,7 +78,7 @@ class QuestionController extends Controller
                         'args_by_get', 'url_args'));
     }
 
-    public function validateRequest(Request $request) {
+    public function validateRequest(Request $request, $question_id=null) {
         $this->validate($request, [
             'question'  => 'required|max:150',
             'qsection_id' => 'numeric',
@@ -93,7 +93,7 @@ class QuestionController extends Controller
         if (!isset($data['section_id']) || !$data['section_id']) {
             $data['section_id']= Qsection::getSectionId($data['qsection_id']);
         }
-        Question::renumerateOthers($data['sequence_number']);
+        Question::renumerateOthers($data['sequence_number'], $question_id);
         return $data;
     }
     
@@ -197,7 +197,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        $question->fill($this->validateRequest($request))->save();
+        $question->fill($this->validateRequest($request, $question->id))->save();
         
         $answer_name = $question->updateAnswers($request->answers);
 //dd($answer_name);        

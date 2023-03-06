@@ -25,5 +25,6 @@
     <p><a href="service/split_qsections">Разбить разделы вопросов</a></p>
     <p><a href="service/merge_answers">Объединить одинаковые ответы на одни и те же вопросы</a></p>
     <p><a href="service/replace_apostroph">Заменить апострофы на правильные</a></p>
+    <p><a href="service/remove_empty_question_numbers">Пененумеровать вопросы по порядку</a></p>
     
 @endsection
