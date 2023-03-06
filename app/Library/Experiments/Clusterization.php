@@ -679,17 +679,8 @@ dd($centroid, $cluster); */
             $cluster_places[$cur_color] = [];
             foreach ($cluster as $place_id) {
                 $place = $places->where('id', $place_id)->first();
-                $cluster_places[$cur_color][] 
-                        = ['latitude'=>$place->latitude,
-                           'longitude'=>$place->longitude,
-                           'place_id' => $place_id,
-                           'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
-                                     . ($place->dialect ? '<br>'.$place->dialect->name : '')
-                                     . $place->popupInfo($qsection_ids, $question_ids, $data_type)];
+                $cluster_places[$cur_color][] = Place::forMap($place_id, $qsection_ids, $question_ids, $data_type);
             }
-/*            $markers[$cur_color] 
-                    = //'<b>'. $cl_num. '</b>: '.
-                    join(', ', AnketaQuestion::getAnswersForPlacesQsections($cluster, $qsection_ids, $question_ids));*/
             if ($new_markers) {
                 $cl_colors[$cl_num] = $cur_color;    
             }

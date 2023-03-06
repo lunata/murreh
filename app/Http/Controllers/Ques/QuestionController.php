@@ -293,10 +293,13 @@ class QuestionController extends Controller
                    })
                    ->orderBy('id');
             if (!$places->count()) { continue; }
-            $markers[$answer->code]=$default_markers[$count++];
-            $answer_places[$answer->code] = $places->get();
+            $markers[$default_markers[$count]]=['num'=>$answer->code, 'text'=> $answer->answer, 'count'=>$places->count()];
+            foreach ($places->get() as $place) {
+                $answer_places[$default_markers[$count]][] = Place::forMap($place->id, null, [$id]);
+            }
+            $count++;
         }
-//dd($answer_places);        
+//dd($markers, $answer_places/*, $cluster_places, $cl_colors*/);        
         return view('ques.question.map', 
                 compact('question', 'answer_places', 'markers')); 
     }

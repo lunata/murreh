@@ -155,6 +155,7 @@ class ClusterizationController extends Controller
         $last_step = array_key_last($clusters);
         list($cluster_places, $cl_colors) 
                 = Clusterization::dataForMap($clusters[$last_step], $places, $qsection_ids, $question_ids, $cl_colors, $data);
+//dd($clusters[$last_step],$cl_colors, $cluster_places, $cl_colors, $places);    
         $method_title = Clusterization::methodTitle($method_id);
         if ($data == 'sosd') {
             if (preg_match('/all$/', $example_id)) {        

@@ -527,4 +527,15 @@ class Place extends Model
         }
         return $anketa_link.$answers;
     }
+    
+    public static function forMap(int $place_id, $qsection_ids, $question_ids, $data_type = 'anketa') {
+        $place = self::find($place_id);
+        return ['latitude'=>$place->latitude,
+                'longitude'=>$place->longitude,
+                'place_id' => $place_id,
+                'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
+                . ($place->dialect ? '<br>'.$place->dialect->name : '')
+                                     . $place->popupInfo($qsection_ids, $question_ids, $data_type)];
+        
+    }
 }

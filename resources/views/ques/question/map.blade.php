@@ -8,51 +8,31 @@
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
- @stop
+     {!!Html::style('css/markers.css')!!}
+@stop
 
 @section('body')
-<h2>{{$question->qsection->section}} :
-{{$question->qsection->title}} :
-{{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
-@foreach ($markers as $code => $color)
-<img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - {{$question->answers()->where('code', $code)->first()->answer}} ({{sizeof($answer_places[$code])}})<br>
-@endforeach
-<div id="mapid" style="width: 100%; min-width: 750px; height: 2100px;"></div>
+    <h2>{{$question->qsection->section}} :
+    {{$question->qsection->title}} :
+    {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
+
+    @foreach ($markers as $color => $info) 
+    <div class="cluster-info">
+        <div class="cluster-marker" style='align-items: center'>
+            <div class="marker-icon marker-legend marker-{{$color}}">
+            <span><b>{{$info['num']}}</b> ({{$info['count']}}):</span>
+            </div>
+            <div>
+           {{$info['text']}}
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+    @include('widgets.leaflet.map', ['height'=>2100, 'markers'=>[]])
 @stop
 
 @section('footScriptExtra')
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
-    
-<script>
-    var mymap = L.map('mapid').setView([61.8, 33.9], 7);
-@foreach ($markers as $code => $color)
-    var {{$code}}Icon = new L.Icon({
-      iconUrl: '/images/markers/marker-icon-{{$color}}.png',
-      iconAnchor: [12, 41],
-      html: ''
-    });
-@endforeach    
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1
-    }).addTo(mymap);
-
-@foreach ($answer_places as $answer_code => $places)
-    @foreach ($places as $place)
-    <?php
-        $anketa_count = $place->anketas()->count();
-        $anketa_link = $anketa_count ? "<br><a href=/ques/anketas?search_place=".$place->id.">".$anketa_count." ".
-                trans_choice('анкета|анкеты|анкет', $anketa_count, [], 'ru')."</a>" : '';
-    ?>
-    L.marker([{{$place->latitude}}, {{$place->longitude}}], {icon: {{$answer_code}}Icon, html: '1'}).addTo(mymap)
-            .bindPopup("<b>{{$place->name_ru}}</b>{!!$anketa_link!!}").openPopup();
-    @endforeach
-@endforeach
-</script>
-@stop
+    @include('widgets.leaflet.map_script', ['latitude'=>61.8, 'places'=>$answer_places, 'colors'=>array_keys($answer_places)])
+    {!!Html::script('js/experiment.js')!!}
+@endsection
