@@ -7,7 +7,7 @@
 @section('body')
     <h2>{{$question->qsection->section}} :
     {{$question->qsection->title}} :
-    {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
+    {{$question->sequence_number}}. {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
 
     <p>Выберите ответы для слияния. Останется один (первый ответ).</p>
 
