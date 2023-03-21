@@ -9,6 +9,8 @@
     {{$question->qsection->title}} :
     {{$question->sequence_number}}. {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
 
+    <p><a href="{{route('question.index', $url_args)}}">{{ trans('messages.back_to_list') }}</a></p>
+
     <p>Выберите ответы для слияния. Останется один (первый ответ).</p>
 
     {!! Form::open(array('method'=>'POST', 'url' => '/ques/question/'.$question->id.'/merge')) !!}
