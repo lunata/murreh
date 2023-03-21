@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Response;
+use DB; 
 
 use App\Library\Map;
 use App\Library\Str;
@@ -387,4 +388,54 @@ class QuestionController extends Controller
 //        $question->updateAnswers($request->answers);
         return 'Данные скопированы!';
     }    
+    
+    public function answersForMerge($id) {
+        $question = Question::find((int)$id);
+        if (!$question) {
+            return Redirect::to('/ques/question/'.$this->args_by_get)
+                ->withError('Нет такого вопроса');        
+        }
+        $answer_values=[NULL=>''];
+        foreach ($question->answers as $answer) {
+            $answer_values[$answer->id] = $answer->code. ' - '. $answer->answer;
+        }
+        $url_args = $this->url_args;
+        
+        return view('ques.question.merge', 
+                compact('answer_values', 'question', 'url_args')); 
+    }    
+    
+    public function mergeAnswers($id, Request $request) {
+        $question = Question::find((int)$id);
+        if (!$question) {
+            return Redirect::to('/ques/question/'.$this->args_by_get)
+                ->withError('Нет такого вопроса');        
+        }
+        $answers = (array)$request->input('answers');
+//dd($answers);        
+        if (!isset($answers[1]) || !$answers[1]) {
+            return Redirect::to('/ques/question/'.$this->args_by_get)
+                ->withError('Нет первого ответа');                    
+        }
+        for ($i=2; $i<=sizeof($answers); $i++) {
+            if ($answers[$i]) {
+                DB::statement("update anketa_question set answer_id='".$answers[1]."' where answer_id='".$answers[$i]."'");
+                Answer::find($answers[$i])->delete();
+            }
+        }
+        
+        $new_answers = $question->answers->sortBy('code');
+        $letters = range('a', 'z');
+        for ($i=0; $i<sizeof($new_answers); $i++) {
+            if ($new_answers[$i]->code != $letters[$i]) {
+                $new_answers[$i]->code = $letters[$i];
+                $new_answers[$i]->save();
+//                print '<p>'. $new_answers[$i]->code. " -> ". $letters[$i] .'</p>';
+            }
+        }
+//dd($new_answers);        
+//exit(1);        
+        return Redirect::to('/ques/question/'.$this->args_by_get)
+            ->withSuccess('Ответы объединены');        
+    }
 }

@@ -118,6 +118,8 @@ Route::get('ques/qsection/list', [QsectionController::class, 'qsectionList']);
 
 Route::get('ques/question/{id}/edit_answer/{anketa_id}', [QuestionController::class, 'editAnswer']);
 Route::get('ques/question/{id}/map', [QuestionController::class, 'onMap']);
+Route::get('ques/question/{id}/merge', [QuestionController::class, 'answersForMerge']);
+Route::post('ques/question/{id}/merge', [QuestionController::class, 'mergeAnswers']);
 Route::get('ques/question/copy/{from_question_id}_{to_qsection}', [QuestionController::class, 'copy']);
 Route::get('ques/question/store_from_cluster', [QuestionController::class, 'storeFromCluster']);
 Route::get('ques/question/list', [QuestionController::class, 'questionList']);

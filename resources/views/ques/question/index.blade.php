@@ -107,6 +107,8 @@
                     @include('widgets.form.button._edit_small_button', 
                              ['route' => '/ques/question/'.$question->id.'/edit'])
                     @include('widgets.form.button._delete_small_button', ['obj_name' => 'question'])
+                    @include('widgets.form.button._merge', 
+                             ['route' => '/ques/question/'.$question->id.'/merge'])
                 </td>
                 @endif
             </tr>

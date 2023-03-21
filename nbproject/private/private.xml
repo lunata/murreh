@@ -2,20 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/_search_form.blade.php</file>
-            <file>file:/E:/projects/murreh/resources/lang/ru/navigation.php</file>
-            <file>file:/E:/projects/murreh/routes/web.php</file>
-            <file>file:/E:/projects/murreh/resources/lang/ru/messages.php</file>
-            <file>file:/E:/projects/murreh/resources/lang/ru/dict.php</file>
-            <file>file:/E:/projects/murreh/resources/views/experiments/anketa_cluster/index.blade.php</file>
-            <file>file:/E:/projects/murreh/public/css/markers.css</file>
-            <file>file:/E:/projects/murreh/resources/views/header/top_left_menu.blade.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Dict/DialectController.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Dict/Lang.php</file>
-            <file>file:/E:/projects/murreh/app/Models/Dict/Dialect.php</file>
-            <file>file:/E:/projects/murreh/app/Http/Controllers/Person/InformantController.php</file>
-            <file>file:/E:/projects/murreh/resources/views/dict/dialect/index.blade.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
