@@ -10,6 +10,7 @@ function callQsectionCreateForm() {
 function saveQuestion() {
     $("#cluster_form").attr('action', '/ques/question/store_from_cluster');
 //console.log($("#cluster_form").attr('action'));    
+    $("#cluster_form").attr("method", "post");
     $("#cluster_form").submit();
 /*
     var data = {

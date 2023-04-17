@@ -1,6 +1,7 @@
 {!! Form::open(['url' => '/experiments/anketa_cluster', 
                      'method' => 'get', 'id'=>'cluster_form']) 
 !!}
+@csrf
 <div class="lang-click-b">
     <span>Выделить</span>
     <span><input id="select-all-place" type="checkbox"> все населенные пункты</span>

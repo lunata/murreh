@@ -122,6 +122,7 @@ Route::get('ques/question/{id}/merge', [QuestionController::class, 'answersForMe
 Route::post('ques/question/{id}/merge', [QuestionController::class, 'mergeAnswers']);
 Route::get('ques/question/copy/{from_question_id}_{to_qsection}', [QuestionController::class, 'copy']);
 Route::get('ques/question/store_from_cluster', [QuestionController::class, 'storeFromCluster']);
+Route::post('ques/question/store_from_cluster', [QuestionController::class, 'storeFromCluster']);
 Route::get('ques/question/list', [QuestionController::class, 'questionList']);
 Route::put('ques/question/update_answer/{anketa_id}', [QuestionController::class, 'updateAnswer'])->name('question.update_answer');
 
