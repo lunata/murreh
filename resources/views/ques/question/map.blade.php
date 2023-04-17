@@ -14,13 +14,13 @@
 @section('body')
     <h2>{{$question->qsection->section}} :
     {{$question->qsection->title}} :
-    {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}</h2>
+    {{$question->question}} {{$question->question_ru ? '('.$question->question_ru.')': ''}}
 
     @foreach ($markers as $color => $info) 
     <div class="cluster-info">
         <div class="cluster-marker" style='align-items: center'>
             <div class="marker-icon marker-legend marker-{{$color}}">
-            <span><b>{{$info['num']}}</b> ({{$info['count']}}):</span>
+            <span><b>{{$info['num']}}</b>{{-- ({{$info['count']}}):--}}</span>
             </div>
             <div>
            {{$info['text']}}
@@ -28,7 +28,7 @@
         </div>
     </div>
     @endforeach
-
+</h2>
     @include('widgets.leaflet.map', ['height'=>2100, 'markers'=>[]])
 @stop
 
