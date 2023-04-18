@@ -27,7 +27,7 @@
         <table class="table-bordered table-wide rwd-table wide-md">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
 {{--                <th>{{ trans('geo.region') }}</th> --}}
                 <th>{{ trans('geo.district') }}</th>
                 <th>{{ trans('geo.name') }} {{ trans('messages.in_russian') }}</th>
@@ -46,7 +46,7 @@
         </thead>
         <tbody>
             @foreach($places as $place)
-            <tr><td data-th="ID">{{$place->id}}</td>
+            <tr><td data-th="No">{{$place->sequence_number}}</td>
 {{--                <td data-th="{{ trans('geo.region') }}">{{$place->regionNames()}}</td> --}}
                 <td data-th="{{ trans('geo.district') }}">
                     @if ($place->districts)

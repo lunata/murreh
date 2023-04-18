@@ -3,6 +3,10 @@
 <div class="row">
     <div class="col-sm-6">
         @include('widgets.form.formitem._text', 
+                ['name' => 'sequence_number', 
+                 'title'=>trans('messages.sequence_number')])
+                 
+        @include('widgets.form.formitem._text', 
                 ['name' => 'name_ru', 
                  'title'=>trans('geo.name').' '.trans('messages.in_russian')])
                  

@@ -28,7 +28,7 @@ class Place extends Model
     
     public $timestamps = false;
     protected $fillable = ['name_ru', 'name_old_ru', 'name_krl', 'name_old_krl', 
-                           'latitude', 'longitude', 'population', 'dialect_id'];
+                           'latitude', 'longitude', 'population', 'dialect_id', 'sequence_number'];
     
     use \App\Traits\Methods\getNameAttribute;
     use \App\Traits\Methods\getList;
@@ -249,7 +249,7 @@ class Place extends Model
     }
     
     public static function search(Array $url_args) {
-        $places = self::orderBy('id'); //name_ru
+        $places = self::orderBy('sequence_number'); //'id'
 
         $places = self::searchIntField($places, 'id', $url_args['search_id']);
         $places = self::searchIntField($places, 'dialect_id', $url_args['search_dialect']);
@@ -532,7 +532,7 @@ class Place extends Model
         $place = self::find($place_id);
         return ['latitude'=>$place->latitude,
                 'longitude'=>$place->longitude,
-                'place_id' => $place_id,
+                'place_id' => $place->sequence_number,
                 'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
                 . ($place->dialect ? '<br>'.$place->dialect->name : '')
                                      . $place->popupInfo($qsection_ids, $question_ids, $data_type)];
