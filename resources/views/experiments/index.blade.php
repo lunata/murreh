@@ -13,6 +13,7 @@
     <li><a href='/experiments/anketa_cluster/example/1_3-119'>Разделы "Звонкий / глухой согласный", метод полной связи</a></li>
     <li><a href='/experiments/anketa_cluster/example/1_1_7'>Раздел "Гласный конца слова", метод полной связи</a></li>
     <li><a href='/experiments/anketa_cluster/example/1_3_120'>Раздел "Альтернация согласных", метод полной связи + K-средних</a></li>
+    <li><a href='/experiments/anketa_cluster/example/1_1_126'>Раздел "Тверские говоры", метод полной связи</a></li>
     </ul>
     <p><a href="/experiments/sosd_cluster">{{trans('navigation.sosd_cluster')}}</a></p>
     <p>Примеры:</p>
