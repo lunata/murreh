@@ -1,6 +1,0 @@
-
-In ProviderRepository.php line 208:
-                                                             
-  Class 'Facade\Ignition\IgnitionServiceProvider' not found  
-                                                             
-
