@@ -533,7 +533,7 @@ class Place extends Model
         return ['latitude'=>$place->latitude,
                 'longitude'=>$place->longitude,
                 'place_id' => $place->sequence_number,
-                'popup' => $place->id.'. <b>'.$place->name_ru.'</b>'
+                'popup' => $place->sequence_number.'. <b>'.$place->name_ru.'</b>'
                 . ($place->dialect ? '<br>'.$place->dialect->name : '')
                                      . $place->popupInfo($qsection_ids, $question_ids, $data_type)];
         

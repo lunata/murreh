@@ -39,7 +39,7 @@ class ClusterizationController extends Controller
                 $place_values, $qsection_values, $question_values, $total_limit, 
                 $with_geo, $metric_values, $section_values) 
                 = Clusterization::getRequestDataForCluster($request, $places, $data, $metric);
-        
+//dd($place_values);        
         $clusterization = Clusterization::init($places, $distances, $method_id, $with_geo, $distance_limit, $total_limit, $data, $metric);
         $clusterization->clusterization($method_id);
         $clusters = $clusterization->getClusters();
