@@ -24,13 +24,9 @@
     </ul>
     <p>Примеры по разделам:</p>
     <ul>
-        <p>Метод полной связи + K-средних</p>
-    @foreach (['A12', 'A21', 'A22', 'A31', 'A322', 'A33', 'A34', 'A36', 'A411', 'A43', 'B15', 'B16', 'B181', 'B23', 'B31', 'B321', 'B322', 'B334', 'B34', 'B356', 'B36', 'B373', 'B374', 'B52'] as $id)
-        <li>{{ $id }}. <a href='/experiments/sosd_cluster/example/1_3_{{ $id }}'>{{ \App\Models\SOSD\ConceptCategory::getNameById($id) }}</a></li>
-    @endforeach
-    
-        <p style='margin-top: 20px;'>Метод полной связи</p>
-    @foreach (['A321', 'A323', 'A35', 'A412', 'A42', 'A44', 'B11', 'B12', 'B17', 'B182', 'B21', 'B22', 'B323', 'B324', 'B331', 'B332', 'B333', 'B351', 'B352', 'B353', 'B354', 'B355', 'B371', 'B372', 'B375', 'B38', 'B411', 'B412', 'B42', 'B43', 'B51', 'C2'] as $id)
+    @foreach (['A12', 'A21', 'A22', 'A31', 'A321', 'A322', 'A323', 'A33', 'A34', 'A35', 'A36', 'A411', 'A412', 'A42', 'A43', 'A44', 
+               'B11', 'B12', 'B15', 'B16', 'B17', 'B181', 'B182', 'B21', 'B22', 'B23', 'B31', 'B321', 'B322', 'B323', 'B324', 'B331', 'B332', 'B333', 'B334', 'B34', 
+               'B351', 'B352', 'B353', 'B354', 'B355', 'B356', 'B36', 'B371', 'B372', 'B373', 'B374', 'B375', 'B38', 'B411', 'B412', 'B42', 'B43', 'B51', 'B52', 'C2'] as $id)
         <li>{{ $id }}. <a href='/experiments/sosd_cluster/example/1_1_{{ $id }}'>{{ \App\Models\SOSD\ConceptCategory::getNameById($id) }}</a></li>
     @endforeach
     </ul>
