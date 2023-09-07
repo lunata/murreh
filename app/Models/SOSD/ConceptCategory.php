@@ -92,4 +92,11 @@ class ConceptCategory extends Model
         }
         return $list;
     }
+    
+    public static function getNameById($id) {
+        $category = self::find($id);
+        if ($category) {
+            return $category->name;
+        }
+    }
 }
