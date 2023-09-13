@@ -32,4 +32,11 @@
         <li>{{ $id }}. <a href='/experiments/sosd_cluster/example/1_1_{{ $id }}'>{{ \App\Models\SOSD\ConceptCategory::getNameById($id) }}</a></li>
     @endforeach
     </ul>
+    
+    <p>Сводные карты по СОСД</p>
+    <ul>
+        <li><a href='/experiments/sosd_cluster/example/1_1_A11-A12-A21-A22-A31-A321-A322-A323-A33-A34_2'>2 кластера</a></li>
+        <li><a href='/experiments/sosd_cluster/example/1_1_A11-A12-A21-A22-A31-A321-A322-A323-A33-A34_4'>4 кластера</a></li>
+        <li><a href='/experiments/sosd_cluster/example/1_1_A11-A12-A21-A22-A31-A321-A322-A323-A33-A34_17'>17 кластеров</a></li>
+    </ul>
 @endsection
