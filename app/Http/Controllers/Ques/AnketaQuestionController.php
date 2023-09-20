@@ -135,4 +135,15 @@ class AnketaQuestionController extends Controller
         return view('ques.anketa._question_show', 
                 compact('anketa', 'questions', 'qsection_id'));
     }
+    
+    public function getTotal(string $section) {
+        if ($section == 'all') {
+            return number_format(AnketaQuestion::count(), 0, ',', ' ');
+        } elseif (is_numeric ($section)) {
+            return number_format(AnketaQuestion::whereIn('question_id', function($q) use ($section) {
+                $q -> select('id')->from('questions')
+                   -> whereSectionId($section);
+            })->count(), 0, ',', ' ');
+        }
+    }
 }

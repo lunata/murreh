@@ -258,4 +258,12 @@ class PlaceController extends Controller
 //dd($list);        
         return Response::json($list);
     }    
+    
+    public function getTotal() {
+        $places = Place::whereIn('id', function($q) {
+                $q -> select('place_id')->from('anketas');
+            })->count();
+        return Place::count(). " (". $places.")";
+    }
+    
 }

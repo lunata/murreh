@@ -270,4 +270,8 @@ class AnketaController extends Controller
                        ->orderBy('id')->get();
         return view('ques.anketa.map', compact('places')); 
     }
+    
+    public function getTotal() {
+        return Anketa::count();
+    }
 }

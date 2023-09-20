@@ -177,4 +177,8 @@ class RecorderController extends Controller
                   ->withSuccess($result['message']);
         }
     }
+    
+    public function getTotal() {
+        return Recorder::count();
+    }
 }

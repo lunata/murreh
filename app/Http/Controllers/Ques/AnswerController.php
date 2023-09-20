@@ -114,4 +114,5 @@ class AnswerController extends Controller
         }  
         return Response::json($list);
     }
+    
 }

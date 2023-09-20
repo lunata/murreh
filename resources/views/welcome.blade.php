@@ -43,14 +43,29 @@
                     к.фил.н., научный сотрудник сектора языкознания ИЯЛИ КарНЦ РАН</p>
                     
                     <h2>Статистика</h2>                   
-                    <p>Количество анкет: <b>{{$stats['anketas']}}</b><br>
-                    Количество собирателей: <b>{{$stats['recorders']}}</b><br>
-                    Количество населенных пунктов: <b>{{$stats['places']}}</b><br>
-                    Количество ответов (всего): <b>{{$stats['answers']}}</b><br>
-                    Количество ответов (социолингвистическая информация): <b>{{$stats['answers_soc']}}</b><br>
-                    Количество ответов (фонетика): <b>{{$stats['answers_phon']}}</b><br>
-                    Количество ответов (морфология): <b>{{$stats['answers_mor']}}</b><br>
-                    Количество ответов (лексика): <b>{{$stats['answers_lex']}}</b></p>
+                    <p>Количество анкет: <b id="total-anketas"></b><br>
+                    Количество собирателей: <b id="total-recorders"></b><br>
+                    Количество населенных пунктов: <b id="total-places"></b><br>
+                    Количество ответов (всего): <b id="total-answers-all"></b><br>
+                    Количество ответов (социолингвистическая информация): <b id="total-answers-1"></b><br>
+                    Количество ответов (фонетика): <b id="total-answers-2"></b><br>
+                    Количество ответов (морфология): <b id="total-answers-3"></b><br>
+                    Количество ответов (лексика): <b id="total-answers-4"></b></p>
                 </div>
             </div>
 @endsection
+
+@section('footScriptExtra')
+    {!!Html::script('js/stats.js')!!}
+@stop
+
+@section('jqueryFunc')
+    totalAnketas();
+    totalRecorders();
+    totalPlaces();
+    totalAnswers('all');
+    totalAnswers(1);
+    totalAnswers(2);
+    totalAnswers(3);
+    totalAnswers(4);
+@stop

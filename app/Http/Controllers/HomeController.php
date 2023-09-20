@@ -28,10 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $places = Place::whereIn('id', function($q) {
-                $q -> select('place_id')->from('anketas');
-            })->count();
-        $answers_soc = AnketaQuestion::whereIn('question_id', function($q) {
+/*        $answers_soc = AnketaQuestion::whereIn('question_id', function($q) {
                 $q -> select('id')->from('questions')
                    -> whereSectionId(1);
             })->count();
@@ -47,14 +44,11 @@ class HomeController extends Controller
                 $q -> select('id')->from('questions')
                    -> whereSectionId(4);
             })->count();
-        $stats['anketas'] = Anketa::count();
-        $stats['recorders'] = Recorder::count();
-        $stats['places'] = Place::count(). " (". $places.")";
         $stats['answers'] = number_format(AnketaQuestion::count(), 0, ',', ' ');
         $stats['answers_soc'] = number_format($answers_soc, 0, ',', ' ');
         $stats['answers_phon'] = number_format($answers_phon, 0, ',', ' ');
         $stats['answers_mor'] = number_format($answers_mor, 0, ',', ' ');
-        $stats['answers_lex'] = number_format($answers_lex, 0, ',', ' ');
-        return view('welcome', compact('stats'));
+        $stats['answers_lex'] = number_format($answers_lex, 0, ',', ' ');*/
+        return view('welcome');
     }   
 }

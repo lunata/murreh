@@ -91,6 +91,7 @@ Route::get('export/concepts_by_places', [ExportController::class, 'conceptsByPla
 Route::get('export/translations_by_questions', [ExportController::class, 'translationsByQuestions']);
 
 Route::get('geo/place/list', [PlaceController::class, 'placeList']);
+Route::get('geo/place/total', [PlaceController::class, 'getTotal']);
 //Route::get('geo/place/map', [PlaceController::class, 'showMap']);
 
 /*Route::get('import/place_coord', [ImportController::class, 'placeCoord']);
@@ -101,14 +102,18 @@ Route::get('import/concept_categories', [ImportController::class, 'conceptСateg
 */
 Route::get('import/concept_place', [ImportController::class, 'conceptPlace']);
 
+Route::get('person/recorder/total', [RecorderController::class, 'getTotal']);
+
 Route::get('ques/anketa/list', [AnketaController::class, 'anketaList']);
 Route::get('ques/anketa/map', [AnketaController::class, 'onMap']);
+Route::get('/ques/anketa/total', [AnketaController::class, 'getTotal']);
 
 Route::get('ques/anketa_question/{anketa_id}_{qsection_id}/edit', [AnketaQuestionController::class, 'edit'])->name('anketa_question.edit');
 Route::get('ques/anketa_question/copy/{from_anketa}_{to_anketa}_{qsection_id}', [AnketaQuestionController::class, 'copyAnswers']);
 Route::get('ques/anketa_question/list_for_copy/{anketa_id}_{qsection_id}', [AnketaQuestionController::class, 'listForCopy']);
 Route::put('ques/anketa_question/{anketa_id}', [AnketaQuestionController::class, 'update'])->name('anketa_question.update');
 Route::get('ques/anketa_question/compare_anketas', [AnketaQuestionController::class, 'compareAnketas']);
+Route::get('ques/anketa_question/total/{section}', [AnketaQuestionController::class, 'getTotal']);
 
 Route::get('ques/answer/list', [AnswerController::class, 'answerList']);
 
