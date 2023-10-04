@@ -33,6 +33,27 @@
                         Для <a href="/sosd/concept_category/">каждого раздела</a> приведены кластерные карты, демонстрирующие диалектные ареалы, сформированные внутри карельского и вепсского языков на основе 
                         определенного лексико-семантического разряда. <a href="https://karjalankieliopit.net/atlas/bubon/bubon.html">Программа кластеризации</a> 
                         разработана профессором информатики университета Восточной Финляндии Мартти Пенттоненом.</p>
+                    
+                    <div class='row' style='margin-bottom: 20px'>
+                        <div class='col-sm-3'>
+                            <a href='/images/big/svid_bd_2022.png'><img src='/images/svid_bd_2022.png'></a>
+                        </div>
+                        <div class='col-sm-3' style='padding-top: 30px;'>
+                            Cвидетельство о государственной регистрации базы данных Федеральной службы по интеллектуальной собственности<br>
+                            № 2022621259<br> 
+                            <a href='https://new.fips.ru/registers-doc-view/fips_servlet?DB=DB&DocNumber=2022621259&TypeFile=html'>"Диалектная база карельского языка MURREH"</a><br>
+                            от 23.05.2022
+                        </div>
+                        <div class='col-sm-3'>
+                            <a href='/images/big/svid_cluster_2022.png'><img src='/images/svid_cluster_2022.png'></a>
+                        </div>
+                        <div class='col-sm-3' style='padding-top: 30px;'>
+                            Cвидетельство о государственной регистрации программы для ЭВМ Федеральной службы по интеллектуальной собственности<br>
+                            № 2022660015<br> 
+                            <a href='https://new.fips.ru/registers-doc-view/fips_servlet?DB=EVM&DocNumber=2022660015&TypeFile=html'>"Clustering n-dimensional heterogeneous language data for dialect partitioning"</a><br>
+                            от 27.05.2022
+                        </div>
+                    </div>
 
                     <h2>Участники проекта</h2>
 
