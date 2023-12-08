@@ -8,17 +8,19 @@
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
- @stop
+     {!!Html::style('css/markers.css')!!}
+@stop
 
 @section('body')
-<h2>{{$concept->concept_category_id}}. 
-{{$concept->name}}</h2>
-@foreach ($markers as $code => $color)
-<img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - 
-{{join(', ', array_unique($concept->places()->where('code', 'like', $code.'%')->pluck('word')->toArray()))}} 
-({{sizeof(array_unique($code_places[$code]))}})<br>
-@endforeach
-<div id="mapid" style="width: 100%; min-width: 750px; height: 2100px;"></div>
+    <h2>{{$concept->concept_category_id}}. {{$concept->name}}</h2>
+    
+    @foreach ($markers as $code => $color)
+        <img src="/images/markers/marker-icon-{{$color}}.png"> {{$code}} - 
+        {{join(', ', array_unique($concept->places()->where('code', 'like', $code.'%')->pluck('word')->toArray()))}} 
+        ({{sizeof(array_unique($code_places[$code]))}})<br>
+    @endforeach
+    
+    <div id="mapid" style="width: 100%; min-width: 750px; height: 2100px;"></div>
 @stop
 
 @section('footScriptExtra')
@@ -34,10 +36,12 @@
       iconAnchor: [12, 41],
     });
 @endforeach    
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+/*            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',*/
             id: 'mapbox/streets-v11',
             tileSize: 512,
             zoomOffset: -1
