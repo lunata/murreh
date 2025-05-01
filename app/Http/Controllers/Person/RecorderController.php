@@ -22,8 +22,8 @@ class RecorderController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('auth:edit,/');
-//        $this->middleware('auth:edit,/person/recorder/', ['only' => ['create','store','edit','update','destroy']]);
+//        $this->middleware('auth:edit,/');
+        $this->middleware('auth:edit,/person/recorder/', ['except' => ['getTotal']]);
         
         $this->url_args = Recorder::urlArgs($request);                  
         $this->args_by_get = Str::searchValuesByURL($this->url_args);
