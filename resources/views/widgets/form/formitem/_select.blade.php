@@ -1,16 +1,16 @@
 <?php 
-if (!isset($attributes)) {
+if (empty($attributes)) {
     $attributes = [];
 }
 
-if (!isset($attributes['class'])) {
+if (empty($attributes['class'])) {
     $attributes['class'] = 'form-control';
 }
 $id_name = preg_replace("/[\.\]\[]/","_",$name);
 $attributes['id'] = $id_name;
 ?>
 
-<div class="form-group {{ $errors->has($name) || $errors->has($name) ? 'has-error' : '' }}">
+<div class="form-group{{ $errors->has($name) || $errors->has($name) ? ' has-error' : '' }}">
     @if(isset($title) && $title)
 	<label for="{{$name}}">
             {{ $title ?? null }}
