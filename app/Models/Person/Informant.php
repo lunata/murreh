@@ -2,7 +2,7 @@
 
 namespace App\Models\Person;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Library\Str;
@@ -11,7 +11,7 @@ use App\Models\Geo\Place;
 
 class Informant extends Model
 {
-    use HasFactory;
+//    use HasFactory;
     
     public $timestamps = false;
     protected $fillable = ['name_ru', 'birth_date', 'birth_place_id', 'place_id', 'nationality_id', 'occupation_id', 'pol'];
